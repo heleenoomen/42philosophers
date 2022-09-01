@@ -59,17 +59,36 @@ void	routine(t_philo *philo_data)
 
 int	main(void)
 {
-	t_philo		philo_data;
-	pthread_t	philosopher;
+	t_ph_parms	philo_parms;
+	t_philo		*philo_data;
+	pthread_t	*philosophers;
+	int		i;
 
-	philo_data.time_die = 500;
-	philo_data.time_eat = 2;
-	philo_data.time_sleep = 8;
-	philo_data.died = false;
-	pthread_mutex_init(&philo_data.left_fork, NULL);
-	pthread_mutex_init(&philo_data.right_fork, NULL);
-	gettimeofday(&philo_data.last_meal, NULL);
-	pthread_create(&philosopher, NULL, (void *) &routine, &philo_data);
+	/* get philo_data from user input, if argc is < 4 or > 5, return */
+	if (parse(&philo_parms, argc, argv) == -1)
+		return (1);
+	/* initialize philo structs */
+	if (initialize(philo_parms, philo_data, philosophers) == -1);
+		/* malloc an array of pthread_t, for each philosopher one thread */
+		/* malloc an array of philo_data, for each philosopher one t_philo entry */
+		/* malloc the right and left fork mutex for each philosopher. For the last one:
+		 * only the right fork, the left fork will point to the fork of the first philosopher */
+		/* initialize the mutextes */
+		/* fill in time_die, time_eat and time_sleep and set 'died' to false in every entry of the
+		 * philo_data table */	
+		/* in case of failure, free and destroy everything created so far and return -1 */
+		return (2);
+	i = 0;
+	/* send off the philosophers to their routine */
+	while (i < philo_parms.num_philos)
+	{
+		gettimeofday(&philo_data[i].last_meal);
+		if (pthread_create(philosophers + i, NULL, (void *) routine, philo_parms + i)
+			return (join_and_return(philo_data, philosophers, i - 1, 3);
+				/* sets the 'died' value of all philosophers created so far to true, so that they return */
+				/* then destroys mutexes, free philosophers array and philo_data array, returns with ret value */
+		i++;
+	}
 	while (1)
 	{
 		if (philo_data.died == true)

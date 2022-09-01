@@ -1,0 +1,58 @@
+void	free_philos(pthread_t **philos)
+{
+	free(*philos);
+	*philos = NULL;
+}
+
+void	destroy_forks(pthread_mutex_t **forks, int num_of_mutexes)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_of_mutexes)
+	{
+		pthread_mutex_destroy(forks + i);
+		i++;
+	}
+}
+
+/* sets the 'died' parameter for all running philosophers to true. Sets their time_eat
+ * and time_sleep parameters to 0, so that they will return immediately from their routines.
+ * Waits for all the threads to join
+ */
+void	join_threads(pthread_t *philosophers, t_philo *philo_data, int num_to_join)
+{
+	int	i;
+
+	i = 0;
+	while (i < num_to_join)
+	{
+		(philo_data + i)->died = true;
+		(philo_data + i)->time_to_eat = 0;
+		(philo_data + i)->time_to_sleep = 0;
+		i++;
+	}
+	i = 0;
+	while (i < num_to_join)
+	{
+		pthread_join(philosophers[i], NULL);
+		i++;
+	}
+}
+
+void	free_philo(pthread_t *philosophers, t_philo *philo_data, int num_philos, int num_to_join)
+{
+	int	i;
+
+	join_threads(philosophers, philo_data, num_to_join);
+	i = 0;
+	while (i < num_philos)
+	{
+		if (pthread_mutex_destroy((philo_data + i)->right_fork) == -1)
+			ft_putstr_fd(ERROR_MUTEX_DESTROY, 2);
+		i++;
+	}
+	free(philo_data->right_fork);
+	free(philosophers);
+	free(philo_data);
+}
