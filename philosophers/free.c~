@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 15:19:09 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/02 13:57:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/02 13:56:49 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,4 +90,3 @@ void	free_philo(t_main *main, t_philo *philos, int num_philos, int num_to_join)
 	free(main->philosophers);
 	free(philos);
 }
-

@@ -43,7 +43,7 @@ void	ft_putstr_fd(char *s, int fd)
 /* writes an error message to standard error
  * returns with ret value
  */
-int	return_error(char *message, int ret)
+int	putstr_return(char *message, int ret)
 {
 	ft_putstr_fd(message, 2);
 	return (ret);

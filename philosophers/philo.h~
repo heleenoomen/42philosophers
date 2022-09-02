@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 14:50:48 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/02 13:41:36 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/02 13:18:11 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct	s_philo
 	pthread_mutex_t		*print_lock;
 	pthread_mutex_t		*right_fork;
 	pthread_mutex_t		*left_fork;	
-	short				died;
+	bool				died;
 	int					index;
 }						t_philo;
 
@@ -55,18 +55,11 @@ typedef struct	s_philo
 	type and the minimum number is 2"
 # define	TIME "Please provide time parameters in whole milliseconds. Time parameters must be of integer type\
 	(long int) and must be bigger than 0" 
-# define ERROR_THREADS "Error: could not create threads"
+# define ERROR_THREADS "Error: could not initialize threads"
 # define ERROR_MUTEXES "Error: could not initialize mutexes"
 # define ERROR_LOCK "Error: could not lock mutex"
 # define ERROR_MUTEX_DESTROY "Error: unable to destroy mutex"
 # define ERROR_MEM "Error: out of memory (malloc failed)"
 # define ERROR_TIME "Error: cannot set time of day"
-
-# define FALSE 		0
-# define TRUE		1
-# define LOCK_ERR	2
-# define UNLOCK_ERR 3
-# define TIME_ERR	4
-# define THR_ERR	5
 
 #endif

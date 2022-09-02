@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 15:25:04 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/02 13:42:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/02 12:19:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void fill_philos(t_main *main, t_philo *philos)
 		(philos + i)->time_eat = main->time_eat;
 		(philos + i)->time_sleep = main->time_sleep;
 		(philos + i)->times_must_eat = main->times_must_eat;
-		(philos + i)->died = FALSE;
+		(philos + i)->died = false;
 		(philos + i)->index = i + 1;
 		(philos + i)->print_lock = &(main->print_lock);
 		i++;

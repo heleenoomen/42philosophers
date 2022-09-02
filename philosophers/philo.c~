@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/01 14:52:54 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/02 13:55:17 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/02 13:51:09 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	main(int argc, char **argv)
 		i = 0;
 		while (i < main.num_philos)
 		{
-			if ((philos + i)->died != FALSE)
+			if ((philos + i)->died == true)
 				break ;
 			i++;
 		}
