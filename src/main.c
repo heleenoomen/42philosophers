@@ -1,34 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   routine.c                                          :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/04 11:21:29 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 11:37:16 by hoomen           ###   ########.fr       */
+/*   Created: 2022/09/03 18:15:09 by hoomen            #+#    #+#             */
+/*   Updated: 2022/09/04 18:56:33 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	routine(t_philo *philo)
+/* mark M */
+
+int	help_message(void)
 {
-	while (philo->ctrl->run == false);
-	while (philo->ctrl->death == false)
-	{
-		if (died(philo))
-			break ;
-		take_forks(philo);
-		if (philo->ctrl->death || died(philo))
-			break ;	
-		eat(philo);
-		if (philo->ctrl->death || died(philo))
-			break ;
-		sleep(philo);
-		if (philo->ctrl->death || died(philo))
-			break ;
-		think(philo);
-	}
+	printf("%s %s\n%s\n", ERR, ARGS, USAGE);
+	return (1);
+}
+
+int	main(int argc, char **argv)
+{
+	t_ctrl	*controller;
+	t_err	*error;
+
+	if (argc < 5 || argc > 6)
+		return (help_message());
+	error = NULL;
+	controller = init_controller(argc, argv, error);
+	if (error)
+		exit_program(controller, error);
+	init_threads(controller, error);
+	return (exit_program(controller, error));
 }
 

@@ -6,13 +6,13 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 10:58:22 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/04 19:25:22 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	*ft_malloc(size_t size, char *error)
+void	*ft_malloc(size_t size, t_err *error)
 {
 	void	*ret;
 
@@ -22,7 +22,8 @@ void	*ft_malloc(size_t size, char *error)
 	return (ret);
 }
 
-unsigned int	ft_atoui(char *s, char *error, short type)
+
+unsigned int	ft_atoui(char *s, t_err *error, short type)
 {
 	unsigned long int	nbr;
 	bool				inv;
@@ -41,11 +42,32 @@ unsigned int	ft_atoui(char *s, char *error, short type)
 		else if (type == ME && (inv || nbr > INT_MAX))
 			error = INV_ME;
 		else if ((inv || nbr > UINT_MAX))
-			error = INV_T;
+			error = INV_TIME;
 		if (error)
 			return (0);
 		s++;
 	}
 	return ((unsigned int) nbr);
+}
+
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i;
+
+	if (s1 == NULL && s2 == NULL)
+		return (0);
+	if (s1 == NULL)
+		return (0 - *s2);
+	if (s2 == NULL)
+		return (*s1);
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return (s1[i] - s2[i]);
+		i++;
+	}
+	return (0);
 }
 

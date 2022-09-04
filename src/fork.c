@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 12:59:46 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/04 19:09:45 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	init_forks(t_ctrl *ctrl, char *error)
 	nu_forks = ctrl->nu_philo;
 	while (i < nu_forks)
 	{
-		if (pthread_mutex_init(&(ctrl->forks[i].fork), NULL))	
+		if (pthread_mutex_init(&(ctrl->forks[i].mutex), NULL))	
 		{
 			ctrl->forks[i].init = false;
 			error = MUTEX_ERR;
@@ -31,7 +31,7 @@ void	init_forks(t_ctrl *ctrl, char *error)
 		ctrl->forks[i].locked = false;
 		i++;
 	}
-	if (pthread_mutex_init(&(ctrl->print_lock), NULL))
+	if (pthread_mutex_init(&(ctrl->print_lock.mutex), NULL))
 	{
 		ctrl->print_lock.init = false;
 		error = MUTEX_ERR;
@@ -45,19 +45,19 @@ void	get_forks(t_philo *philo)
 {
 	if (philo->nbr % 2)
 	{
-		philo->one = philo->ctrl->forks + philo->nbr - 1;
-		if (philo->nbr == philo->ctrl->nu_philo)
-			philo->two = philo->ctrl->forks;
+		philo->one = philo->controller->forks + philo->nbr - 1;
+		if (philo->nbr == philo->controller->nu_philo)
+			philo->two = philo->controller->forks;
 		else
-			philo->two = philo->ctrl->forks + philo->nbr;
+			philo->two = philo->controller->forks + philo->nbr;
 	}
 	else
 	{
-		if (philo->nbr == philo->ctrl->nu_philo)
-			philo->one = philo->ctrl->forks;
+		if (philo->nbr == philo->controller->nu_philo)
+			philo->one = philo->controller->forks;
 		else
-			philo->one = philo->ctrl->forks + philo->nbr;
-		philo->two = philo->ctrl->forks + philo->nbr - 1;
+			philo->one = philo->controller->forks + philo->nbr;
+		philo->two = philo->controller->forks + philo->nbr - 1;
 	}
 }	
 
@@ -65,25 +65,30 @@ void	take_forks(t_philo *philo)
 {
 	t_ms	time;
 
-	pthread_mutex_lock(&(one->mutex));
+	pthread_mutex_lock(&(philo->one->mutex));
 	time = gettime();
-	one->locked = true;
+	philo->one->locked = true;
 	print_action(philo, FORK, time);
 	philo->last_action = time;
-	if (died(philo) || philo->ctrl->death)
+	if (philo_die(philo) || philo->controller->death)
+	{
+		pthread_mutex_unlock(&(philo->two->mutex));
 		return ;
-	pthread_mutex_lock(&(two->mutex));
+	}
+	pthread_mutex_lock(&(philo->two->mutex));
 	time = gettime();
-	two->locked = true;	
+	philo->two->locked = true;	
 	philo->last_action = time;
 	print_action(philo, FORK, time);
 }
 
 void	leave_forks(t_philo *philo)
 {
+	if (!philo->has_forks)
+		return ;
 	pthread_mutex_unlock(&(philo->two->mutex));
 	philo->two->locked = false;
 	pthread_mutex_unlock(&(philo->one->mutex));
-	philo->one->locked = true;
+	philo->one->locked = false;
 }
 	

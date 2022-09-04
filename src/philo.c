@@ -1,37 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/03 18:15:09 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 10:58:39 by hoomen           ###   ########.fr       */
+/*   Created: 2022/09/04 10:54:34 by hoomen            #+#    #+#             */
+/*   Updated: 2022/09/04 17:47:20 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* mark M */
-
-int	help_message(void)
+void	init_philos(t_ctrl *ctrl)
 {
-	printf("%s %s\n%s\n", ERR, ARGS, USAGE);
-	return (1);
-}
+	int	i;
+	int	nu_philo;
 
-int	main(int argc, char **argv)
-{
-	t_ctrl	*controller;
-	t_err	*error;
-
-	if (argc < 5 || argc > 6)
-		return (help_message);
-	error = NULL;
-	t_ctrl = init_controller(argc, argv, error);
-	if (error)
-		exit_program(controller, error);
-	init_threads(controller, error);
-	return (exit_program(controller, error));
+	nu_philo = ctrl->nu_philo;
+	i = -1;
+	while (++i < nu_philo)
+	{
+		ctrl->philos[i].nbr = i + 1;
+		ctrl->philos[i].controller = ctrl;
+		ctrl->philos[i].meals = 0;
+		ctrl->philos[i].last_action = 0;
+		ctrl->philos[i].last_meal = 0;
+		ctrl->philos[i].has_forks = false;
+		ctrl->philos[i].died = false;
+	}
 }
 
