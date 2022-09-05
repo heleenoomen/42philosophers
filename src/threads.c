@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 19:07:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 19:24:02 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,11 @@ void	routine(t_philo *philo)
 		if (philo->controller->death || philo_die(philo))
 			break ;
 		philo_think(philo);
-		while (philo->meals > left->meals || philo->meals > right->meals);
+		while (philo->meals > left->meals || philo->meals > right->meals)
+		{
+			if (philo->controller->death)
+				return ;
+		}
 	}
 }
 

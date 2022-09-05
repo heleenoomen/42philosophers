@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:22:08 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 19:22:34 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ t_ms	gettime(void)
 void	philo_action(t_philo *philo, t_ms time_action)
 {
 	t_ms	end_of_action;
-	bool	*death;
+	bool	death;
 
-	death = &(philo->controller->death);
+	death = philo->controller->death;
 	end_of_action = philo->last_action + time_action;
 	while (gettime() < end_of_action)
 	{
-		if (*death)
+		if (death)
 			break ;
 		usleep (500);
 	}
