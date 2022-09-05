@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:09:45 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 09:26:35 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,25 +61,42 @@ void	get_forks(t_philo *philo)
 	}
 }	
 
+void	take_fork(t_philo *philo, t_fork *fork)
+{
+	pthread_mutex_lock(&(philo->fork->mutex));
+	time = gettime();
+	fork->locked = true;
+	print_action(philo, FORK, time);
+	philo->last_action = time;
+}
+
 void	take_forks(t_philo *philo)
 {
 	t_ms	time;
 
-	pthread_mutex_lock(&(philo->one->mutex));
-	time = gettime();
-	philo->one->locked = true;
-	print_action(philo, FORK, time);
-	philo->last_action = time;
+	while (philo->one->locked)
+	{
+		if (philo_die(philo))
+			return ;
+		usleep(100);
+	}
+	take_fork(philo, &(philo->one));
 	if (philo_die(philo) || philo->controller->death)
 	{
-		pthread_mutex_unlock(&(philo->two->mutex));
+		pthread_mutex_unlock(&(philo->one->mutex));
 		return ;
 	}
-	pthread_mutex_lock(&(philo->two->mutex));
-	time = gettime();
-	philo->two->locked = true;	
-	philo->last_action = time;
-	print_action(philo, FORK, time);
+	while (philo->two->locked)
+	{
+		if (philo_die(philo))
+		{
+			pthread_mutex_unlock(&(philo->one->mutex));
+			return ;
+		}
+		usleep(100);
+	}
+	take_fork(philo, &(philo->two));
+	philo->has_forks = true;
 }
 
 void	leave_forks(t_philo *philo)
@@ -90,5 +107,6 @@ void	leave_forks(t_philo *philo)
 	philo->two->locked = false;
 	pthread_mutex_unlock(&(philo->one->mutex));
 	philo->one->locked = false;
+	philo->has_forks = false;
 }
 	

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:54:34 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 17:47:20 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 09:55:19 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ void	init_philos(t_ctrl *ctrl)
 		ctrl->philos[i].meals = 0;
 		ctrl->philos[i].last_action = 0;
 		ctrl->philos[i].last_meal = 0;
+		if (ctrl->max_meals != -1)
+			ctrl->philos[i].meals = 0;
+		else
+			ctrl->philos[i].meals = -1;
 		ctrl->philos[i].has_forks = false;
 		ctrl->philos[i].died = false;
 	}

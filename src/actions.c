@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:21:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 09:54:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	philo_eat(t_philo *philo)
 	print_action(philo, EAT, philo->last_action);
 	philo->last_meal = philo->last_action;
 	philo_action(philo, philo->controller->time_eat);
+	if (philo->meals != -1)
+		philo->meals++;
 }
 
 /* time is acquired and a message is printed, philo_action is called to stop the
