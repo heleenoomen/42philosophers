@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 13:13:15 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 18:52:58 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 	if (error)
 		return (ctrl);
 	ctrl->threads = ft_malloc(ctrl->nu_philo * sizeof(pthread_t), error);
-	ctrl->forks = ft_malloc(ctrl->nu_philo * sizeof(pthread_mutex_t), error);
+	ctrl->forks = ft_malloc(ctrl->nu_philo * sizeof(t_fork), error);
 	ctrl->philos = ft_malloc(ctrl->nu_philo * sizeof(t_philo), error);
 	if (error)
 		return (ctrl);

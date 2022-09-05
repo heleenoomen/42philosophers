@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 13:24:37 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 19:05:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,36 +24,17 @@ void	print_action(t_philo *philo, char *action, t_ms time)
 	t_fork	*print_lock;
 	t_ms	rel_time;
 
-//	rel_time = time - philo->controller->start;
 	print_lock = &(philo->controller->print_lock);
 	time--;
-//	while (philo->controller->print_queue && rel_time > philo->controller->print_queue)
-//	{
-//		if (!print_lock->locked)
-//			(philo->controller->print_queue)++;
-//		if (philo->controller->death || philo_die(philo))
-//			return ;
-//	}
 	while (print_lock->locked)
 	{
-		if (philo_die(philo))
+		if (!philo->controller->death && !philo->died && philo_die(philo))
 			return ;
 	}
 	pthread_mutex_lock(&(philo->controller->print_lock.mutex));
 	rel_time = gettime() - philo->controller->start;
-	if (philo->nbr > 5)
-	{
-		int i = 0;
-		while (i < philo->controller->nu_philo)
-		{
-			if (philo->controller->philos + i == philo)
-				printf("wicked is %i\n", i);
-			i++;
-		}
-	}
 	if (!philo->controller->death || philo->died)
 		printf("%u %i %s\n", rel_time, philo->nbr, action);
-//	philo->controller->print_queue = rel_time;
 	pthread_mutex_unlock(&(philo->controller->print_lock.mutex));
 }
 	

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 13:20:26 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 19:07:11 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,17 @@ void	count_meals(t_ctrl *controller)
 	max_meals = controller->max_meals;
 	philos = controller->philos;
 	nu_philos = controller->nu_philo;
-	while (1)
+	while (!controller->death)
 	{
 		i = -1;
 		while (++i < nu_philos)
 		{
 			if (philos[i].meals < max_meals)
 				break ;
+			if (controller->death)
+				return ;
 		}
-		if (i == nu_philos)
+		if (i == nu_philos && !controller->death)
 		{
 			printf("max meals reached\n");
 			controller->death = true;
