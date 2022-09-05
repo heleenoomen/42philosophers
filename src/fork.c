@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 09:26:35 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 12:55:23 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	init_forks(t_ctrl *ctrl, char *error)
 	}
 	ctrl->print_lock.init = true;
 	ctrl->print_lock.locked = false;
+	ctrl->print_queue = 0;
 }
 
 void	get_forks(t_philo *philo)
@@ -63,7 +64,10 @@ void	get_forks(t_philo *philo)
 
 void	take_fork(t_philo *philo, t_fork *fork)
 {
-	pthread_mutex_lock(&(philo->fork->mutex));
+	t_ms	time;
+
+	pthread_mutex_lock(&(fork->mutex));
+	fork->queue = philo->last_meal;
 	time = gettime();
 	fork->locked = true;
 	print_action(philo, FORK, time);
@@ -72,15 +76,13 @@ void	take_fork(t_philo *philo, t_fork *fork)
 
 void	take_forks(t_philo *philo)
 {
-	t_ms	time;
-
 	while (philo->one->locked)
 	{
 		if (philo_die(philo))
 			return ;
 		usleep(100);
 	}
-	take_fork(philo, &(philo->one));
+	take_fork(philo, philo->one);
 	if (philo_die(philo) || philo->controller->death)
 	{
 		pthread_mutex_unlock(&(philo->one->mutex));
@@ -95,7 +97,7 @@ void	take_forks(t_philo *philo)
 		}
 		usleep(100);
 	}
-	take_fork(philo, &(philo->two));
+	take_fork(philo, philo->two);
 	philo->has_forks = true;
 }
 

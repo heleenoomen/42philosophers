@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 09:54:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 13:24:37 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,39 @@
  */
 void	print_action(t_philo *philo, char *action, t_ms time)
 {
+	t_fork	*print_lock;
+	t_ms	rel_time;
+
+//	rel_time = time - philo->controller->start;
+	print_lock = &(philo->controller->print_lock);
+	time--;
+//	while (philo->controller->print_queue && rel_time > philo->controller->print_queue)
+//	{
+//		if (!print_lock->locked)
+//			(philo->controller->print_queue)++;
+//		if (philo->controller->death || philo_die(philo))
+//			return ;
+//	}
+	while (print_lock->locked)
+	{
+		if (philo_die(philo))
+			return ;
+	}
 	pthread_mutex_lock(&(philo->controller->print_lock.mutex));
+	rel_time = gettime() - philo->controller->start;
+	if (philo->nbr > 5)
+	{
+		int i = 0;
+		while (i < philo->controller->nu_philo)
+		{
+			if (philo->controller->philos + i == philo)
+				printf("wicked is %i\n", i);
+			i++;
+		}
+	}
 	if (!philo->controller->death || philo->died)
-		printf("%u ms\t%i %s\n", time - philo->controller->start, philo->nbr, action);
+		printf("%u %i %s\n", rel_time, philo->nbr, action);
+//	philo->controller->print_queue = rel_time;
 	pthread_mutex_unlock(&(philo->controller->print_lock.mutex));
 }
 	
@@ -34,11 +64,12 @@ void	print_action(t_philo *philo, char *action, t_ms time)
  */
 void	philo_eat(t_philo *philo)
 {
+	if (philo->died)
+		return ;
 	print_action(philo, EAT, philo->last_action);
 	philo->last_meal = philo->last_action;
 	philo_action(philo, philo->controller->time_eat);
-	if (philo->meals != -1)
-		philo->meals++;
+	philo->meals++;
 }
 
 /* time is acquired and a message is printed, philo_action is called to stop the
@@ -77,7 +108,7 @@ bool	philo_die(t_philo *philo)
 	t_ms time;
 
 	time = gettime();
-	if (philo->controller->time_die < (time - philo->last_meal))
+	if (philo->controller->time_die > (time - philo->last_meal))
 		return (false);
 	philo->controller->death = true;
 	philo->died = true;

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:25:57 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 12:55:23 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_fork
 	pthread_mutex_t	mutex;
 	bool			init;
 	bool			locked;
+	t_ms			queue;
 }					t_fork;
 
 typedef struct s_ctrl
@@ -47,6 +48,7 @@ typedef struct s_ctrl
 	bool			run;
 	pthread_t		*threads;
 	struct s_fork	print_lock;
+	t_ms			print_queue;
 	struct s_fork	*forks;
 	struct s_philo	*philos;
 }					t_ctrl;

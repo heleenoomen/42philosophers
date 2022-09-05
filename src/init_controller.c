@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:05:29 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 13:13:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 	if (error)
 		return (ctrl);
 	init_philos(ctrl);
+	int i = 0;
+	while (i < ctrl->nu_philo)
+	{
+		printf("ctrl->nu_philo[i].nbr = %i\n", ctrl->philos[i].nbr);
+		i++;
+	}
 	return (ctrl);
 }
 	

@@ -6,11 +6,21 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 10:07:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/05 13:20:26 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+t_philo	*who_is_neighbour(t_philo *philo, int neighbour_nbr)
+{
+	int	nu_philo;
+
+	nu_philo = philo->controller->nu_philo;
+	if (neighbour_nbr == 0)
+		return (philo->controller->philos + nu_philo - 1);
+	return (philo->controller->philos + philo->nbr - 2);
+}
 
 /* tells the philo which forks to use (get_forks). Waits until the controller
  * sets 'run' to true and sets last_action and last_meal to this timestamp.
@@ -25,7 +35,12 @@
  */
 void	routine(t_philo *philo)
 {
+	t_philo	*left;
+	t_philo *right;
+	
 	get_forks(philo);
+	left = who_is_neighbour(philo, philo->nbr - 1);
+	right = who_is_neighbour(philo, philo->nbr + 1);
 	while (philo->controller->run == false);
 	philo->last_action = philo->controller->start;
 	philo->last_meal = philo->controller->start;
@@ -42,6 +57,7 @@ void	routine(t_philo *philo)
 		if (philo->controller->death || philo_die(philo))
 			break ;
 		philo_think(philo);
+		while (philo->meals > left->meals || philo->meals > right->meals);
 	}
 }
 
@@ -66,27 +82,26 @@ void	count_meals(t_ctrl *controller)
 	int		i;
 	t_philo	*philos;
 	int		nu_philos;
-	t_ms	time;
 
 	if (controller->max_meals == -1)
 		return ;
 	max_meals = controller->max_meals;
 	philos = controller->philos;
-	nu_philos = controller->nu_philos;
+	nu_philos = controller->nu_philo;
 	while (1)
 	{
 		i = -1;
 		while (++i < nu_philos)
 		{
-			if (philos[i].meals != max_meals)
+			if (philos[i].meals < max_meals)
 				break ;
 		}
 		if (i == nu_philos)
 		{
+			printf("max meals reached\n");
 			controller->death = true;
 			return ;
 		}
-		usleep(100);
 	}
 }
 
@@ -100,7 +115,7 @@ void	count_meals(t_ctrl *controller)
  * After creating threads, controller sets start time of simulation (gettime()) and
  * sets 'run' to true so that all threads starts the simulation at the same time.
  * Controller then goes to join_threads, to wait for all threads to return from their
- * routin
+ * routine
  */
 void	init_threads(t_ctrl *ctrl, char *error)
 {
