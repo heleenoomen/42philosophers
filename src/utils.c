@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:25:22 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 12:38:51 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	*ft_malloc(size_t size, t_err *error)
 
 	ret = malloc(size);
 	if (ret == NULL)
-		error = MALLOC_ERR; 
+		*error = MALLOC_ERR; 
 	return (ret);
 }
 
@@ -28,7 +28,7 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 	unsigned long int	nbr;
 	bool				inv;
 
-	if (error)
+	if (*error)
 		return (0);
 	nbr = 0;
 	inv = false;
@@ -38,12 +38,12 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 			inv = true;
 		nbr = (10 * nbr) + *s - '0';
 		if (type == PH && (inv || nbr > PH_MAX))
-			error = INV_PH;
+			*error = INV_PH;
 		else if (type == ME && (inv || nbr > INT_MAX))
-			error = INV_ME;
+			*error = INV_ME;
 		else if ((inv || nbr > UINT_MAX))
-			error = INV_TIME;
-		if (error)
+			*error = INV_TIME;
+		if (*error)
 			return (0);
 		s++;
 	}

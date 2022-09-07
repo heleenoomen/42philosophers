@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 12:55:23 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 12:41:01 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 /* represent time in milliseconds */
 typedef unsigned int	t_ms;
 /* mark s */
-typedef char			t_err;
+typedef char			*t_err;
 
 typedef struct s_fork
 {

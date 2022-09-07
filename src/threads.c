@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 19:24:02 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 12:45:45 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void	count_meals(t_ctrl *controller)
  * Controller then goes to join_threads, to wait for all threads to return from their
  * routine
  */
-void	init_threads(t_ctrl *ctrl, char *error)
+void	init_threads(t_ctrl *ctrl, t_err *error)
 {
 	int	i;
 	int	nu_philo;
@@ -136,7 +136,7 @@ void	init_threads(t_ctrl *ctrl, char *error)
 	{
 		if (pthread_create(ctrl->threads + i, NULL, (void *)routine, ctrl->philos + i))
 		{
-			error = THREAD_ERR;
+			*error = THREAD_ERR;
 			ctrl->death = true;
 			break ;
 		}

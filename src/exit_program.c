@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 18:54:06 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 13:00:18 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,17 @@ void	destroy_mutexes(t_ctrl *controller)
 
 int	exit_program(t_ctrl *controller, t_err *error)
 {
-	if (ft_strcmp(INV_PH, error) || ft_strcmp(INV_TIME, error)
-			|| ft_strcmp(INV_ME, error))
+	if (*error)
+		printf("%s %s\n", ERR, *error);
+	if (ft_strcmp(INV_PH, *error) || ft_strcmp(INV_TIME, *error)
+			|| ft_strcmp(INV_ME, *error))
 	{
 		free(controller);
 		return (1);
 	}
-	if (error == NULL || ft_strcmp(MUTEX_ERR, error) == 0)
-		destroy_mutexes(controller);
+	if (*error == NULL || ft_strcmp(MUTEX_ERR, *error))
+		free(controller->philos);
+	destroy_mutexes(controller);
 	free(controller->threads);
 	free(controller->forks);
 	free(controller->philos);

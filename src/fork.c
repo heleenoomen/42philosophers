@@ -6,13 +6,13 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/05 12:55:23 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 12:42:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	init_forks(t_ctrl *ctrl, char *error)
+void	init_forks(t_ctrl *ctrl, t_err *error)
 {
 	int	i;
 	int	nu_forks;
@@ -24,7 +24,7 @@ void	init_forks(t_ctrl *ctrl, char *error)
 		if (pthread_mutex_init(&(ctrl->forks[i].mutex), NULL))	
 		{
 			ctrl->forks[i].init = false;
-			error = MUTEX_ERR;
+			*error = MUTEX_ERR;
 			return ;
 		}
 		ctrl->forks[i].init = true;
@@ -34,7 +34,7 @@ void	init_forks(t_ctrl *ctrl, char *error)
 	if (pthread_mutex_init(&(ctrl->print_lock.mutex), NULL))
 	{
 		ctrl->print_lock.init = false;
-		error = MUTEX_ERR;
+		*error = MUTEX_ERR;
 		return ;
 	}
 	ctrl->print_lock.init = true;
