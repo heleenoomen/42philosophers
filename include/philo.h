@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 12:41:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 15:51:34 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_philo
 	t_ms			last_action;
 	t_ms			last_meal;
 	int				meals;
+	bool			sated;
 	t_ctrl			*controller;
 	bool			died;
 }					t_philo;

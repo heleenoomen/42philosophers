@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 12:42:21 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 15:49:52 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,8 @@ void	take_forks(t_philo *philo)
 {
 	while (philo->one->locked)
 	{
-		if (philo_die(philo))
+	if (philo_die(philo))
 			return ;
-		usleep(100);
 	}
 	take_fork(philo, philo->one);
 	if (philo_die(philo) || philo->controller->death)
@@ -95,7 +94,6 @@ void	take_forks(t_philo *philo)
 			pthread_mutex_unlock(&(philo->one->mutex));
 			return ;
 		}
-		usleep(100);
 	}
 	take_fork(philo, philo->two);
 	philo->has_forks = true;

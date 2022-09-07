@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/04 19:18:26 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 15:31:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ _to_die> <time_to_eat> <time_to_sleep> [max meals]."
 # define INV_PH "Please provide a valid number of philosophers (max 200)."
 # define INV_ME "Please provide a valid number of meals max (max INT_MAX)."
 
-# define FORK "has taken a fork"
+# define FORK1 "has taken fork one"
+# define FORK2 "has taken fork two"
 # define EAT "is eating"
 # define SLEEP "is sleeping"
 # define THINK "is thinking"
