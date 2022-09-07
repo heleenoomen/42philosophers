@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 15:51:34 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 18:33:45 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_ctrl
 	t_ms			start;
 	bool			death;
 	bool			run;
+	bool			simulation;
 	pthread_t		*threads;
 	struct s_fork	print_lock;
 	t_ms			print_queue;
@@ -58,13 +59,12 @@ typedef struct s_philo
 	int				nbr;
 	t_fork			*one;
 	t_fork			*two;
-	bool			has_forks;
 	t_ms			last_action;
 	t_ms			last_meal;
 	int				meals;
 	bool			sated;
+	bool			free;
 	t_ctrl			*controller;
-	bool			died;
 }					t_philo;
 
 /* ft_atoui needs to know if the string to convert is the number
@@ -98,16 +98,19 @@ void			init_philos(t_ctrl *ctrl);
 /* threads.c */
 void			init_threads(t_ctrl *ctrl, t_err *error);
 
+/* watcher.c */
+void			watcher(t_ctrl *controller);
+
 /* actions.c */
 void			print_action(t_philo *philo, char *action, t_ms time);
-void			philo_eat(t_philo *philo);
+void			take_forks(t_philo *philo);
+void			eat(t_philo *philo);
 void			philo_sleep(t_philo *philo);
-void			philo_think(t_philo *philo);
-bool			philo_die(t_philo *philo);
+void			think(t_philo *philo);
 
 /* time.c */
 t_ms			gettime(void);
-void			philo_action(t_philo *philo, t_ms time);
+void			ph_usleep(t_philo *philo, t_ms time);
 
 /* exit_program.c */
 int				exit_program(t_ctrl *controller, t_err *error);

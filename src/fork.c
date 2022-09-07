@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 15:49:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/07 20:13:40 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,69 +44,20 @@ void	init_forks(t_ctrl *ctrl, t_err *error)
 
 void	get_forks(t_philo *philo)
 {
+	int	left;
+	int	right;
+
+	left = (philo->nbr - 1) % philo->controller->nu_philo;
+	right = philo->nbr % philo->controller->nu_philo;
 	if (philo->nbr % 2)
 	{
-		philo->one = philo->controller->forks + philo->nbr - 1;
-		if (philo->nbr == philo->controller->nu_philo)
-			philo->two = philo->controller->forks;
-		else
-			philo->two = philo->controller->forks + philo->nbr;
+		philo->one = philo->controller->forks + left;
+		philo->two = philo->controller->forks + right;
 	}
 	else
 	{
-		if (philo->nbr == philo->controller->nu_philo)
-			philo->one = philo->controller->forks;
-		else
-			philo->one = philo->controller->forks + philo->nbr;
-		philo->two = philo->controller->forks + philo->nbr - 1;
+		philo->one = philo->controller->forks + right;
+		philo->two = philo->controller->forks + left;
 	}
-}	
-
-void	take_fork(t_philo *philo, t_fork *fork)
-{
-	t_ms	time;
-
-	pthread_mutex_lock(&(fork->mutex));
-	fork->queue = philo->last_meal;
-	time = gettime();
-	fork->locked = true;
-	print_action(philo, FORK, time);
-	philo->last_action = time;
 }
 
-void	take_forks(t_philo *philo)
-{
-	while (philo->one->locked)
-	{
-	if (philo_die(philo))
-			return ;
-	}
-	take_fork(philo, philo->one);
-	if (philo_die(philo) || philo->controller->death)
-	{
-		pthread_mutex_unlock(&(philo->one->mutex));
-		return ;
-	}
-	while (philo->two->locked)
-	{
-		if (philo_die(philo))
-		{
-			pthread_mutex_unlock(&(philo->one->mutex));
-			return ;
-		}
-	}
-	take_fork(philo, philo->two);
-	philo->has_forks = true;
-}
-
-void	leave_forks(t_philo *philo)
-{
-	if (!philo->has_forks)
-		return ;
-	pthread_mutex_unlock(&(philo->two->mutex));
-	philo->two->locked = false;
-	pthread_mutex_unlock(&(philo->one->mutex));
-	philo->one->locked = false;
-	philo->has_forks = false;
-}
-	
