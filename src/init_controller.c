@@ -6,11 +6,18 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 12:56:42 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 13:55:19 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	init_flags_counters_controller(t_ctrl *controller)
+{
+	controller->run = false;
+	controller->death = false;
+	controller->watcher_go = 0;
+}
 
 t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 {
@@ -32,12 +39,9 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 	ctrl->threads = ft_malloc(ctrl->nu_philo * sizeof(pthread_t), error);
 	ctrl->forks = ft_malloc(ctrl->nu_philo * sizeof(t_fork), error);
 	ctrl->philos = ft_malloc(ctrl->nu_philo * sizeof(t_philo), error);
-	if (*error)
-		return (ctrl);
 	init_forks(ctrl, error);
-	if (*error)
-		return (ctrl);
 	init_philos(ctrl);
+	init_flags_counters_controller(ctrl);
 	return (ctrl);
 }
 	

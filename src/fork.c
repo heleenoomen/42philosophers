@@ -6,40 +6,40 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 20:13:40 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 13:54:46 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+bool	init_fork(t_fork *fork, t_err *error)
+{
+	if (pthread_mutex_init(&(fork->mutex), NULL))
+	{
+		*error = MUTEX_ERR;
+		fork->init = false;
+		return (true);
+	}
+	fork->init = true;
+	return (false);	
+}
 
 void	init_forks(t_ctrl *ctrl, t_err *error)
 {
 	int	i;
 	int	nu_forks;
 
-	i = 0;
-	nu_forks = ctrl->nu_philo;
-	while (i < nu_forks)
-	{
-		if (pthread_mutex_init(&(ctrl->forks[i].mutex), NULL))	
-		{
-			ctrl->forks[i].init = false;
-			*error = MUTEX_ERR;
-			return ;
-		}
-		ctrl->forks[i].init = true;
-		ctrl->forks[i].locked = false;
-		i++;
-	}
-	if (pthread_mutex_init(&(ctrl->print_lock.mutex), NULL))
-	{
-		ctrl->print_lock.init = false;
-		*error = MUTEX_ERR;
+	if (*error)
 		return ;
+	i = -1;
+	nu_forks = ctrl->nu_philo;
+	while (++i < nu_forks)
+	{
+		if (init_fork(&(ctrl->forks[i]), error))	
+			return ;
 	}
-	ctrl->print_lock.init = true;
-	ctrl->print_lock.locked = false;
-	ctrl->print_queue = 0;
+	if (init_fork(&(ctrl->print_lock.mutex), error))
+		return ;
 }
 
 void	get_forks(t_philo *philo)

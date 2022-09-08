@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/08 12:34:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 12:59:01 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,6 @@ bool	check_lonely(t_ctrl *controller)
 {
 	if (controller->nu_philo > 1)
 		return (false);
-	printf("here\n");
 	controller->death = true;
 	print_action(controller->philos, FORK, gettime());
 	ph_usleep(controller->philos, controller->time_die);
