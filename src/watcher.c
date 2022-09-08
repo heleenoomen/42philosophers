@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 20:26:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 12:34:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,12 @@
 
 bool	check_died(t_ctrl *controller, t_philo *philo)
 {
-	t_ms	time;
-
-	time = gettime();
 	if (!philo->free)
 		return (false);
-	if (controller->time_die + philo->last_meal > time)
+	if (gettime() - philo->last_meal > controller->time_die)
 	{
 		controller->death = true;
 		print_action(philo, DIE, gettime());
-		printf("last_meal = %u\n", philo->last_meal);
-		printf("time_die = %u\n", controller->time_die);
-		printf("start = %u\n", controller->start);
-		printf("actual time = %u\n", gettime());
-		printf("actual reltime = %u\n", time - controller->start);
 		return (true);
 	}
 	return (false);
@@ -65,6 +57,15 @@ bool	check_all_sated(t_ctrl *controller, int nu_sated, int nu_philos, bool max_m
 	return (false);
 }
 
+void	watcher_wait(t_ctrl *controller)
+{
+	while (controller->go < controller->nu_philo)
+	{
+		if ((gettime() - controller->start) > controller->time_die)
+			break ;
+	}
+}
+
 void	watcher(t_ctrl *controller)
 {
 	int		i;
@@ -80,8 +81,10 @@ void	watcher(t_ctrl *controller)
 	philos = controller->philos;
 	nu_philos = controller->nu_philo;
 	nu_sated = 0;
+	controller-> go = 0;
 	controller->start = gettime();
 	controller->run = true;
+	watcher_wait(controller);
 	if (check_lonely(controller))
 		return ;
 	while (1)

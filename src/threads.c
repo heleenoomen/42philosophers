@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 20:10:31 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 12:28:30 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 void	routine(t_philo *philo)
 {
-	bool	*death;
+	bool		*death;
 
 	death = &(philo->controller->death);
-	while (philo->controller->run == false);
+	while ((philo->controller->run) == false);
 	philo->last_action = philo->controller->start;
 	philo->last_meal = philo->controller->start;
+	philo->controller->go++;
 	while (!(*death))
 	{
 		take_forks(philo);

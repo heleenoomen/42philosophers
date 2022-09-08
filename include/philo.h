@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 18:33:45 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 12:30:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_ctrl
 	t_ms			start;
 	bool			death;
 	bool			run;
-	bool			simulation;
+	unsigned char	go;
 	pthread_t		*threads;
 	struct s_fork	print_lock;
 	t_ms			print_queue;
