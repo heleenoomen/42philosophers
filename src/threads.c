@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:27:53 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 11:42:57 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,14 @@
  * checked for, philo->free is set to false (after taking forks, i.e. at the
  * start of the meal) and again to free (after waking up from sleeping).
  */
-void	routine(t_philo *philo)
+void	run_philosophers(t_philo *philo)
 {
 	bool		*death;
 
 	death = &(philo->controller->death);
 	while ((philo->controller->run) == false);
 	philo->last_meal = philo->controller->start;
+	philo->last_action = philo->controller->start;
 	philo->free = true;
 	while (!(*death))
 	{
@@ -46,6 +47,17 @@ void	routine(t_philo *philo)
 			return ;
 		think(philo);
 	}
+}
+
+void	run_one_philosopher(t_philo *philo)
+{
+	while ((philo->controller->run) == false);	
+	philo->last_meal = philo->controller->start;
+	philo->free = true;
+	pthread_mutex_lock(&(philo->one->mutex));
+	print_action(philo, FORK, gettime());
+	while (!(philo->controller->death));
+	pthread_mutex_unlock(&(philo->one->mutex));
 }
 
 /* when the simulation is over, the main thread waits for the other threads to 
@@ -75,10 +87,15 @@ void	join_threads(t_ctrl *ctrl)
  */
 void	init_threads(t_ctrl *ctrl, t_err *error)
 {
-	int	i;
-	int	nu_philo;
+	int		i;
+	int		nu_philo;
+	void	(*routine)(t_philo *);
 
 	nu_philo = ctrl->nu_philo;
+	if (nu_philo == 1)
+		routine = &run_one_philosopher;
+	else
+		routine = &run_philosophers;
 	i = 0;
 	while (i < nu_philo)
 	{

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:36:17 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 12:02:13 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,19 @@ bool	check_sated(t_philo *philo)
 	return (false);
 }
 
-bool	check_lonely(t_ctrl *controller)
+bool	check_lonely(t_ctrl *controller, t_philo *philos, int nu_philo)
 {
-	if (controller->nu_philo > 1)
+	if (nu_philo > 1)
 		return (false);
-	controller->death = true;
 	controller->start = gettime();
 	controller->run = true;
-	print_action(controller->philos, FORK, gettime());
-	ph_usleep(controller->philos, controller->time_die);
-	print_action(controller->philos, DIE, gettime());
+	while (!philos->free);
+	while (gettime() - philos->last_meal < controller->time_die);
+	print_action(philos, DIE, gettime());
+	// {
+		// if (check_died(controller, philos))
+			// return (true);
+	// }
 	return (true);
 }
 
@@ -77,15 +80,15 @@ void	watcher(t_ctrl *controller)
 	int		nu_sated;
 	bool	max_meals;
 
+	nu_philos = controller->nu_philo;
+	philos = controller->philos;
+	if (check_lonely(controller, philos, nu_philos))
+		return ;
 	if (controller->max_meals == -1)
 		max_meals = false;
 	else
 		max_meals = true;
-	philos = controller->philos;
-	nu_philos = controller->nu_philo;
 	nu_sated = 0;
-	if (check_lonely(controller))
-		return ;
 	controller->start = gettime();
 	controller->run = true;
 	while (1)

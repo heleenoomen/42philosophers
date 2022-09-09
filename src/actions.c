@@ -6,11 +6,13 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 19:53:33 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 13:42:05 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
+#include <errno.h>
 
 /* prints the action. Prints the time since the beginning of the simulation. 
  * Uses the print_lock mutex from the controller struct so that multiple philo-

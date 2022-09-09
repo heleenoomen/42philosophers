@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:30:57 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 13:06:31 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,14 @@ void	init_forks(t_ctrl *ctrl, t_err *error)
 
 	if (*error)
 		return ;
-	i = -1;
+	i = 0;
 	nu_forks = ctrl->nu_philo;
-	while (++i < nu_forks)
+	while (i < nu_forks)
 	{
-		if (init_fork(&(ctrl->forks[i]), error))	
+		if (init_fork(ctrl->forks + i, error) == false)	
 			return ;
+		ctrl->forks[i].init = true;
+		i++;
 	}
 	if (init_fork(&(ctrl->print_lock), error))
 		return ;
@@ -68,7 +70,9 @@ void	get_forks(t_philo *philo)
 
 	left = (philo->nbr - 1) % philo->controller->nu_philo;
 	right = philo->nbr % philo->controller->nu_philo;
-	if (philo->nbr % 2)
+	if (philo->controller->nu_philo == 1)
+		philo->one = philo->controller->forks;
+	else if (philo->nbr % 2)
 	{
 		philo->one = philo->controller->forks + left;
 		philo->two = philo->controller->forks + right;
