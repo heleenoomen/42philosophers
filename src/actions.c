@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 13:42:05 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 15:16:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,9 @@ void	print_action(t_philo *philo, char *action, t_ms time)
  */
 void	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->one->mutex));
+	pthread_mutex_lock(&(philo->left->mutex));
 	print_action(philo, FORK, gettime());
-	pthread_mutex_lock(&(philo->two->mutex));
+	pthread_mutex_lock(&(philo->right->mutex));
 	philo->last_action = gettime();
 	print_action(philo, FORK, philo->last_action);
 }
@@ -52,8 +52,8 @@ void	eat(t_philo *philo)
 	print_action(philo, EAT, philo->last_meal);
 	philo->meals++;
 	ph_usleep(philo, philo->controller->time_eat);	
-	pthread_mutex_unlock(&(philo->one->mutex));
-	pthread_mutex_unlock(&(philo->two->mutex));	
+	pthread_mutex_unlock(&(philo->right->mutex));
+	pthread_mutex_unlock(&(philo->left->mutex));	
 }
 
 /* time is acquired and a message is printed, ph_usleep is called to stop the

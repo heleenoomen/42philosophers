@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:31:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 15:09:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ typedef struct s_ctrl
 typedef struct s_philo
 {
 	int				nbr;
-	t_fork			*one;
-	t_fork			*two;
+	t_fork			*left;
+	t_fork			*right;
 	t_ms			last_action;
 	t_ms			last_meal;
 	int				meals;
@@ -125,7 +125,6 @@ t_ctrl			*init_controller(int argc, char **argv, t_err *error);
 /* fork.c */
 void			init_forks(t_ctrl *ctrl, t_err *error);
 void			get_forks(t_philo *philo);
-void			take_forks(t_philo *philo);
 void			leave_forks(t_philo *philo);
 
 /* philo.c */

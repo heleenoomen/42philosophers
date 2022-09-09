@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:54:34 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:07:33 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 15:07:49 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ void	init_philos(t_ctrl *ctrl, t_err *error)
 		ctrl->philos[i].nbr = i + 1;
 		ctrl->philos[i].controller = ctrl;
 		ctrl->philos[i].meals = 0;
-		get_forks(ctrl->philos + i);
+		ctrl->philos[i].left = ctrl->forks + ((i - 1) % nu_philo);
+		ctrl->philos[i].right = ctrl->forks + (i % nu_philo);
 		ctrl->philos[i].sated = false;
 		ctrl->philos[i].free = false;
 	}

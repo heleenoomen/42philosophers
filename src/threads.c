@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 11:42:57 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 15:36:40 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ void	run_philosophers(t_philo *philo)
 	philo->last_meal = philo->controller->start;
 	philo->last_action = philo->controller->start;
 	philo->free = true;
+	if (philo->nbr % 2)
+		ph_usleep(philo, philo->controller->time_eat);
 	while (!(*death))
 	{
 		take_forks(philo);
@@ -54,10 +56,10 @@ void	run_one_philosopher(t_philo *philo)
 	while ((philo->controller->run) == false);	
 	philo->last_meal = philo->controller->start;
 	philo->free = true;
-	pthread_mutex_lock(&(philo->one->mutex));
+	pthread_mutex_lock(&(philo->left->mutex));
 	print_action(philo, FORK, gettime());
 	while (!(philo->controller->death));
-	pthread_mutex_unlock(&(philo->one->mutex));
+	pthread_mutex_unlock(&(philo->left->mutex));
 }
 
 /* when the simulation is over, the main thread waits for the other threads to 

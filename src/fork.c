@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 13:06:31 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 15:11:50 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,16 +71,16 @@ void	get_forks(t_philo *philo)
 	left = (philo->nbr - 1) % philo->controller->nu_philo;
 	right = philo->nbr % philo->controller->nu_philo;
 	if (philo->controller->nu_philo == 1)
-		philo->one = philo->controller->forks;
+		philo->left = philo->controller->forks;
 	else if (philo->nbr % 2)
 	{
-		philo->one = philo->controller->forks + left;
-		philo->two = philo->controller->forks + right;
+		philo->left = philo->controller->forks + left;
+		philo->right = philo->controller->forks + right;
 	}
 	else
 	{
-		philo->one = philo->controller->forks + right;
-		philo->two = philo->controller->forks + left;
+		philo->left = philo->controller->forks + right;
+		philo->right = philo->controller->forks + left;
 	}
 }
 
