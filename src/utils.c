@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/08 13:43:43 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 10:34:11 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static bool	check_error(char *s, t_err *error, short type)
 {
 	if (*error)
 		return (true);
-	if (s == NULL || s[0] == '\0' || s[0] == '0')
+	if (s == NULL || s[0] == '\0' || (s[0] == '0' && s[1] == '0'))
 	{
 		if (type == PH)
 			*error = INV_PH;
@@ -58,7 +58,7 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 	unsigned long int	nbr;
 	bool				inv;
 
-	if (check_error(s, error, type));
+	if (check_error(s, error, type))
 		return (0);
 	nbr = 0;
 	inv = false;
@@ -77,7 +77,7 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 			return (0);
 		s++;
 	}
-	if (nrb == 0 && type == PH)
+	if (nbr == 0 && type == PH)
 		*error = NO_PH;
 	return ((unsigned int) nbr); }
 

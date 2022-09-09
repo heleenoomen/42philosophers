@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/08 13:41:10 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 10:31:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 
 /* represent time in milliseconds */
 typedef unsigned int	t_ms;
+
 /* mark s */
 typedef char			*t_err;
 
@@ -64,9 +65,9 @@ typedef struct s_ctrl
 	t_ms			start;
 	bool			death;
 	bool			run;
-	unsigned char	watcher_go;
 	pthread_t		*threads;
 	struct s_fork	*forks;
+	struct s_fork	print_lock;
 	struct s_philo	*philos;
 }					t_ctrl;
 
@@ -106,7 +107,7 @@ typedef struct s_philo
  * the number exceeds UINT_MAX */
 # define PH 0
 # define ME 1
-# define T	2
+# define TI	2
 
 /* define the maximum number op philosopers */
 # ifndef PH_MAX
@@ -128,7 +129,7 @@ void			take_forks(t_philo *philo);
 void			leave_forks(t_philo *philo);
 
 /* philo.c */
-void			init_philos(t_ctrl *ctrl);
+void			init_philos(t_ctrl *ctrl, t_err *error);
 
 /* threads.c */
 void			init_threads(t_ctrl *ctrl, t_err *error);

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:09 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 15:49:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 10:24:55 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 
 	if (argc < 5 || argc > 6)
 		return (help_message());
+	error = NULL;
 	controller = init_controller(argc, argv, &error);
 	if (error)
 		return (exit_program(controller, &error));

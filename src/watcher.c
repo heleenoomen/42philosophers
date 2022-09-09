@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/08 12:59:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/09 10:36:17 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ bool	check_lonely(t_ctrl *controller)
 	if (controller->nu_philo > 1)
 		return (false);
 	controller->death = true;
+	controller->start = gettime();
+	controller->run = true;
 	print_action(controller->philos, FORK, gettime());
 	ph_usleep(controller->philos, controller->time_die);
 	print_action(controller->philos, DIE, gettime());
@@ -56,15 +58,17 @@ bool	check_all_sated(t_ctrl *controller, int nu_sated, int nu_philos, bool max_m
 	return (false);
 }
 
-void	watcher_wait(t_ctrl *controller)
-{
-	while (controller->go < controller->nu_philo)
-	{
-		if ((gettime() - controller->start) > controller->time_die)
-			break ;
-	}
-}
-
+/* controller sets local parameters to avoid redirection and access data faster.
+ * Max_meals is set to true when the max_meals parameter was entered by the
+ * user, to false if it wasn't entered. nu_philos is set to
+ * controller->nu_philos, nu_sated is set to zero since no philosopher has eaten
+ * yet right after the start of the simulation. Check lonely is called in case
+ * their is only one philosopher. Now, watcher is ready to starts the
+ * simulation: she sets the start time to the current time (gettime()) and sets
+ * run to true for the philosophers to start their routines. Once simulation is 
+ * started, watcher enters a whileloop where he constantly checks if a 
+ * philosopher has died or is sated or if all philosophers are sated.
+ */
 void	watcher(t_ctrl *controller)
 {
 	int		i;
@@ -80,12 +84,10 @@ void	watcher(t_ctrl *controller)
 	philos = controller->philos;
 	nu_philos = controller->nu_philo;
 	nu_sated = 0;
-	controller-> go = 0;
-	controller->start = gettime();
-	controller->run = true;
-	watcher_wait(controller);
 	if (check_lonely(controller))
 		return ;
+	controller->start = gettime();
+	controller->run = true;
 	while (1)
 	{
 		i = -1;
