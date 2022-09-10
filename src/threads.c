@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 15:36:40 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/10 18:53:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,55 +25,35 @@
  */
 void	run_philosophers(t_philo *philo)
 {
-	bool		*death;
-
-	death = &(philo->controller->death);
-	while ((philo->controller->run) == false);
-	philo->last_meal = philo->controller->start;
-	philo->last_action = philo->controller->start;
-	philo->free = true;
+	philo->last_meal = philo->ctrl->start;
 	if (philo->nbr % 2)
-		ph_usleep(philo, philo->controller->time_eat);
-	while (!(*death))
+		ph_usleep(philo, philo->ctrl->time_eat);
+	while ((death(philo->ctrl, CHECK) == false))
 	{
-		take_forks(philo);
-		philo->free = false;
-		eat(philo);
-		if (philo->meals == philo->controller->max_meals)
-			philo->sated = true;
-		if (*death)
-			return ;	
-		philo_sleep(philo);
-		philo->free = true;
-		if (*death)
-			return ;
-		think(philo);
+		ph_eat(philo);
+		ph_sleep(philo);
+		print_action(philo, THINK, gettime());
 	}
 }
 
 void	run_one_philosopher(t_philo *philo)
 {
-	while ((philo->controller->run) == false);	
-	philo->last_meal = philo->controller->start;
-	philo->free = true;
+	philo->last_meal = philo->ctrl->start;
 	pthread_mutex_lock(&(philo->left->mutex));
 	print_action(philo, FORK, gettime());
-	while (!(philo->controller->death));
-	pthread_mutex_unlock(&(philo->left->mutex));
+	while (death(philo->ctrl, CHECK) == false);
 }
 
 /* when the simulation is over, the main thread waits for the other threads to 
  * return befor exiting the program. pthread_join waits for threads to join (=
  * for them to return from their routine)
  */
-void	join_threads(t_ctrl *ctrl)
+void	join_threads(t_ctrl *ctrl, int nu_created)
 {
 	int	i;
-	int	nu_philo;
 
-	nu_philo = ctrl->nu_philo;
 	i = 0;
-	while (i++ < nu_philo)
+	while (i++ < nu_created)
 		pthread_join(ctrl->threads[i], NULL);
 }
 
@@ -90,27 +70,26 @@ void	join_threads(t_ctrl *ctrl)
 void	init_threads(t_ctrl *ctrl, t_err *error)
 {
 	int		i;
-	int		nu_philo;
 	void	(*routine)(t_philo *);
 
-	nu_philo = ctrl->nu_philo;
 	if (nu_philo == 1)
 		routine = &run_one_philosopher;
 	else
 		routine = &run_philosophers;
 	i = 0;
+	ctrl->start = gettime();
 	while (i < nu_philo)
 	{
 		if (pthread_create(ctrl->threads + i, NULL, (void *)routine, ctrl->philos + i))
 		{
 			*error = THREAD_ERR;
-			ctrl->death = true;
+			death(ctrl, SET);
 			break ;
 		}
 		i++;
 	}
-	watcher(ctrl);
-	join_threads(ctrl);
+	watcher(ctrl, i);
+	join_threads(ctrl, i);
 }
 
 

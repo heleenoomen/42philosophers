@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:54:34 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 15:07:49 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/10 19:03:36 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void	init_philos(t_ctrl *ctrl, t_err *error)
 		ctrl->philos[i].meals = 0;
 		ctrl->philos[i].left = ctrl->forks + ((i - 1) % nu_philo);
 		ctrl->philos[i].right = ctrl->forks + (i % nu_philo);
+		init_mutex(&(ctrl->philos[i].lock_meal.mutex), error);
+		init_mutex(&(ctrl->philos[i].lock_status.mutex), error);
 		ctrl->philos[i].sated = false;
 		ctrl->philos[i].free = false;
 	}

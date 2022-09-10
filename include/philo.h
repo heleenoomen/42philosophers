@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 15:09:39 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/10 19:09:52 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ typedef unsigned int	t_ms;
 /* mark s */
 typedef char			*t_err;
 
-typedef struct s_fork
+typedef struct s_mutex
 {
 	pthread_mutex_t	mutex;
 	bool			init;
-}					t_fork;
+}					t_mutex;
 
 /* the controller struct is used by the main thread (controller/watcher).
  * In here we store the parameters provided by the user:
@@ -51,7 +51,7 @@ typedef struct s_fork
  * 					and after watcher_go == nu_philo, watcher can start overseeing
  * 					the simulation
  * 	*threads	>	pointer to array of threads (every thread is a philosopher)
- * 	*forks		>	pointer to array of t_forks (every fork is a t_fork)
+ * 	*forks		>	pointer to array of t_mutexs (every fork is a t_mutex)
  * 	*philos		>	pointer to array of t_philo struct, each of them representing
  * 					one philosopher
  */
@@ -62,13 +62,14 @@ typedef struct s_ctrl
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
-	t_ms			start;
-	bool			death;
-	bool			run;
-	pthread_t		*threads;
-	struct s_fork	*forks;
-	struct s_fork	print_lock;
 	struct s_philo	*philos;
+	pthread_t		*threads;
+	t_mutex			*forks;
+	bool			death;
+	t_mutex			lock_death;
+	int				nu_sated;
+	t_mutex			lock_sated;
+	t_mutex			lock_print;
 }					t_ctrl;
 
 /* each t_philo struct represents a philosopher: they are the parameter that
@@ -90,15 +91,18 @@ typedef struct s_ctrl
 typedef struct s_philo
 {
 	int				nbr;
-	t_fork			*left;
-	t_fork			*right;
-	t_ms			last_action;
 	t_ms			last_meal;
+	t_mutex			*left;
+	t_mutex			*right;
+	t_mutex			lock_meal;
+	t_mutex			lock_status;
 	int				meals;
-	bool			sated;
-	bool			free;
-	t_ctrl			*controller;
+	bool			status;
+	t_ctrl			*ctrl;
 }					t_philo;
+
+# define EATS 0
+# define NOT_EATING 1
 
 /* ft_atoui needs to know if the string to convert is the number
  * of philosophers (PH) or the max_meals parameter (ME). In case of PH or ME,
@@ -123,9 +127,8 @@ int				ft_strcmp(char *s1, char *s2);
 t_ctrl			*init_controller(int argc, char **argv, t_err *error);
 
 /* fork.c */
-void			init_forks(t_ctrl *ctrl, t_err *error);
-void			get_forks(t_philo *philo);
-void			leave_forks(t_philo *philo);
+void			init_all_mutexes(t_ctrl *ctrl, t_err *error);
+bool			init_mutex(t_mutex *fork, t_err *error);
 
 /* philo.c */
 void			init_philos(t_ctrl *ctrl, t_err *error);
@@ -134,14 +137,22 @@ void			init_philos(t_ctrl *ctrl, t_err *error);
 void			init_threads(t_ctrl *ctrl, t_err *error);
 
 /* watcher.c */
-void			watcher(t_ctrl *controller);
+void			watcher(t_ctrl *ctrl, int threads_created);
 
 /* actions.c */
 void			print_action(t_philo *philo, char *action, t_ms time);
 void			take_forks(t_philo *philo);
 void			eat(t_philo *philo);
 void			philo_sleep(t_philo *philo);
-void			think(t_philo *philo);
+bool			death_check(t_ctrl *controller);
+
+/* death.c */
+bool			death(t_ctrl *ctrl, bool action)
+t_ms			meal(t_philo *philo, t_ms start_meal, bool flag, bool status);
+bool			sated(t_ctrl *ctrl, bool flag);
+bool			status(t_philo *philo);
+# define SET true
+# define CHECK false
 
 /* time.c */
 t_ms			gettime(void);
