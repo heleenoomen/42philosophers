@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/10 19:09:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 10:37:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_ctrl
 	int				nu_sated;
 	t_mutex			lock_sated;
 	t_mutex			lock_print;
+	t_ms			start;
 }					t_ctrl;
 
 /* each t_philo struct represents a philosopher: they are the parameter that
@@ -128,7 +129,7 @@ t_ctrl			*init_controller(int argc, char **argv, t_err *error);
 
 /* fork.c */
 void			init_all_mutexes(t_ctrl *ctrl, t_err *error);
-bool			init_mutex(t_mutex *fork, t_err *error);
+bool			init_mutex(t_mutex *mutex, t_err *error);
 
 /* philo.c */
 void			init_philos(t_ctrl *ctrl, t_err *error);
@@ -141,16 +142,21 @@ void			watcher(t_ctrl *ctrl, int threads_created);
 
 /* actions.c */
 void			print_action(t_philo *philo, char *action, t_ms time);
-void			take_forks(t_philo *philo);
-void			eat(t_philo *philo);
-void			philo_sleep(t_philo *philo);
-bool			death_check(t_ctrl *controller);
+void			ph_eat(t_philo *philo);
+void			ph_sleep(t_philo *philo);
 
-/* death.c */
-bool			death(t_ctrl *ctrl, bool action)
-t_ms			meal(t_philo *philo, t_ms start_meal, bool flag, bool status);
-bool			sated(t_ctrl *ctrl, bool flag);
-bool			status(t_philo *philo);
+/* set.c */
+void			set_death(t_ctrl *ctrl);
+void			increment_sated(t_ctrl *ctrl);
+void			set_status(t_philo *philo, bool status);
+void			set_last_meal(t_philo *philo, t_ms time);
+	
+/* check.c */
+bool			check_death(t_ctrl *ctrl);
+bool			check_sated(t_ctrl *ctrl);
+bool			check_status(t_philo *philo);
+t_ms			time_last_meal(t_philo *philo);
+
 # define SET true
 # define CHECK false
 

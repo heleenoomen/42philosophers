@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/10 18:53:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 10:51:40 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,15 @@
 void	run_philosophers(t_philo *philo)
 {
 	philo->last_meal = philo->ctrl->start;
+	set_status(philo, NOT_EATING);
 	if (philo->nbr % 2)
 		ph_usleep(philo, philo->ctrl->time_eat);
-	while ((death(philo->ctrl, CHECK) == false))
+	while ((check_death(philo->ctrl) == false))
 	{
 		ph_eat(philo);
 		ph_sleep(philo);
 		print_action(philo, THINK, gettime());
 	}
-}
-
-void	run_one_philosopher(t_philo *philo)
-{
-	philo->last_meal = philo->ctrl->start;
-	pthread_mutex_lock(&(philo->left->mutex));
-	print_action(philo, FORK, gettime());
-	while (death(philo->ctrl, CHECK) == false);
 }
 
 /* when the simulation is over, the main thread waits for the other threads to 
@@ -52,8 +45,8 @@ void	join_threads(t_ctrl *ctrl, int nu_created)
 {
 	int	i;
 
-	i = 0;
-	while (i++ < nu_created)
+	i = -1;
+	while (++i < nu_created)
 		pthread_join(ctrl->threads[i], NULL);
 }
 
@@ -72,18 +65,15 @@ void	init_threads(t_ctrl *ctrl, t_err *error)
 	int		i;
 	void	(*routine)(t_philo *);
 
-	if (nu_philo == 1)
-		routine = &run_one_philosopher;
-	else
-		routine = &run_philosophers;
+	routine = &run_philosophers;
 	i = 0;
 	ctrl->start = gettime();
-	while (i < nu_philo)
+	while (i < ctrl->nu_philo)
 	{
 		if (pthread_create(ctrl->threads + i, NULL, (void *)routine, ctrl->philos + i))
 		{
 			*error = THREAD_ERR;
-			death(ctrl, SET);
+			set_death(ctrl);
 			break ;
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/10 17:24:36 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 09:53:34 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	init_all_mutexes(t_ctrl *ctrl, t_err *error)
 	nu_forks = ctrl->nu_philo;
 	while (i < nu_forks)
 	{
-		init_mutex(ctrl->forks + i, error) == false;	
+		init_mutex(ctrl->forks + i, error);	
 		i++;
 	}
 	init_mutex(&(ctrl->lock_print), error);

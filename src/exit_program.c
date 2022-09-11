@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/07 13:00:18 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 09:52:44 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	destroy_mutexes(t_ctrl *controller)
 {
-	t_fork	*forks;
+	t_mutex	*forks;
 	int		i;
 	int		nu_philo;
 

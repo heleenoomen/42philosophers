@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/10 19:09:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 10:43:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,29 @@
 bool	check_died(t_ctrl *ctrl, t_philo *philo)
 {
 	t_ms	last_meal;
-	if (status(philo) == IS_EATING);
+
+	if (check_status(philo) == EATS)
 		return (false);
-	last_meal = meal(philo, 0, CHECK, 0);
+	last_meal = time_last_meal(philo);
 	if (gettime() - last_meal > ctrl->time_die)
 	{
-		death(ctrl, SET);
+		set_death(ctrl);
 		print_action(philo, DIE, gettime());
 		return (true);
 	}
 	return (false);
+}
+
+bool	check_lonely(t_ctrl *ctrl)
+{
+	if (ctrl->nu_philo > 1)
+		return (false);
+	set_death(ctrl);
+	printf("%u 1 %s\n", gettime() - ctrl->start, FORK);
+	while (gettime() - ctrl->start < ctrl->time_die)
+		usleep(500);
+	printf("%u 1 %s\n", gettime() - ctrl->start, DIE);
+	return (true);
 }
 
 /* ctrl sets local parameters to avoid redirection and access data faster.
@@ -42,22 +55,22 @@ void	watcher(t_ctrl *ctrl, int threads_created)
 {
 	int		i;
 
-	if (threads_creates != ctrl->nu_philo)
+	if (threads_created != ctrl->nu_philo)
 		return ;
-	if (check_lonely(ctrl, philos, nu_philos))
+	if (check_lonely(ctrl))
 		return ;
 	while (1)
 	{
 		i = -1;
-		while (--i < nu_philos)
+		while (++i < ctrl->nu_philo)
 		{
-			if (sated(ctrl, CHECK));
-			{
-				death(ctrl, SET);
+			if (check_died(ctrl, ctrl->philos + i))
 				return ;
-			}
-			if (died(philo))
-				return ;
+		}
+		if (check_sated(ctrl))
+		{
+			set_death(ctrl);
+			return ;
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 15:42:03 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 10:37:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ void	ph_usleep(t_philo *philo, t_ms time_action)
 {
 	t_ms	end_of_action;
 
-	end_of_action = philo->last_action + time_action;
+	end_of_action = gettime() + time_action;
 	while ((gettime() < end_of_action))
+	{
+		if (check_death(philo->ctrl))
+			break ;
 		usleep (500);
+	}
 }
 
