@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 11:03:54 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 11:49:07 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	print_action(t_philo *philo, char *action, t_ms time)
 
 	rel_time = time - philo->ctrl->start;
 	pthread_mutex_lock(&(philo->ctrl->lock_print.mutex));
-	if (!(check_death(philo->ctrl)) || !ft_strcmp(action, DIE))
+	if (!(check_death(philo->ctrl)) || check_sated(philo->ctrl) || !ft_strcmp(action, DIE))
 		printf("%u %i %s\n", rel_time, philo->nbr, action);
 	pthread_mutex_unlock(&(philo->ctrl->lock_print.mutex));
 }
@@ -42,6 +42,7 @@ void	ph_eat(t_philo *philo)
 	set_status(philo, EATS);
 	print_action(philo, FORK, gettime());
 	set_last_meal(philo, start_meal);
+	philo->last_action = start_meal;
 	philo->meals++;
 	if (philo->meals == philo->ctrl->max_meals)
 		increment_sated(philo->ctrl);
@@ -57,7 +58,8 @@ void	ph_eat(t_philo *philo)
  */
 void	ph_sleep(t_philo *philo)
 {
-	print_action(philo, SLEEP, gettime());
+	philo->last_action = gettime();
+	print_action(philo, SLEEP, philo->last_action);
 	ph_usleep(philo, philo->ctrl->time_sleep);
 }
 

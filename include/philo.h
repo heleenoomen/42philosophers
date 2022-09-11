@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 10:37:21 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 11:20:00 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_ctrl
 	int				nu_sated;
 	t_mutex			lock_sated;
 	t_mutex			lock_print;
+	t_mutex			lock_start;
 	t_ms			start;
 }					t_ctrl;
 
@@ -93,6 +94,7 @@ typedef struct s_philo
 {
 	int				nbr;
 	t_ms			last_meal;
+	t_ms			last_action;
 	t_mutex			*left;
 	t_mutex			*right;
 	t_mutex			lock_meal;

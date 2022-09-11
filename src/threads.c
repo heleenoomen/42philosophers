@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 10:51:40 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 11:24:07 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,13 @@
  */
 void	run_philosophers(t_philo *philo)
 {
+	pthread_mutex_lock(&(philo->ctrl->lock_start.mutex));
+	pthread_mutex_unlock(&(philo->ctrl->lock_start.mutex));
 	philo->last_meal = philo->ctrl->start;
+	philo->last_action = philo->ctrl->start;
 	set_status(philo, NOT_EATING);
 	if (philo->nbr % 2)
-		ph_usleep(philo, philo->ctrl->time_eat);
+		ph_usleep(philo, philo->ctrl->time_eat - 10);
 	while ((check_death(philo->ctrl) == false))
 	{
 		ph_eat(philo);
@@ -67,7 +70,7 @@ void	init_threads(t_ctrl *ctrl, t_err *error)
 
 	routine = &run_philosophers;
 	i = 0;
-	ctrl->start = gettime();
+	pthread_mutex_lock(&(ctrl->lock_start.mutex));
 	while (i < ctrl->nu_philo)
 	{
 		if (pthread_create(ctrl->threads + i, NULL, (void *)routine, ctrl->philos + i))
@@ -78,6 +81,8 @@ void	init_threads(t_ctrl *ctrl, t_err *error)
 		}
 		i++;
 	}
+	ctrl->start = gettime();
+	pthread_mutex_unlock(&(ctrl->lock_start.mutex));
 	watcher(ctrl, i);
 	join_threads(ctrl, i);
 }

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 10:44:21 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 09:53:34 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 11:09:40 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ void	init_all_mutexes(t_ctrl *ctrl, t_err *error)
 	init_mutex(&(ctrl->lock_print), error);
 	init_mutex(&(ctrl->lock_death), error);
 	init_mutex(&(ctrl->lock_sated), error);
+	init_mutex(&(ctrl->lock_start), error);
 }
 
