@@ -6,17 +6,24 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 10:43:15 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 14:22:03 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+/* status of the philosopher is checked. If she is eating, she cannot die, so
+ * there is nothing to check (return false). Else, the time of her last meal is
+ * checked and measured against the current time (gettime()).
+ * If the time elapsed is bigger than her time_die, she dies: death is set to
+ * true, the action is printed and true is return. If less time has elapsed, the
+ * philo does not die and false is returned.
+ */
 bool	check_died(t_ctrl *ctrl, t_philo *philo)
 {
 	t_ms	last_meal;
 
-	if (check_status(philo) == EATS)
+	if (check_status(philo) == EATING)
 		return (false);
 	last_meal = time_last_meal(philo);
 	if (gettime() - last_meal > ctrl->time_die)
@@ -28,6 +35,11 @@ bool	check_died(t_ctrl *ctrl, t_philo *philo)
 	return (false);
 }
 
+/* if nu_philo equals 1, death is set to true to make the philosopher thread
+ * return immediately. The philosopher takes a fork and, after time_die has
+ * elapsed, she dies. Messages are printed and check_lonely returns to watcher,
+ * which will then return immediately
+ */
 bool	check_lonely(t_ctrl *ctrl)
 {
 	if (ctrl->nu_philo > 1)
@@ -40,16 +52,13 @@ bool	check_lonely(t_ctrl *ctrl)
 	return (true);
 }
 
-/* ctrl sets local parameters to avoid redirection and access data faster.
- * Max_meals is set to true when the max_meals parameter was entered by the
- * user, to false if it wasn't entered. nu_philos is set to
- * ctrl->nu_philos, nu_sated is set to zero since no philosopher has eaten
- * yet right after the start of the simulation. Check lonely is called in case
- * their is only one philosopher. Now, watcher is ready to starts the
- * simulation: she sets the start time to the current time (gettime()) and sets
- * run to true for the philosophers to start their routines. Once simulation is 
- * started, watcher enters a whileloop where he constantly checks if a 
- * philosopher has died or is sated or if all philosophers are sated.
+/* if not all threads were created succesfully (threads_created !=
+ * ctrl->nu_philo), watcher returns immediately. Otherwise, watcher checks first
+ * if there is only one philosopher (check_lonely). If so, returns. If nu_philo
+ * is more then one, watcher goes through the array of philos continuously to
+ * check if one of them died (check_died). If so, watcher returns. At the end of
+ * every cycle, watcher checkes if all philosophers are sated, in which case it
+ * sets death to true for the simulation to end.
  */
 void	watcher(t_ctrl *ctrl, int threads_created)
 {

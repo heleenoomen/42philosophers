@@ -6,11 +6,26 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 09:15:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 09:55:38 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 13:32:44 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+/* Every shared parameter that is modified during simulation is protected with a
+ * mutex of its own, so that no thread can check the value while another thread
+ * is modifying it. (For example: when the main thread is busy setting 'death'
+ * to true, the lock_death mutex is locked and threads wanting to check the
+ * death parameter have to wait until the main thread has finished updating the
+ * value).
+ * 
+ * All 'set_ / increment_' functions have their 'check' counterpart (see
+ * check.c), where the same mutex is used. While the value is being changed,
+ * threads who want to read the value have to wait until the writing thread
+ * unlocks the corresponding mutex and vice versa.
+ *
+ * This mutex system avoids data races (which would cause undefined behaviour)
+ */
 
 void	set_death(t_ctrl *ctrl)
 {
