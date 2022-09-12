@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/12 17:29:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/12 19:30:56 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,16 +26,14 @@
 /* represent time in milliseconds */
 typedef unsigned int	t_ms;
 
-/* semaphore struct with a flag to indicate the semaphore was succesfully opened
- */
-typedef struct sem_t
-{
-	t_sem	*sem;
-	bool	init;
-}
-
 /* mark s */
 typedef char			*t_err;
+
+typedef struct s_mutex
+{
+	pthread_mutex_t	mutex;
+	bool			init;
+}					t_mutex;
 
 /* the controller struct is used by the main thread (controller/watcher).
  * In here we store the parameters provided by the user:
@@ -63,49 +61,17 @@ typedef char			*t_err;
 typedef struct s_ctrl
 {
 	int				nu_philo;
-	t_sem			*forks;
-	t_sem			*status_sem;
-	t_sem			*last_meal_sem;
+	int				index;
 	int				max_meals;
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
-	struct s_philo	*philos;
-	int				*pids;		
-	bool			death;
-	t_sem			death_sem;
-	int				nu_sated;
-	t_sem			sated_sem;
-	t_ms			start;
-	t_sem			start_sem;
-	t_sem			print_sem;
-}					t_ctrl;
-
-/* each t_philo struct represents a philosopher: they are the parameter that
- * each philosopher takes to here routine.
- * nbr			>	the number (index) of the philosopher
- * left			>	pointer to her left fork
- * right		>	pointer to her right fork
- * last_action	>	the time her last action started
- * last_meal	>	the time her last meal started
- * lock_meal	>	mutex to protect the last_meal timestamp
- * meals		>	number of times she has eaten
- * status		>	either EATING (she is eating an cannot die) or NOT_EATING
- * 					(she is not eating, therefore watcher can declare her dead)
- * lock_status	>	mutex to protect the status flag
- * ctrl			>	pointer to the ctrl struct
- */
-typedef struct s_philo
-{
-	int				nbr;
-	t_ms			last_action;
 	t_ms			last_meal;
-	t_sem			last_meal_sem;
-	int				meals;
+	t_ms			start;
 	bool			status;
-	t_sem			status_sem;
-	t_ctrl			*ctrl;
-}					t_philo;
+	pthread_t		watcher;
+	sem_t			sem_watcher;
+}					t_ctrl;
 
 /* status of individual philosopher: either she is eating and cannot be declared
  * dead by the watcher, or she is not eating (sleeping, thinking) and can be
