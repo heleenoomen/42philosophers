@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/12 19:30:56 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/13 13:29:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <pthread.h>
+# include <semaphore.h>
 # include <sys/time.h>
 # include <string.h>
 # include <limits.h>
+# include <signal.h>
 # include "message.h"
 
 /* represent time in milliseconds */
@@ -61,16 +63,23 @@ typedef struct s_mutex
 typedef struct s_ctrl
 {
 	int				nu_philo;
+	int				*cpids;
 	int				index;
 	int				max_meals;
+	int				meals;
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
 	t_ms			last_meal;
+	sem_t			*last_meal_sem;
 	t_ms			start;
 	bool			status;
+	sem_t			*status_sem;
+	bool			died;
+	sem_t			*died_sem;
 	pthread_t		watcher;
-	sem_t			sem_watcher;
+	sem_t			*print;
+	sem_t			*forks;
 }					t_ctrl;
 
 /* status of individual philosopher: either she is eating and cannot be declared
@@ -94,48 +103,61 @@ typedef struct s_ctrl
 #  define PH_MAX 200
 # endif
 
+/* define the semaphores */
+# define FORKS 0
+# define PRINT 1
+
+/* exit statuses for philosophers */
+# define DEATH 0
+# define SATED 1
+
 /* utils.c */
+int				ft_fork(t_ctrl *ctrl, int nu_forks, t_err *error);
 void			*ft_malloc(size_t size, t_err *error);
 unsigned int	ft_atoui(char *s, t_err *error, short type);
 int				ft_strcmp(char *s1, char *s2);
 
 /* init_structs.c */
+void			init_semaphores(t_ctrl *ctrl, t_err *error);
 t_ctrl			*init_controller(int argc, char **argv, t_err *error);
-void			init_philos(t_ctrl *ctrl, t_err *error);
 
 /* mutex.c */
-void			init_all_mutexes(t_ctrl *ctrl, t_err *error);
-bool			init_mutex(t_mutex *mutex, t_err *error);
+//void			init_all_mutexes(t_ctrl *ctrl, t_err *error)nt	ft_fork(t_ctrl *ctrl, int nu_forks, t_err *error)
+//bool			init_mutex(t_mutex *mutex, t_err *error);
 
 /* simulation.c */
-void			init_threads(t_ctrl *ctrl, t_err *error);
+void			run_philosophers(t_ctrl *ctrl);
+void			watcher(t_ctrl *ctrl);
+void			child_process(t_ctrl *ctrl);
+void			big_watcher(t_ctrl *ctrl);
+void			start_simulation(t_ctrl *ctrl, t_err *error);
 
 /* watcher.c */
-void			watcher(t_ctrl *ctrl, int threads_created);
+//void			watcher(t_ctrl *ctrl, int threads_created);
 
 /* action.c */
-void			print_action(t_philo *philo, char *action, t_ms time);
-void			ph_eat(t_philo *philo);
-void			ph_sleep(t_philo *philo);
+void			print_action(t_ctrl *ctrl, t_ms time, char *action);
+void			ph_eat(t_ctrl *ctrl);
+void			ph_sleep(t_ctrl *ctrl);
 
 /* set.c */
-void			set_death(t_ctrl *ctrl);
-void			increment_sated(t_ctrl *ctrl);
-void			set_status(t_philo *philo, bool status);
-void			set_last_meal(t_philo *philo, t_ms time);
+//void			set_death(t_ctrl *ctrl);
+//void			increment_sated(t_ctrl *ctrl);
+//void			set_status(t_philo *philo, bool status);
+//void			set_last_meal(t_philo *philo, t_ms time);
 	
 /* check.c */
-bool			check_death(t_ctrl *ctrl);
-bool			check_sated(t_ctrl *ctrl);
-bool			check_status(t_philo *philo);
-t_ms			time_last_meal(t_philo *philo);
+//bool			check_death(t_ctrl *ctrl);
+//bool			check_sated(t_ctrl *ctrl);
+//bool			check_status(t_philo *philo);
+//t_ms			time_last_meal(t_philo *philo);
 
 /* time.c */
 t_ms			gettime(void);
-void			ph_usleep(t_philo *philo, t_ms time);
+void			ph_usleep(t_ctrl *ctrl, t_ms time_action);
 
 /* exit_program.c */
-int				exit_program(t_ctrl *controller, t_err *error);
+int				exit_program(t_ctrl *ctrl, int nu_forks, t_err *error);
 
 #endif
 

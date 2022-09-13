@@ -6,11 +6,24 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:34:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/13 10:39:59 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
+
+int	ft_fork(t_ctrl *ctrl, int forked_so_far, t_err *error)
+{
+	int	ret;
+
+	ret = fork();
+	if (ret == -1)
+	{
+		*error = FORK;
+		exit_program(ctrl, forked_so_far, error);
+	}
+	return (ret);
+}
 
 /* allocates size bytes of memory on the heap. If allocation fails, sets
  * error to MALLOC_ERR. Returns a pointer to the allocated block

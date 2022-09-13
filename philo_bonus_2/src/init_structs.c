@@ -6,26 +6,31 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/12 18:41:20 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/13 13:30:29 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "philo_bonus.h"
 
-sem_t	**init_semaphores(t_ctrl *ctrl, t_err *error)
+void	init_semaphores(t_ctrl *ctrl, t_err *error)
 {
-	sem_t	*ret;
-	
-	ret = ft_malloc(3 * sizeof(sem_t *))
-	if (error)
-		return (0);
-	sem_unlink("/forks");
-	sem[FORKS] = sem_open("/forks", O_CREAT, 0644, nu_philo);
-	sem_unlink("/start");
-	sem[START] = sem_open("/start", O_CREAT, 0644, 1);
-	sem_unlink("/print");
-	sem[PRINT] = sem_opne("/print", O_CREAT, 0644, 1);
-	return (ret);
+	if (*error)
+		return ;
+	sem_unlink("/tmp/forks");
+	ctrl->forks = sem_open("/tmp/forks", O_CREAT, 0664, ctrl->nu_philo);
+	if (ctrl->forks == SEM_FAILED)
+		perror("forks not created");
+	printf("%i forks are created\n", ctrl->nu_philo);
+	sem_unlink("/tmp/print");
+	ctrl->print = sem_open("/tmp/print", O_CREAT, 0664, 1);
+	if (ctrl->forks == SEM_FAILED)
+		perror("print not created");
+	sem_unlink("/tmp/status_sem");
+	ctrl->status_sem = sem_open("/tmp/status_sem", O_CREAT, 0664, 1);
+	sem_unlink("/tmp/died_sem");
+	ctrl->died_sem = sem_open("/tmp/died_sem", O_CREAT, 0664, 1);
+	sem_unlink("/tmp/last_meal_sem");
+	ctrl->last_meal_sem = sem_open("/tmp/last_meal_sem", O_CREAT, 0664, 1);
 }
 
 /* allocate space for ctrl struct, parse user parameters, allocate space for
@@ -46,6 +51,10 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 		ctrl->max_meals = ft_atoui(argv[5], error, ME);
 	else
 		ctrl->max_meals = -1;
+	init_semaphores(ctrl, error);
+	ctrl->status = NOT_EATING;
+	ctrl->meals = 0;
+	ctrl->died = false;
 	return (ctrl);
 }
 	

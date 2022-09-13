@@ -6,11 +6,11 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 13:37:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/13 13:38:07 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+# include "philo_bonus.h"
 
 /* Returns the current time in milliseconds */
 t_ms	gettime(void)
@@ -30,16 +30,20 @@ t_ms	gettime(void)
  * from getting crazy. Death is checked in case a philosopheer dies in her
  * sleep.
  */
-void	ph_usleep(t_philo *philo, t_ms time_action)
+void	ph_usleep(t_ctrl *ctrl, t_ms time_action)
 {
 	t_ms	end_of_action;
+	bool	died;
 
-	end_of_action = philo->last_action + time_action;
+	end_of_action = gettime() + time_action;
 	while ((gettime() < end_of_action))
 	{
-		if (check_death(philo->ctrl))
+		sem_wait(ctrl->died_sem);
+		died = ctrl->died;
+		sem_post(ctrl->died_sem);
+		if (died)
 			break ;
-		usleep (500);
+		usleep (200);
 	}
 }
 
