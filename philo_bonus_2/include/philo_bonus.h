@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/13 13:29:21 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/14 12:15:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,8 @@ typedef struct s_ctrl
 # define PRINT 1
 
 /* exit statuses for philosophers */
-# define DEATH 0
-# define SATED 1
+# define DEATH 8
+# define SATED 9
 
 /* utils.c */
 int				ft_fork(t_ctrl *ctrl, int nu_forks, t_err *error);
@@ -141,16 +141,16 @@ void			ph_eat(t_ctrl *ctrl);
 void			ph_sleep(t_ctrl *ctrl);
 
 /* set.c */
-//void			set_death(t_ctrl *ctrl);
-//void			increment_sated(t_ctrl *ctrl);
-//void			set_status(t_philo *philo, bool status);
-//void			set_last_meal(t_philo *philo, t_ms time);
+void			set_died(t_ctrl *ctrl);
+void			set_status(t_ctrl *ctrl, bool status);
+void			set_last_meal(t_ctrl *ctrl, t_ms time);
+bool			incr_meals_check_sated(t_ctrl *ctrl);
 	
 /* check.c */
-//bool			check_death(t_ctrl *ctrl);
-//bool			check_sated(t_ctrl *ctrl);
-//bool			check_status(t_philo *philo);
-//t_ms			time_last_meal(t_philo *philo);
+bool			check_died(t_ctrl *ctrl);
+bool			check_status(t_ctrl *ctrl);
+t_ms			time_last_meal(t_ctrl *ctrl);
+bool			check_sated(t_ctrl *ctrl);
 
 /* time.c */
 t_ms			gettime(void);

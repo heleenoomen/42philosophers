@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/13 13:43:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/14 12:00:13 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,25 +22,27 @@ void	print_action(t_ctrl *ctrl, t_ms time, char *action)
 	
 void	ph_eat(t_ctrl *ctrl)
 {
+	t_ms	last_meal;
+
 	sem_wait(ctrl->forks);
 	print_action(ctrl, gettime() - ctrl->start, FORK);
 	sem_wait(ctrl->forks);
-	sem_wait(ctrl->last_meal_sem);
-	ctrl->last_meal = gettime();
-	sem_post(ctrl->last_meal_sem);
-	sem_wait(ctrl->status_sem);
-	ctrl->status = EATING;
-	sem_post(ctrl->status_sem);
-	print_action(ctrl, ctrl->last_meal - ctrl->start, FORK);
-	print_action(ctrl, ctrl->last_meal - ctrl->start, EAT);
+	last_meal = gettime();
+	set_status(ctrl, EATING);
+	set_last_meal(ctrl, last_meal);
+	print_action(ctrl, last_meal - ctrl->start, FORK);
+	print_action(ctrl, last_meal - ctrl->start, EAT);
 	ph_usleep(ctrl, ctrl->time_eat - (gettime() - ctrl->last_meal));	
 	sem_post(ctrl->forks);
 	sem_post(ctrl->forks);
-	ctrl->status = NOT_EATING;
+	set_status(ctrl, NOT_EATING);
 	ctrl->meals++;
 	if (ctrl->meals == ctrl->max_meals)
 	{
-		exit (SATED);
+		pthread_detach(ctrl->watcher);
+		print_action(ctrl, gettime() - ctrl->start, "IS SATED");
+		printf("nu meals = %i\n", ctrl->meals);
+		exit(SATED);
 	}
 }
 

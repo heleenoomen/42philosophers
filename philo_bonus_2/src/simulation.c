@@ -6,40 +6,11 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/13 19:27:54 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/14 12:17:44 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
-bool	check_died(t_ctrl *ctrl)
-{
-	bool	ret;
-	sem_wait(ctrl->died_sem);
-	ret = ctrl->died;
-	sem_post(ctrl->died_sem);
-	return (ret);
-}
-
-bool	check_status(t_ctrl *ctrl)
-{
-	bool	ret;
-
-	sem_wait(ctrl->status_sem);
-	ret = ctrl->status;
-	sem_post(ctrl->status_sem);
-	return (ret);
-}
-
-t_ms	timediff_last_meal(t_ctrl *ctrl)
-{
-	t_ms	time;
-
-	sem_wait(ctrl->last_meal_sem);
-	time = ctrl->last_meal;
-	sem_post(ctrl->last_meal_sem);
-	return (gettime() - time);
-}
 
 void	run_philosophers(t_ctrl *ctrl)
 {
@@ -55,6 +26,7 @@ void	run_philosophers(t_ctrl *ctrl)
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	free(ctrl);
+	pthread_detach(ctrl->watcher);
 	exit(DEATH);
 }
 
@@ -62,17 +34,14 @@ void	watcher(t_ctrl *ctrl)
 {
 	while (1)
 	{
-		if (check_status(ctrl) == NOT_EATING && timediff_last_meal(ctrl)
+		if (check_status(ctrl) == NOT_EATING && (gettime() - time_last_meal(ctrl))
 				> ctrl->time_die)
 		{
-			sem_wait(ctrl->died_sem);
-			ctrl->died = true;
-			sem_post(ctrl->died_sem);
+			set_died(ctrl);
 			sem_wait(ctrl->print);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
-			exit(DEATH) ;
+			exit(DEATH);
 		}
-		ph_usleep(ctrl, 200);
 	}
 }
 
@@ -80,13 +49,11 @@ void	big_watcher(t_ctrl *ctrl)
 {
 	int	status;
 	int	sated;
-	// int	i;
+	int	i;
 
 	sated = 0;
 	while (1)
 	{
-		while (1)
-		{
 			waitpid(-1, &status, 0);
 			if (WIFEXITED(status))
 			{
@@ -98,12 +65,14 @@ void	big_watcher(t_ctrl *ctrl)
 						kill(ctrl->cpids[i], SIGKILL);
 					return ;
 				}
-				if (status == SATED)
+				else
+				{
 					sated++;
+					printf("nu sated = %i, nu_philo = %i\n", sated, ctrl->nu_philo);
+					if (sated == ctrl->nu_philo)
+						return ;
+				}
 			}
-			if (sated == ctrl->nu_philo)
-				return ;
-		}	
 	}
 }
 
@@ -123,7 +92,6 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 			ctrl->index = i + 1;
 			if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, (void *)ctrl))
 				exit_program (ctrl, i, error);
-			pthread_detach(ctrl->watcher);
 			run_philosophers(ctrl);
 		}
 	}
