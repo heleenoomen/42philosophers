@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/15 19:53:04 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 19:51:27 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,6 @@
  */
 void	run_philosophers(t_philo *philo)
 {
-	bool	uneven_nu_philo;
-
-	uneven_nu_philo = philo->ctrl->nu_philo % 2;
 	pthread_mutex_lock(&(philo->ctrl->lock_start.mutex));
 	pthread_mutex_unlock(&(philo->ctrl->lock_start.mutex));
 	philo->last_meal = philo->ctrl->start;
@@ -35,8 +32,7 @@ void	run_philosophers(t_philo *philo)
 		ph_eat(philo);
 		ph_sleep(philo);
 		print_action(philo, THINK);
-		if (uneven_nu_philo)
-			usleep(3000);
+		usleep(3000);
 	}
 }
 

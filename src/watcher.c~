@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/15 19:50:19 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/11 14:22:03 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ bool	check_died(t_ctrl *ctrl, t_philo *philo)
 	if (gettime() - last_meal > ctrl->time_die)
 	{
 		set_death(ctrl);
-		print_action(philo, DIE);
+		print_action(philo, DIE, gettime());
 		return (true);
 	}
 	return (false);
