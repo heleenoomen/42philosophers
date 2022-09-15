@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/14 11:46:39 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 17:04:49 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ void	init_semaphores(t_ctrl *ctrl, t_err *error)
 {
 	if (*error)
 		return ;
-	sem_unlink("/tmp/forks");
-	ctrl->forks = sem_open("/tmp/forks", O_CREAT, 0664, ctrl->nu_philo);
+	sem_unlink("/forks");
+	ctrl->forks = sem_open("/forks", O_CREAT, 0664, ctrl->nu_philo);
 	if (ctrl->forks == SEM_FAILED)
 		perror("forks not created");
 	printf("%i forks are created\n", ctrl->nu_philo);
-	sem_unlink("/tmp/print");
-	ctrl->print = sem_open("/tmp/print", O_CREAT, 0664, 1);
+	sem_unlink("/print");
+	ctrl->print = sem_open("/print", O_CREAT, 0664, 1);
 	if (ctrl->forks == SEM_FAILED)
 		perror("print not created");
-	sem_unlink("/tmp/status_sem");
-	ctrl->status_sem = sem_open("/tmp/status_sem", O_CREAT, 0664, 1);
-	sem_unlink("/tmp/died_sem");
-	ctrl->died_sem = sem_open("/tmp/died_sem", O_CREAT, 0664, 1);
-	sem_unlink("/tmp/last_meal_sem");
-	ctrl->last_meal_sem = sem_open("/tmp/last_meal_sem", O_CREAT, 0664, 1);
+	sem_unlink("/status_sem");
+	ctrl->status_sem = sem_open("/status_sem", O_CREAT, 0664, 1);
+	sem_unlink("/died_sem");
+	ctrl->died_sem = sem_open("/died_sem", O_CREAT, 0664, 1);
+	sem_unlink("/last_meal_sem");
+	ctrl->last_meal_sem = sem_open("/last_meal_sem", O_CREAT, 0664, 1);
 }
 
 /* allocate space for ctrl struct, parse user parameters, allocate space for

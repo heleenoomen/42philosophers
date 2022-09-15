@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/14 12:15:42 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 17:02:52 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include <string.h>
 # include <limits.h>
 # include <signal.h>
+# include <fcntl.h>
+# include <sys/wait.h>
 # include "message.h"
 
 /* represent time in milliseconds */

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/14 12:27:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 17:08:18 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ void	ph_eat(t_ctrl *ctrl)
 	ph_usleep(ctrl, ctrl->time_eat - (gettime() - ctrl->last_meal));	
 	sem_post(ctrl->forks);
 	sem_post(ctrl->forks);
-	printf("%i is here (38)\n", ctrl->index);
-//	set_status(ctrl, NOT_EATING);
+	set_status(ctrl, NOT_EATING);
 	ctrl->meals++;
-	printf("%i is here\n", ctrl->index);
 	if (ctrl->meals == ctrl->max_meals)
 	{
 		pthread_detach(ctrl->watcher);
-		print_action(ctrl, gettime() - ctrl->start, "IS SATED");
-		printf("nu meals = %i\n", ctrl->meals);
+		sem_post(ctrl->status_sem);
+		sem_post(ctrl->died_sem);
 		exit(SATED);
 	}
 }

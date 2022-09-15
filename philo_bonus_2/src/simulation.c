@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/14 12:17:44 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 17:07:36 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,6 @@ void	run_philosophers(t_ctrl *ctrl)
 		ph_sleep(ctrl);
 		print_action(ctrl, gettime() - ctrl->start, THINK);
 	}
-	sem_close(ctrl->print);
-	sem_close(ctrl->forks);
-	sem_unlink("/forks");
-	sem_unlink("/print");
 	free(ctrl);
 	pthread_detach(ctrl->watcher);
 	exit(DEATH);
@@ -40,7 +36,7 @@ void	watcher(t_ctrl *ctrl)
 			set_died(ctrl);
 			sem_wait(ctrl->print);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
-			exit(DEATH);
+			return ;
 		}
 	}
 }
@@ -68,7 +64,6 @@ void	big_watcher(t_ctrl *ctrl)
 				else
 				{
 					sated++;
-					printf("nu sated = %i, nu_philo = %i\n", sated, ctrl->nu_philo);
 					if (sated == ctrl->nu_philo)
 						return ;
 				}

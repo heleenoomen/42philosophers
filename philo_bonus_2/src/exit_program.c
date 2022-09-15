@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/14 11:56:55 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 17:16:02 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
  * ctrl-struct have to be freed. An error code is returned in case of error (2
  * for user error, 1 for system error). Zero is returned when no error occurred
  */
-int	exit_program(t_ctrl *ctrl, int nu_forks, t_err *error)
+int	exit_program(t_ctrl *ctrl, t_err *error)
 {
-	nu_forks--;
 	if (*error)
 		printf("%s %s\n", ERR, *error);
 	if (ctrl == NULL)
