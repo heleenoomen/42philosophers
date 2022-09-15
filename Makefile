@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+         #
+#    By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/22 15:35:03 by hoomen            #+#    #+#              #
-#    Updated: 2022/08/22 15:44:24 by hoomen           ###   ########.fr        #
+#    Updated: 2022/09/15 14:50:48 by hoomen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,15 +14,16 @@ VPATH		= src
 INCFLAGS	= -I include
 
 CC			= cc
-FLAGS		= -Wall -Werror -Wextra
+FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
 
 NAME		= philo
 HEADER		= include/philo.h
-SRC			= philo.c
+SRC			= action.c check.c exit_program.c init_structs.c main.c mutex.c\
+			  set.c simulation.c time.c utils.c watcher.c
 OBJ			= $(addprefix obj/,$(notdir $(SRC:.c=.o)))
 
 $(NAME) : $(OBJ) 
-	$(CC) $(FLAG) -o $@ $^ -pthread
+	$(CC) $(FLAGS) -o $@ $^ -pthread
 
 obj/%.o : %.c $(HEADER) | obj
 	$(CC) $(FLAGS) $(INCFLAGS) -c $< -o $@
