@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/15 15:52:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 15:39:47 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ void	init_philos(t_ctrl *ctrl, t_err *error)
 		ctrl->philos[i].nbr = i + 1;
 		ctrl->philos[i].ctrl = ctrl;
 		ctrl->philos[i].meals = 0;
-		get_forks(ctrl->philos + i);
-		//ctrl->philos[i].left = ctrl->forks + (i % ctrl->nu_philo);
-		//ctrl->philos[i].right = ctrl->forks + ((i + 1) % ctrl->nu_philo);
+		ctrl->philos[i].left = ctrl->forks + (i % ctrl->nu_philo);
+		ctrl->philos[i].right = ctrl->forks + ((i + 1) % ctrl->nu_philo);
 		init_mutex(&(ctrl->philos[i].lock_meal), error);
 		init_mutex(&(ctrl->philos[i].lock_status), error);
 		ctrl->philos[i].status = EATING;

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 17:48:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 13:37:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/15 15:49:05 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,5 +57,15 @@ t_ms	time_last_meal(t_philo *philo)
 	time = philo->last_meal;
 	pthread_mutex_unlock(&(philo->lock_meal.mutex));
 	return (time);
+}
+
+bool	check_forks_in_use(t_philo *philo)
+{
+	int	forks_in_use;
+
+	pthread_mutex_lock(&(philo->ctrl->lock_forks_in_use.mutex));
+	forks_in_use = philo->ctrl->forks_in_use;
+	pthread_mutex_unlock(&(philo->ctrl->lock_forks_in_use.mutex));
+	return (forks_in_use < 4);
 }
 
