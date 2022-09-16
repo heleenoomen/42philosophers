@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 15:24:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 15:43:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 void	destroy_mutex(t_mutex *mutex)
 {
 	if (mutex->init)
-		pthread_mutex_destroy(&(mutex->mutex))
+		pthread_mutex_destroy(&(mutex->mutex));
 }
 
 /* if the forks array is not NULL, all forks that were initialized are
@@ -63,8 +63,8 @@ int	exit_program(t_ctrl *ctrl, t_err *error)
 		printf("%s %s\n", ERR, *error);
 	if (ctrl == NULL)
 		return (1);
-	if (ft_strcmp(INV_PH, *error) || ft_strcmp(INV_TIME, *error)
-			|| ft_strcmp(INV_ME, *error))
+	if (!ft_strcmp(INV_PH, *error) || !ft_strcmp(INV_TIME, *error)
+			|| !ft_strcmp(INV_ME, *error))
 	{
 		free(ctrl);
 		return (2);
