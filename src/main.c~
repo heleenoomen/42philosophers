@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:09 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 15:10:41 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 15:08:03 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,17 @@ int	help_message(void)
 	return (1);
 }
 
+void	check(void)
+{
+	system("leaks philo");
+}
+
 int	main(int argc, char **argv)
 {
 	t_ctrl	*controller;
 	t_err	error;
 
+	atexit(check);
 	if (argc < 5 || argc > 6)
 		return (help_message());
 	error = NULL;

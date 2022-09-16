@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 14:51:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 14:50:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	print_action(t_philo *philo, char *action, t_ms time)
 	pthread_mutex_lock(&(philo->ctrl->lock_print.mutex));
 	if (!(check_death(philo->ctrl)) || check_sated(philo->ctrl)
 			|| !ft_strcmp(action, DIE))
-		printf("%u %i %s\n", rel_time, philo->nbr, action);
+	{
+	//	printf("\033[31m");
+		printf("\033[37;2m%u %i\033[37;0m %s\n", rel_time, philo->nbr, action);
+	}
 	pthread_mutex_unlock(&(philo->ctrl->lock_print.mutex));
 }
 	

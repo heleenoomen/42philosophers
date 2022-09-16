@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 15:07:31 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 15:06:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define MUTEX_ERR "Failed at initializing mutex."
 # define ARGS "Invalid arguments."
 # define USAGE "Usage: \033[44m./philo \033[42m<nbr_of_philosophers> \033[43m<time\
-_to_die> \033[45m<time_to_eat> \033[46m<time_to_sleep> \033[43m[max meals]\033[40m"
+_to_die> \033[45m<time_to_eat> \033[46m<time_to_sleep> \033[43m[max meals]\033[40m."
 # define INV_TIME "Please provide time in whole milliseconds (max 2.000.000)."
 # define INV_PH "Please provide a valid number of philosophers (max 200)."
 # define INV_ME "Number of meals invalid. Please provide a valid number (max 2.000.000); \

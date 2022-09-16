@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 15:24:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 15:19:54 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@
 void	destroy_mutex(t_mutex *mutex)
 {
 	if (mutex->init)
-		pthread_mutex_destroy(&(mutex->mutex))
+	{
+		if (pthread_mutex_destroy(&(mutex->mutex)))
+			printf("mutex can't be destroyed\n");
+	}
 }
 
 /* if the forks array is not NULL, all forks that were initialized are
