@@ -6,7 +6,7 @@
 #    By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/22 15:35:03 by hoomen            #+#    #+#              #
-#    Updated: 2022/09/17 15:33:10 by hoomen           ###   ########.fr        #
+#    Updated: 2022/09/17 14:09:51 by hoomen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,12 @@ VPATH		= src
 INCFLAGS	= -I include
 
 CC			= cc
-FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
+FLAGS		= -Wall -Werror -Wextra #-fsanitize=thread
 
 NAME		= philo
-HEADER		= include/philo.h
-SRC			= action.c check.c exit_program.c init_structs.c main.c mutex.c\
-			  set.c simulation.c time.c utils.c watcher.c
+HEADER		= include/philo_bonus.h
+SRC			= action.c check.c exit_program.c init.c main.c set.c simulation.c\
+			  time.c utils.c big_watcher.c
 OBJ			= $(addprefix obj/,$(notdir $(SRC:.c=.o)))
 
 $(NAME) : $(OBJ) 
