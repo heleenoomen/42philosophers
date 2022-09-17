@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 15:57:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/08 13:14:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # define ERR "Error:"
 # define MALLOC_ERR "Failed at allocating memory."
 # define THREAD_ERR "Failed at creating thread."
-# define SEM_ERR "Failed to open semaphores."
+# define MUTEX_ERR "Failed at initializing mutex."
 # define ARGS "Invalid arguments."
 # define USAGE "Usage: ./philo <nbr_of_philosophers> <time\
 _to_die> <time_to_eat> <time_to_sleep> [max meals]."

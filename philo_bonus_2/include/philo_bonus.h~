@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 16:07:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 15:55:50 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,13 @@ void			*ft_malloc(size_t size, t_err *error);
 unsigned int	ft_atoui(char *s, t_err *error, short type);
 int				ft_strcmp(char *s1, char *s2);
 
-/* init.c */
+/* init_structs.c */
+void			init_semaphores(t_ctrl *ctrl, t_err *error);
 t_ctrl			*init_ctrl(int argc, char **argv, t_err *error);
+
+/* mutex.c */
+//void			init_all_mutexes(t_ctrl *ctrl, t_err *error)nt	ft_fork(t_ctrl *ctrl, int nu_forks, t_err *error)
+//bool			init_mutex(t_mutex *mutex, t_err *error);
 
 /* simulation.c */
 void			run_philosophers(t_ctrl *ctrl);
@@ -124,6 +129,9 @@ void			watcher(t_ctrl *ctrl);
 void			child_process(t_ctrl *ctrl);
 void			big_watcher(t_ctrl *ctrl);
 void			simulation(t_ctrl *ctrl, t_err *error);
+
+/* watcher.c */
+//void			watcher(t_ctrl *ctrl, int threads_created);
 
 /* action.c */
 void			print_action(t_ctrl *ctrl, t_ms time, char *action);

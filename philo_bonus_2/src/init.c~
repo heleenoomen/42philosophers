@@ -1,42 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init_structs.c                                     :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/15 17:04:49 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/16 16:00:36 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-void	init_semaphores(t_ctrl *ctrl, t_err *error)
+sem_t	*init_semaphore(char *name, int value, t_err *error)
+{
+	sem_t	*ret;
+
+	sem_unlink(name);
+	ret = sem_open(name, O_CREAT, 0664, value);
+	if (ret == SEM_FAILED)
+		*error = SEM_ERR; 
+	return (ret);
+}
+		
+void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 {
 	if (*error)
 		return ;
-	sem_unlink("/forks");
-	ctrl->forks = sem_open("/forks", O_CREAT, 0664, ctrl->nu_philo);
-	if (ctrl->forks == SEM_FAILED)
-		perror("forks not created");
-	printf("%i forks are created\n", ctrl->nu_philo);
-	sem_unlink("/print");
-	ctrl->print = sem_open("/print", O_CREAT, 0664, 1);
-	if (ctrl->forks == SEM_FAILED)
-		perror("print not created");
-	sem_unlink("/status_sem");
-	ctrl->status_sem = sem_open("/status_sem", O_CREAT, 0664, 1);
-	sem_unlink("/died_sem");
-	ctrl->died_sem = sem_open("/died_sem", O_CREAT, 0664, 1);
-	sem_unlink("/last_meal_sem");
-	ctrl->last_meal_sem = sem_open("/last_meal_sem", O_CREAT, 0664, 1);
+	ctrl->forks = init_semaphore("/tmp/forks", ctrl->nu_philo);
+	ctrl->print = init_semaphore("/tmp/print", 1);
+	ctrl->last_meal_sem = init_semaphore("/tmp/last_meal_sem", 1);
+	ctrl->status_sem = init_semaphore("/tmp/status_sem", 1);
+	ctrl->died_sem = init_semaphore("/tmp/died_sem", 1);
 }
 
-/* allocate space for ctrl struct, parse user parameters, allocate space for
- * arrays and initialize mutexes and the philos array.
- */
-t_ctrl	*init_controller(int argc, char **argv, t_err *error)
+t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 {
 	t_ctrl	*ctrl;
 
@@ -51,7 +49,7 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 		ctrl->max_meals = ft_atoui(argv[5], error, ME);
 	else
 		ctrl->max_meals = -1;
-	init_semaphores(ctrl, error);
+	init_all_semaphores(ctrl, error);
 	ctrl->status = NOT_EATING;
 	ctrl->meals = 0;
 	ctrl->died = false;
