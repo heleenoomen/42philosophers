@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:11:59 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/17 14:37:52 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_ctrl
 	pthread_t		watcher;
 	sem_t			*print;
 	sem_t			*forks;
+	sem_t			*start_sem;
 }					t_ctrl;
 
 /* status of individual philosopher: either she is eating and cannot be declared

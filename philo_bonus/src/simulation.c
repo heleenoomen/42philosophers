@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:33:21 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/17 15:03:54 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,27 @@ void	run_philosophers(t_ctrl *ctrl)
 	}
 	free(ctrl);
 	pthread_detach(ctrl->watcher);
+	printf("my last meal was at %u\n", ctrl->last_meal - ctrl->start);
 	exit(DEATH);
 }
 
 
 void	watcher(t_ctrl *ctrl)
 {
+	t_ms	last_meal;
 	while (1)
 	{
-		if (check_status(ctrl) == NOT_EATING && (gettime() - time_last_meal(ctrl))
-				> ctrl->time_die)
+		last_meal = time_last_meal(ctrl);
+
+		if (check_status(ctrl) == NOT_EATING && ((gettime() - last_meal)
+				> ctrl->time_die))
 		{
 			set_died(ctrl);
 			sem_wait(ctrl->print);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
+			printf("last meal started at: %u, actual time = %u\n", ctrl->last_meal - ctrl->start, gettime() - ctrl->start);
+			printf("time since last meal = %u\n", gettime() - ctrl->last_meal);
+			printf("last_meal = %u\n", last_meal);
 			exit(DEATH);
 		}
 	}
