@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:43:48 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 17:20:31 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,6 @@ sem_t	*init_semaphore(char *name, int value, t_err *error)
 		
 void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 {
-	int	i;
-
 	if (*error)
 		return ;
 	ctrl->forks = init_semaphore("forks", ctrl->nu_philo, error);
@@ -37,10 +35,6 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);
-	ctrl->start_sem = init_semaphore("start_sem", ctrl->nu_philo, error);
-	i = -1;
-	while (++i < ctrl->nu_philo)
-		sem_wait(ctrl->start_sem);
 }
 
 t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:24:40 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 17:32:40 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
 	i = -1;
 	while (++i < ctrl->nu_philo)
 	{
-		kill(ctrl->cpids[i], SIGKILL);
+		kill(ctrl->cpids[i], SIGTERM);
 		ctrl->cpids[i] = 0;
 	}	
 	if (status != DEATH)
@@ -36,7 +36,7 @@ bool	check_lonely(t_ctrl *ctrl)
 	start = gettime();
 	while (gettime() < start + ctrl->time_die)
 		usleep(500);
-	kill(ctrl->cpids[0], SIGKILL);	
+	kill(ctrl->cpids[0], SIGTERM);	
 	printf("%u 1 died\n", gettime() - ctrl->start);
 	return (true);
 }

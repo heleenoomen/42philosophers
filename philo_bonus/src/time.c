@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/13 13:38:07 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 17:07:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ph_usleep(t_ctrl *ctrl, t_ms time_action)
 	t_ms	end_of_action;
 	bool	died;
 
-	end_of_action = gettime() + time_action;
+	end_of_action = ctrl->last_action + time_action;
 	while ((gettime() < end_of_action))
 	{
 		sem_wait(ctrl->died_sem);

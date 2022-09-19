@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 13:55:36 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 16:42:41 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	run_philosophers(t_philo *philo)
 	{
 		ph_eat(philo);
 		ph_sleep(philo);
-		print_action(philo, THINK, gettime());
+		print_action(philo, THINK);
 	}
 }
 

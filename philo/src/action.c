@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/16 14:51:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 16:44:24 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@
  * In case death has occurred, threads can no longer print, unless 'death' was
  * set to true because of saturation or unless the message is the DIE message
  */
-void	print_action(t_philo *philo, char *action, t_ms time)
+void	print_action(t_philo *philo, char *action)
 {
-	t_ms	rel_time;
 
-	rel_time = time - philo->ctrl->start;
 	pthread_mutex_lock(&(philo->ctrl->lock_print.mutex));
+	philo->last_action = gettime();
 	if (!(check_death(philo->ctrl)) || check_sated(philo->ctrl)
 			|| !ft_strcmp(action, DIE))
-		printf("%u %i %s\n", rel_time, philo->nbr, action);
+		printf("%u %i %s\n", philo->last_action - philo->ctrl->start, philo->nbr, action);
 	pthread_mutex_unlock(&(philo->ctrl->lock_print.mutex));
 }
 	
@@ -42,21 +41,17 @@ void	print_action(t_philo *philo, char *action, t_ms time)
  */
 void	ph_eat(t_philo *philo)
 {
-	t_ms	start_meal;
-
 	pthread_mutex_lock(&(philo->left->mutex));
-	print_action(philo, FORK, gettime());
+	print_action(philo, FORK);
 	pthread_mutex_lock(&(philo->right->mutex));
-	start_meal = gettime();
+	print_action(philo, FORK);
+	print_action(philo, EAT);
+	set_last_meal(philo, philo->last_action);
 	set_status(philo, EATING);
-	print_action(philo, FORK, gettime());
-	set_last_meal(philo, start_meal);
-	philo->last_action = start_meal;
+	ph_usleep(philo, philo->ctrl->time_eat);	
 	philo->meals++;
 	if (philo->meals == philo->ctrl->max_meals)
 		increment_sated(philo->ctrl);
-	print_action(philo, EAT, philo->last_meal);
-	ph_usleep(philo, philo->ctrl->time_eat);	
 	pthread_mutex_unlock(&(philo->right->mutex));
 	pthread_mutex_unlock(&(philo->left->mutex));	
 	set_status(philo, NOT_EATING);
@@ -67,8 +62,7 @@ void	ph_eat(t_philo *philo)
  */
 void	ph_sleep(t_philo *philo)
 {
-	philo->last_action = gettime();
-	print_action(philo, SLEEP, philo->last_action);
+	print_action(philo, SLEEP);
 	ph_usleep(philo, philo->ctrl->time_sleep);
 }
 

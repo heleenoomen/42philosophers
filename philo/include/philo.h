@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 14:21:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 16:42:09 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ void			init_threads(t_ctrl *ctrl, t_err *error);
 void			watcher(t_ctrl *ctrl, int threads_created);
 
 /* action.c */
-void			print_action(t_philo *philo, char *action, t_ms time);
+void			print_action(t_philo *philo, char *action);
 void			ph_eat(t_philo *philo);
 void			ph_sleep(t_philo *philo);
 

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:37:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 17:19:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct s_ctrl
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
+	t_ms			last_action;
 	t_ms			last_meal;
 	sem_t			*last_meal_sem;
 	t_ms			start;
@@ -82,7 +83,6 @@ typedef struct s_ctrl
 	pthread_t		watcher;
 	sem_t			*print;
 	sem_t			*forks;
-	sem_t			*start_sem;
 }					t_ctrl;
 
 /* status of individual philosopher: either she is eating and cannot be declared
@@ -136,7 +136,7 @@ void			start_simulation(t_ctrl *ctrl, t_err *error);
 void			big_watcher(t_ctrl *ctrl, t_err *error);
 
 /* action.c */
-void			print_action(t_ctrl *ctrl, t_ms time, char *action);
+void			print_action(t_ctrl *ctrl, char *action);
 void			ph_eat(t_ctrl *ctrl);
 void			ph_sleep(t_ctrl *ctrl);
 

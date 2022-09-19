@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 15:35:49 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 16:47:28 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,17 @@ _to_die> \033[45m<time_to_eat> \033[46m<time_to_sleep> \033[43m[max meals]\033[4
 alternatively, leave this parameter out."
 # define NO_PH "Number of philosophers is 0. No simulation is possible."
 
-# define FORK "\033[36;1mhas taken a fork\033[0m \U0001F374"
-# define EAT "\033[33;1mis eating\033[0m \U0001F35D"
-# define SLEEP "\033[35;1mis sleeping\033[0m \U0001F4A4"
-# define THINK "\033[32;1mis thinking\033[0m \U0001F4AD"
-# define DIE "\033[31;1mdied\033[0m \U0001FAA6"
+//# define FORK "\033[36;1mhas taken a fork\033[0m \U0001F374"
+// # define EAT "\033[33;1mis eating\033[0m \U0001F35D"
+// # define SLEEP "\033[35;1mis sleeping\033[0m \U0001F4A4"
+// # define THINK "\033[32;1mis thinking\033[0m \U0001F4AD"
+// # define DIE "\033[31;1mdied\033[0m \U0001FAA6"
+
+# define FORK "has taken a fork"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define DIE "died"
 
 #endif
 
