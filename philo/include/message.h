@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/19 16:47:28 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 18:39:48 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,21 @@
 # define THREAD_ERR "Failed at creating thread."
 # define MUTEX_ERR "Failed at initializing mutex."
 # define ARGS "Invalid arguments."
-# define USAGE "Usage: \033[44m./philo \033[42m<nbr_of_philosophers> \033[43m<time\
-_to_die> \033[45m<time_to_eat> \033[46m<time_to_sleep> \033[43m[max meals]\033[40m"
-# define INV_TIME "Please provide time in whole milliseconds (max 2.000.000)."
+# define USAGE "Usage: ./philo <nbr_of_philosophers> <time\
+_to_die> <time_to_eat> <time_to_sleep> [max meals]\n\
+<nbr_of_philosophers>\tthe number of philosophers at the table\n\
+<time_to_die>\t\tthe maximum amount of time (in ms) a philosopher can spend\
+ without eating\n\
+<time_to_eat>\t\tthe time a philosopher needs to finish her meal\n\
+<time_to_sleep>\t\tthe time a philosopher spends sleeping\n\
+[max meals]\t\tthe number of times each philosopher must eat (this parameter\
+ is optional)"
+# define INV_TIME "Please provide time in whole milliseconds (max UINT_MAX,\n\
+But please note that 3 million milliseconds is about 1 hour!)."
 # define INV_PH "Please provide a valid number of philosophers (max 200)."
-# define INV_ME "Number of meals invalid. Please provide a valid number (max 2.000.000); \
-alternatively, leave this parameter out."
+# define INV_ME "Number of meals invalid. Please provide a valid number (max INT_MAX);\n\
+Hint: if you're not sure what INT_MAX is, just enter a not to big number.\n\
+Alternatively, you can leave this parameter out altogether."
 # define NO_PH "Number of philosophers is 0. No simulation is possible."
 
 //# define FORK "\033[36;1mhas taken a fork\033[0m \U0001F374"

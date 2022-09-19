@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 13:53:59 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/09/19 18:52:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	exit_program(t_ctrl *ctrl, t_err *error)
 	close_sem(ctrl->last_meal_sem, "/tmp/last_meal_sem");
 	close_sem(ctrl->status_sem, "/tmp/status_sem");
 	close_sem(ctrl->died_sem, "/tmp/died_sem");
+	free(ctrl->cpids);
 	free(ctrl);
 	if (*error)
 		return (1);
