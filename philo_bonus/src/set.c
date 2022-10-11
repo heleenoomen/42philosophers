@@ -12,7 +12,6 @@
 
 #include "philo_bonus.h"
 
-
 void	set_died(t_ctrl *ctrl)
 {
 	sem_wait(ctrl->died_sem);
@@ -34,3 +33,9 @@ void	set_last_meal(t_ctrl *ctrl, t_ms time)
 	sem_post(ctrl->last_meal_sem);
 }
 
+void	set_sated(t_ctrl *ctrl)
+{
+	sem_wait(ctrl->sated_sem);
+	ctrl->sated = true;
+	sem_post(ctrl->sated_sem);
+}

@@ -14,7 +14,7 @@ VPATH		= src
 INCFLAGS	= -I include
 
 CC			= cc
-FLAGS		= -Wall -Werror -Wextra #-fsanitize=thread
+FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
 
 NAME		= philo
 HEADER		= include/philo_bonus.h

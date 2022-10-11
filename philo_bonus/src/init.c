@@ -35,6 +35,7 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);
+	ctrl->sated_sem = init_semaphore("sated_sem", 1, error);
 }
 
 t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
@@ -60,6 +61,8 @@ t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 	ctrl->status = EATING;
 	ctrl->meals = 0;
 	ctrl->died = false;
+	ctrl->sated = false;
+	ctrl->two_forks = false;
 	ctrl->cpids = ft_calloc(ctrl->nu_philo * sizeof(int), error);
 	return (ctrl);
 }

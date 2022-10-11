@@ -23,7 +23,12 @@ void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
 		ctrl->cpids[i] = 0;
 	}	
 	if (status != DEATH)
-		*error = UNDEF_CHILD_PROC;
+	{
+		if (status == THREAD_ERR_CHILD)
+			*error = THREAD_ERR;
+		else
+			*error = UNDEF_CHILD_PROC;
+	}
 	return ;
 }
 
@@ -51,19 +56,19 @@ void	big_watcher(t_ctrl *ctrl, t_err *error)
 		return ;
 	while (1)
 	{
-			waitpid(-1, &status, 0);
-			if (WIFEXITED(status))
+		waitpid(-1, &status, 0);
+		if (WIFEXITED(status))
+		{
+			status = WEXITSTATUS(status);
+			if (status != SATED)
+				return (death_or_error(ctrl, status, error));
+			else
 			{
-				status = WEXITSTATUS(status);
-				if (status != SATED)
-					return (death_or_error(ctrl, status, error));
-				else
-				{
-					sated++;
-					if (sated == ctrl->nu_philo)
-						return ;
-				}
+				sated++;
+				if (sated == ctrl->nu_philo)
+					return ;
 			}
+		}
 	}
 }
 

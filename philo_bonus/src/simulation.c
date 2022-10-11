@@ -14,18 +14,18 @@
 
 void	run_philosophers(t_ctrl *ctrl)
 {
-	set_status(ctrl, NOT_EATING);
+	set_status(ctrl, OTHER);
 	while (check_died(ctrl) == false)
 	{
 		ph_eat(ctrl);
 		ph_sleep(ctrl);
 		print_action(ctrl, THINK);
 	}
+	pthread_join(ctrl->watcher, NULL);
+	free(ctrl->cpids);
 	free(ctrl);
-	pthread_detach(ctrl->watcher);
 	exit(DEATH);
 }
-
 
 void	watcher(t_ctrl *ctrl)
 {
@@ -34,14 +34,16 @@ void	watcher(t_ctrl *ctrl)
 	while (1)
 	{
 		last_meal = time_last_meal(ctrl);
-		if (check_status(ctrl) == NOT_EATING && ((gettime() - last_meal)
+		if (check_status(ctrl) == OTHER && ((gettime() - last_meal)
 				> ctrl->time_die))
 		{
 			set_died(ctrl);
 			sem_wait(ctrl->print);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
-			exit(DEATH);
+			return ;
 		}
+		if (check_sated(ctrl))
+			return ;
 	}
 }
 
@@ -71,10 +73,12 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 		{
 			ctrl->index = i + 1;
 			if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, (void *)ctrl))
-				exit_program (ctrl, error);
+			{
+				sem_wait(ctrl->print);
+				exit(THREAD_ERR_CHILD);
+			}
 			run_philosophers(ctrl);
 		}
 	}
 	big_watcher(ctrl, error);
 }
-

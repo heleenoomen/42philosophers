@@ -39,29 +39,6 @@ typedef struct s_mutex
 	bool			init;
 }					t_mutex;
 
-/* the controller struct is used by the main thread (controller/watcher).
- * In here we store the parameters provided by the user:
- * 	nu_philo	>	the number of philosophers
- * 	max_meals	>	the number of times each philosopher must eat
- * 	time_eat	>	the time a philosopher needs to finish her meal
- * 	time_sleep	>	the time a philosopher spends sleeping
- * 	time_die	>	the maximum length of time a philosopher can spend without
- * 					eating before she dies
- * 	philos		>	pointer to array of t_philo struct, each of them representing
- * 					one philosopher
- * 	threads		>	pointer to array of threads (every thread is a philosopher)
- * 	forks		>	pointer to array of t_mutexs (every fork is a t_mutex)
- * 	death		>	flag that is set to true as soon as one philosopher dies
- * 	lock_death	>	mutex to protect the death flag
- * 	nu_sated	>	the number of sated philosophers (who have eaten max_meals
- * 					times)
- * 	lock_sated	>	mutex to protect the nu_sated counter
- * 	lock_print	>	mutex to protect the STDOUT when multiple threads are
- * 					printing messages
- * 	lock_start >	mutex to stop philosophers from entering their routine until
- * 					all threads are created
- * 	start		>	the start time of the simulation
- */
 typedef struct s_ctrl
 {
 	int				nu_philo;
@@ -80,6 +57,9 @@ typedef struct s_ctrl
 	sem_t			*status_sem;
 	bool			died;
 	sem_t			*died_sem;
+	bool			sated;
+	bool			two_forks;
+	sem_t			*sated_sem;
 	pthread_t		watcher;
 	sem_t			*print;
 	sem_t			*forks;
@@ -90,7 +70,7 @@ typedef struct s_ctrl
  * declared dead if too much time has elapsed since her last meal
  */
 # define EATING 0
-# define NOT_EATING 1
+# define OTHER 1
 
 /* ft_atoui needs to know if the string to convert is the number
  * of philosophers (PH) or the max_meals parameter (ME). In case of PH or ME,
@@ -117,6 +97,7 @@ typedef struct s_ctrl
 # endif
 
 /* exit statuses for philosophers */
+# define THREAD_ERR_CHILD 7
 # define DEATH 8
 # define SATED 9
 
@@ -145,11 +126,13 @@ void			set_died(t_ctrl *ctrl);
 void			set_status(t_ctrl *ctrl, bool status);
 void			set_last_meal(t_ctrl *ctrl, t_ms time);
 bool			incr_meals_check_sated(t_ctrl *ctrl);
+void			set_sated(t_ctrl *ctrl);
 	
 /* check.c */
 bool			check_died(t_ctrl *ctrl);
 bool			check_status(t_ctrl *ctrl);
 t_ms			time_last_meal(t_ctrl *ctrl);
+bool			check_sated(t_ctrl *ctrl);
 bool			check_sated(t_ctrl *ctrl);
 
 /* time.c */

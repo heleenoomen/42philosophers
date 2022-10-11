@@ -14,37 +14,43 @@
 
 void	print_action(t_ctrl *ctrl, char *action)
 {
+	if (check_died(ctrl))
+		return ;
 	sem_wait(ctrl->print);
 	ctrl->last_action = gettime();
-	if (!(ctrl->died) || !ft_strcmp(action, DIE))
-		printf("%u %i %s\n", ctrl->last_action - ctrl->start, ctrl->index, action);
+	printf("%u %i %s\n", ctrl->last_action - ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print);
+}
+
+void	take_forks(t_ctrl *ctrl)
+{
+	sem_wait(ctrl->forks);
+	print_action(ctrl, FORK);
+	sem_wait(ctrl->forks);
+	print_action(ctrl, FORK);
+}
+
+void	leave_forks(t_ctrl *ctrl)
+{
+	sem_post(ctrl->forks);
+	sem_post(ctrl->forks);
 }
 	
 void	ph_eat(t_ctrl *ctrl)
 {
-	t_ms	start_meal;
+	bool	sated;
 
-	sem_wait(ctrl->forks);
-	print_action(ctrl, FORK);
-	sem_wait(ctrl->forks);
-	start_meal = gettime();
-	print_action(ctrl, FORK);
+	take_forks(ctrl);
 	print_action(ctrl, EAT);
 	set_status(ctrl, EATING);
 	set_last_meal(ctrl, ctrl->last_action);
-	ctrl->last_action = start_meal;
-	ph_usleep(ctrl, ctrl->time_eat);	
-	sem_post(ctrl->forks);
-	sem_post(ctrl->forks);
-	set_status(ctrl, NOT_EATING);
-	ctrl->meals++;
-	if (ctrl->meals == ctrl->max_meals)
+	sated = ++ctrl->meals == ctrl->max_meals;
+	ph_usleep(ctrl, ctrl->time_eat);
+	leave_forks(ctrl);
+	if (sated)
 	{
-		pthread_detach(ctrl->watcher);
-		sem_post(ctrl->status_sem);
-		sem_post(ctrl->died_sem);
-		sem_post(ctrl->last_meal_sem);
+		set_sated(ctrl);
+		pthread_join(ctrl->watcher, NULL);
 		exit(SATED);
 	}
 }
@@ -52,6 +58,7 @@ void	ph_eat(t_ctrl *ctrl)
 void	ph_sleep(t_ctrl *ctrl)
 {
 	print_action(ctrl, SLEEP);
+	set_status(ctrl, OTHER);
 	ph_usleep(ctrl, ctrl->time_sleep);
 }
 

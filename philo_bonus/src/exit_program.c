@@ -50,11 +50,12 @@ int	exit_program(t_ctrl *ctrl, t_err *error)
 		free(ctrl);
 		return (2);
 	}
-	close_sem(ctrl->print, "/tmp/print");
-	close_sem(ctrl->forks, "/tmp/forks");
-	close_sem(ctrl->last_meal_sem, "/tmp/last_meal_sem");
-	close_sem(ctrl->status_sem, "/tmp/status_sem");
-	close_sem(ctrl->died_sem, "/tmp/died_sem");
+	close_sem(ctrl->print, "print");
+	close_sem(ctrl->forks, "forks");
+	close_sem(ctrl->last_meal_sem, "last_meal_sem");
+	close_sem(ctrl->status_sem, "status_sem");
+	close_sem(ctrl->died_sem, "died_sem");
+	close_sem(ctrl->sated_sem, "sated_sem");
 	free(ctrl->cpids);
 	free(ctrl);
 	if (*error)
