@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/19 17:03:41 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/12 09:14:31 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 void	run_philosophers(t_ctrl *ctrl)
 {
 	set_status(ctrl, OTHER);
+	if (ctrl->index % 2)
+		ph_usleep(ctrl, ctrl->time_eat - 10);
 	while (check_died(ctrl) == false)
 	{
 		ph_eat(ctrl);
@@ -40,6 +42,8 @@ void	watcher(t_ctrl *ctrl)
 			set_died(ctrl);
 			sem_wait(ctrl->print);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
+			sem_post(ctrl->forks);
+			sem_post(ctrl->forks);
 			return ;
 		}
 		if (check_sated(ctrl))
@@ -64,6 +68,7 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 	i = -1;
 	ctrl->start = gettime();
 	ctrl->last_meal = ctrl->start;
+	ctrl->last_action = ctrl->start;
 	while (++i < ctrl->nu_philo)
 	{
 		ctrl->cpids[i] = ft_fork(error);

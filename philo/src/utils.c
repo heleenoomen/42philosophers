@@ -34,7 +34,7 @@ static bool	check_error(char *s, t_err *error, short type)
 {
 	if (*error)
 		return (true);
-	if (s == NULL || s[0] == '\0' || (s[0] == '0' && s[1] == '0'))
+	if (s == NULL || s[0] == '\0' || (s[0] == '0' && s[1] != '\0'))
 	{
 		if (type == PH)
 			*error = INV_PH;
@@ -79,11 +79,12 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 	}
 	if (nbr == 0 && type == PH)
 		*error = NO_PH;
-	return ((unsigned int) nbr); }
+	return ((unsigned int) nbr);
+}
 
 /* returns 0 if both strings are equal, returns the difference between the
  * first non equal character otherwise (s1[n] - s2[n] or s2[n] - s1[n])
- * returns 0 if one or both of the strings are NULL strings.
+ * returns 0 if both of the strings are NULL strings.
  */
 int	ft_strcmp(char *s1, char *s2)
 {
@@ -95,7 +96,6 @@ int	ft_strcmp(char *s1, char *s2)
 		return (0 - *s2);
 	if (s2 == NULL)
 		return (*s1);
-
 	i = 0;
 	while (s1[i] || s2[i])
 	{
@@ -105,4 +105,3 @@ int	ft_strcmp(char *s1, char *s2)
 	}
 	return (0);
 }
-
