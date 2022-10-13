@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 13:58:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 19:58:30 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,5 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 	free_ctrl(ctrl);
 	if (*error)
 		exit(EXIT_FAILURE);
-	system("leaks philo");
 	exit(EXIT_SUCCESS);
 }

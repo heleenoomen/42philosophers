@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:35:56 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:40:24 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,31 +35,34 @@ typedef char			*t_err;
 
 /* all data and semaphores needed for the simulation:
  * nu_philo			the number of philosophers (entered by user)
- * index			the number of the individual philosopher
+ * index			the number of the individual philosopher (for printing logs)
  * max_meals		the max_meals parameter (entered by user)
  * meals			counter: number of times the philosopher has eaten
  * cpids			array of process id's (every philosopher is a child process)
  * status			boolean: philosopher is either EATING (meaning she cannot
- * 					die), or busy with
- * 					some OTHER activity (sleeping, thinking; meaning she can die)
+ * 					die), or busy withsome OTHER activity (sleeping, thinking;
+ * 					meaning she may die)
  * died				boolean: set to true when philosopher dies
  * sated			boolean: set to true when number of times philosopher has
  * 					eaten equals max_meals
  * time_eat			time it takes the philosopher to eat a meal (entered by user)
  * time_sleep		time philosopher spends sleeping (entered by user)
  * time_die			max time a philosopher can go without eating before she dies
- * last_action		time when the philosopher started her last activity
- * last_meal		time when the philosopher started her last meal
+ * start_current_action	time when the philosopher started her last
+ * 						activity
+ * last_meal			time when the philosopher started her last meal
  * sem_t parameters:	semaphores used to protect variables checked and set by
  * 						philosopher (main thread) and watcher (helper thread) to
  * 						avoid data races
  * print_sem			semaphore to protect stdout, so that only one philosopher
- * 						can print to stdout and log messages don't get mixed up
+ * 						can print to stdout at time and log messages don't get
+ * 						mixed up
  * forks				semaphore representing the forks. Value is equal to number of
  * 						philosophers
  * watcher				each philosopher generates a watcher thread that checks if 
  * 						the philosopher has died or is sated (and should thus exit)
  */
+
 typedef struct s_ctrl
 {
 	int				nu_philo;
@@ -73,7 +76,7 @@ typedef struct s_ctrl
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
-	t_ms			start_time_of_current_action;
+	t_ms			start_current_action;
 	t_ms			last_meal;
 	t_ms			start;
 	sem_t			*last_meal_sem;

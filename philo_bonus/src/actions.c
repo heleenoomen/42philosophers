@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 13:57:48 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:45:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void	print_action(t_ctrl *ctrl, char *action)
 	if (check_died(ctrl))
 		return ;
 	sem_wait(ctrl->print_sem);
-	ctrl->start_time_of_current_action = gettime();
-	printf("%u %i %s\n", ctrl->start_time_of_current_action \
+	ctrl->start_current_action = gettime();
+	printf("%u %i %s\n", ctrl->start_current_action \
 	- ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print_sem);
 }
@@ -55,12 +55,12 @@ void	leave_forks(t_ctrl *ctrl)
 
 /* philosopher first takes forks, then the EAT action is printed, status is set
  * to EATING (meaning philosopher cannot die) and last_meal is set to
- * last_action. Meals is increased by one and checked against max_meals to
- * define if the philosopher will be sated after this meal or not. Main thread
- * is send to sleep for time_eat milliseconds. Afterwards, if sated is true and
- * max_meals parameter was entered, the philosopher will set the sated flag to
- * true, wait for the watcher thread to return, free her resources and exit
- * with SATED status.
+ * start_current_action. Meals is increased by one and checked against max_meals
+ * to define if the philosopher will be sated after this meal or not. Main
+ * thread is send to sleep for time_eat milliseconds. Afterwards, if sated is
+ * true and max_meals parameter was entered, the philosopher will set the sated
+ * flag to true, wait for the watcher thread to return, free her resources and
+ * exit with SATED status.
  */
 void	ph_eat(t_ctrl *ctrl)
 {
@@ -69,7 +69,7 @@ void	ph_eat(t_ctrl *ctrl)
 	take_forks(ctrl);
 	print_action(ctrl, EAT);
 	set_status(ctrl, EATING);
-	set_last_meal(ctrl, ctrl->start_time_of_current_action);
+	set_last_meal(ctrl, ctrl->start_current_action);
 	sated = ++ctrl->meals == ctrl->max_meals;
 	ph_usleep_eat(ctrl);
 	leave_forks(ctrl);

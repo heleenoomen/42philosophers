@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   watcher.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 16:06:55 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/19 16:43:16 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 18:43:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,14 @@ bool	check_lonely(t_ctrl *ctrl)
 	return (true);
 }
 
-/* if not all threads were created succesfully (threads_created !=
- * ctrl->nu_philo), watcher returns immediately. Otherwise, watcher checks first
- * if there is only one philosopher (check_lonely). If so, returns. If nu_philo
- * is more then one, watcher goes through the array of philos continuously to
- * check if one of them died (check_died). If so, watcher returns. At the end of
- * every cycle, watcher checkes if all philosophers are sated, in which case it
- * sets death to true for the simulation to end.
+/* returns immediately in case not all threads were created succesfully
+ * (threads_created != ctrl->nu_philo).
+ * Checks if there is only one philosopher, in which case a separate routin is
+ * carried out.
+ * If there are multiple philosophers, watcher starts checking continuously if
+ * one of them died or if all of them where sated. In both cases, watcher sets
+ * 'death' to true to indicate that all philosophers should return and watcher
+ * itself returns to start_simulation.
  */
 void	watcher(t_ctrl *ctrl, int threads_created)
 {
@@ -83,4 +84,3 @@ void	watcher(t_ctrl *ctrl, int threads_created)
 		}
 	}
 }
-

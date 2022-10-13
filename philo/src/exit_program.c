@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   exit_program.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 15:36:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 18:57:30 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-/* destroys a mutex if it was initialized successfully
+/* destroys a mutex in case it was initialized successfully
  */
 void	destroy_mutex(t_mutex *mutex)
 {
@@ -50,25 +50,27 @@ void	destroy_all_mutexes(t_ctrl *ctrl)
 	destroy_mutex(&(ctrl->lock_start));
 }
 
-
-/* prints error message in case error was set. Returns if ctrl == NULL (nothing
- * has to be freed). In case of an invalid parameter, only the ctrl struct has
- * to be freed. Otherwise, mutexes must be destroyed and all arrays in the
- * ctrl-struct have to be freed. An error code is returned in case of error (2
- * for user error, 1 for system error). Zero is returned when no error occurred
+/* prints error message in case error was set. Frees all resources that were
+ * allocated based on the phase of the program where the error occurred.
+ * Returns 0 in case there was no error.
+ * Returns 1 in case of a system error (malloc, thread creation or mutex
+ * initialization failed).
+ * Returns 2 in case the user entered invalid parameters.
  */
 int	exit_program(t_ctrl *ctrl, t_err *error)
 {
-	if (*error)
-		printf("%s %s\n", ERR, *error);
-	if (ctrl == NULL)
-		return (1);
-	if (!ft_strcmp(INV_PH, *error) || !ft_strcmp(INV_TIME, *error)
-			|| !ft_strcmp(INV_ME, *error))
+	if (!my_strcmp(INV_PH, *error) || !my_strcmp(INV_TIME, *error)
+		|| !my_strcmp(INV_ME, *error) || !my_strcmp(NO_PH, *error)
+		|| !my_strcmp(START_SATED, *error))
 	{
+		printf("%s%s %s\n%s", GREEN_BOLD, PHILO, *error, RESET_COLOR);
 		free(ctrl);
 		return (2);
 	}
+	if (*error)
+		printf("%s %s\n", PHILO, *error);
+	if (ctrl == NULL)
+		return (1);
 	destroy_all_mutexes(ctrl);
 	free(ctrl->threads);
 	free(ctrl->forks);
@@ -78,4 +80,3 @@ int	exit_program(t_ctrl *ctrl, t_err *error)
 		return (1);
 	return (0);
 }
-

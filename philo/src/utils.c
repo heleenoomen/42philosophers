@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/09 10:34:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 18:43:03 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 /* allocates size bytes of memory on the heap. If allocation fails, sets
  * error to MALLOC_ERR. Returns a pointer to the allocated block
  */
-void	*ft_malloc(size_t size, t_err *error)
+void	*malloc_set_err(size_t size, t_err *error)
 {
 	void	*ret;
 
 	ret = malloc(size);
 	if (ret == NULL)
-		*error = MALLOC_ERR; 
+		*error = MALLOC_ERR;
 	return (ret);
 }
 
@@ -30,15 +30,15 @@ void	*ft_malloc(size_t size, t_err *error)
  * is a NULL string or is empty, or starts with '0' (numbers with leading
  * zeros are not accepted). Returns false if no obvious error is found
  */
-static bool	check_error(char *s, t_err *error, short type)
+static bool	ph_atoui_check_error(char *s, t_err *error, short type)
 {
 	if (*error)
 		return (true);
 	if (s == NULL || s[0] == '\0' || (s[0] == '0' && s[1] != '\0'))
 	{
-		if (type == PH)
+		if (type == N_PH)
 			*error = INV_PH;
-		else if (type == ME)
+		else if (type == N_MEALS)
 			*error = INV_ME;
 		else
 			*error = INV_TIME;
@@ -52,12 +52,12 @@ static bool	check_error(char *s, t_err *error, short type)
  * or when the number is too high (higher than INT_MAX, or higher than PH_MAX
  * for the number of philosophers).
  */
-unsigned int	ft_atoui(char *s, t_err *error, short type)
+unsigned int	ph_atoui(char *s, t_err *error, short type)
 {
 	unsigned int	nbr;
 	bool			inv;
 
-	if (check_error(s, error, type))
+	if (ph_atoui_check_error(s, error, type))
 		return (0);
 	nbr = 0;
 	inv = false;
@@ -66,9 +66,9 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 		if ((*s < '0' || *s > '9'))
 			inv = true;
 		nbr = (10 * nbr) + *s - '0';
-		if (type == PH && (inv || nbr > PH_MAX))
+		if (type == N_PH && (inv || nbr > PH_MAX))
 			*error = INV_PH;
-		else if (type == ME && (inv || nbr > INT_MAX))
+		else if (type == N_MEALS && (inv || nbr > INT_MAX))
 			*error = INV_ME;
 		else if ((inv || nbr > INT_MAX))
 			*error = INV_TIME;
@@ -76,8 +76,6 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 			return (0);
 		s++;
 	}
-	if (nbr == 0 && type == PH)
-		*error = NO_PH;
 	return (nbr);
 }
 
@@ -85,9 +83,9 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
  * first non equal character otherwise (s1[n] - s2[n] or s2[n] - s1[n])
  * returns 0 if both strings are NULL.
  */
-int	ft_strcmp(char *s1, char *s2)
+int	my_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	if (s1 == NULL && s2 == NULL)
 		return (0);

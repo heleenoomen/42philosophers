@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:35:48 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 19:57:37 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define UNDEF_CHILD_PROC "Abort: Undefined error in child process"
 # define ARGS "Error: Invalid arguments."
 # define USAGE "Usage: ./philo <nbr_of_philosophers> <time\
-_to_die> <time_to_eat> <time_to_sleep> [max meals]."
+_to_die> <time_to_eat> <time_to_sleep> [max meals]"
 # define INV_TIME "Error: Please provide time in whole milliseconds."
 # define INV_PH "Error: Please provide a valid number of philosophers (max 200)\
 ."

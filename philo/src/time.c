@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/11 13:37:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 18:42:43 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
 /* Returns the current time in milliseconds */
 t_ms	gettime(void)
@@ -18,23 +18,25 @@ t_ms	gettime(void)
 	struct timeval	time;
 
 	gettimeofday(&time, NULL);
-	return ((t_ms) ((time.tv_sec * 1000) + (time.tv_usec / 1000)));
+	return ((t_ms)((time.tv_sec * 1000) + (time.tv_usec / 1000)));
 }
 
 /* usleep is imprecise (since it stops a thread for AT LEAST n microseconds, but
- * possibly also longer). Therefore, we use a customi ph_usleep function. It
- * determines when the action will end (the time when the last action started +
- * the total time the action takes, and goes in a while loop until the current
- * time (gettime() is smaller than end_of_action. 
- * In between checking, the thread sleeps for 0.5 milliseconds to prevent the OS
- * from getting crazy. Death is checked in case a philosopheer dies in her
- * sleep.
+ * possibly longer). Therefore, we use two custom ph_usleep functions, which 
+ * usleeps the process for only 0.2 milliseconds and then checks if the current
+ * time (obtained by gettime()) is already smaller than end_of_action time.
+ * end_of_action is obtained by adding the time the action takes to the start
+ * time of the current action. (In between start_current_action and calling
+ * the usleep function, some delays may have happened, for example, by setting
+ * status or setting last meal, which involve mutexes).
+ * ph_usleep_sleep checks at every iteration if the philosopher has died, since
+ * philosophers may die while sleeping.
  */
-void	ph_usleep(t_philo *philo, t_ms time_action)
+void	ph_usleep_check(t_philo *philo, t_ms time_action)
 {
 	t_ms	end_of_action;
 
-	end_of_action = philo->last_action + time_action;
+	end_of_action = philo->start_current_action + time_action;
 	while ((gettime() < end_of_action))
 	{
 		if (check_death(philo->ctrl))
@@ -43,3 +45,14 @@ void	ph_usleep(t_philo *philo, t_ms time_action)
 	}
 }
 
+/* same as ph_usleep_sleep, but without calling costly check_died function,
+ * since philosophers cannot die while eating anyway.
+ */
+void	ph_usleep_eat(t_philo *philo)
+{
+	t_ms	end_of_action;
+
+	end_of_action = philo->start_current_action + philo->ctrl->time_eat;
+	while ((gettime() < end_of_action))
+		usleep (500);
+}

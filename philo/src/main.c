@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:09 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/19 18:27:27 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 16:55:33 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/* mark M */
 
 int	help_message(void)
 {
@@ -20,6 +18,11 @@ int	help_message(void)
 	return (1);
 }
 
+/* check if number of arguments is correct, if not, return EXIT_FAILURE with
+ * help message. Initialize error to NULL, initialize controller struct,
+ * initialize threads to start simulation. Call exit_program to return cleanly
+ * (using exit() is forbidden in the mandatory part of this project)
+ */
 int	main(int argc, char **argv)
 {
 	t_ctrl	*controller;
@@ -34,4 +37,3 @@ int	main(int argc, char **argv)
 	init_threads(controller, &error);
 	return (exit_program(controller, &error));
 }
-

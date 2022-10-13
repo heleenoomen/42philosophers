@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:32:49 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:41:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 	i = -1;
 	ctrl->start = gettime();
 	ctrl->last_meal = ctrl->start;
-	ctrl->start_time_of_current_action = ctrl->start;
+	ctrl->start_current_action = ctrl->start;
 	while (++i < ctrl->nu_philo)
 	{
 		ctrl->cpids[i] = fork_handle_error(ctrl, error);
