@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 11:53:53 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 13:58:53 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ sem_t	*init_semaphore(char *name, int value, t_err *error)
 /* initialize all semaphores in the control struct. Semaphores are
  * initialized with a value of one (only one thread can get or set the protected
  * info at a time, only one thread can print at a time). The forks semaphore
- * is initialized with the number of philosophers (representing the amount of forks
- * on the table)
+ * is initialized with the number of philosophers (representing the amount of
+ * forks on the table)
  */
 void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 {
