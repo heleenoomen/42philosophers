@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 13:58:53 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:27:58 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	if (*error)
 		return ;
 	ctrl->forks = init_semaphore("forks", ctrl->nu_philo, error);
-	ctrl->print_sem = init_semaphore("print", 1, error);
+	ctrl->print_sem = init_semaphore("print_sem", 1, error);
 	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);

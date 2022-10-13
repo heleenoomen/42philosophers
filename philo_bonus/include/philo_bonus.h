@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 11:52:41 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:35:56 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,7 +142,7 @@ void			set_status(t_ctrl *ctrl, bool status);
 void			set_last_meal(t_ctrl *ctrl, t_ms time);
 bool			incr_meals_check_sated(t_ctrl *ctrl);
 void			set_sated(t_ctrl *ctrl);
-	
+
 /* check.c */
 bool			check_died(t_ctrl *ctrl);
 bool			check_status(t_ctrl *ctrl);

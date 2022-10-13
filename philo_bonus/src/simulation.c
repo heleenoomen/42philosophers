@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 11:42:23 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:32:49 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ void	run_philosophers(t_ctrl *ctrl)
 /* thread routine for each philosopher. Continuously checks if the status of the
  * philosopher is OTHER, in which case watcher also checks if the time since the
  * last meal is bigger than time_die. If so, sets 'died' parameter to true,
- * waits for the print semaphore, prints the death message and does not post on the
- * print semaphore again, so that no other thread will be able to print any more
- * messages. To avoid any chance of deadlock, posts twice on the forks semaphore in
- * case the philosopher was holding any forks. Than returns.
- * In case of saturation, returns.
+ * waits for the print semaphore, prints the death message and does not post on
+ * the print semaphore again, so that no other thread will be able to print any
+ * more messages. To avoid any chance of deadlock, posts twice on the forks and
+ * returns. At each iterations, checks for saturation too and returns if the
+ * philosopher is sated.
  */
 void	watcher(t_ctrl *ctrl)
 {
@@ -83,13 +83,14 @@ int	fork_handle_error(t_ctrl *ctrl, t_err *error)
 	return (ret);
 }
 
-/* sets the start time of the simulation, and sets last_meal and last_action to start_time.
- * generates a process for each philosopher, calling fork_handle_error.
- * Saves the process id's of the child processes in the cpids array. In the child process,
- * a watcher thread is created and the main thread is send of to the run_philosophers
- * array. In case thread creation fails, the child process exits immediately.
- * After creation of the threads, big_watcher is called to oversee if child processes 
- * have exited (because of error, death or saturation)
+/* sets the start time of the simulation, and sets last_meal and last_action to
+ * start_time. generates a process for each philosopher, calling
+ * fork_handle_error. Saves the process id's of the child processes in the cpids
+ * array. In the child process, a watcher thread is created and the main thread
+ * is send of to the run_philosophers array. In case thread creation fails, the
+ * child process exits immediately. After creation of the threads, big_watcher
+ * is called to oversee if child processes have exited (because of error, death
+ * or saturation)
  */
 void	start_simulation(t_ctrl *ctrl, t_err *error)
 {
@@ -103,11 +104,12 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 	{
 		ctrl->cpids[i] = fork_handle_error(ctrl, error);
 		if (*error)
-			exit_program(ctrl, error); 
+			exit_program(ctrl, error);
 		if (ctrl->cpids[i] == 0)
 		{
 			ctrl->index = i + 1;
-			if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, (void *)ctrl))
+			if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, \
+			(void *)ctrl))
 			{
 				sem_wait(ctrl->print_sem);
 				free_ctrl(ctrl);

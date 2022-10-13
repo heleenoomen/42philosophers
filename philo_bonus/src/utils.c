@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 11:43:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:35:24 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*malloc_set_err(size_t size, t_err *error)
 
 	ret = malloc(size);
 	if (ret == NULL)
-		*error = MALLOC_ERR; 
+		*error = MALLOC_ERR;
 	return (ret);
 }
 
@@ -44,7 +44,7 @@ void	*calloc_set_err(size_t size, t_err *error)
 		ptr[i] = '\0';
 	return (ret);
 }
-	
+
 /* helper function for ph_atoi. Returns true if, for some reason, error was
  * already set. Returns also true when there is an obvious error: the string
  * is a NULL string or is empty, or starts with '0' (numbers with leading
@@ -106,7 +106,7 @@ unsigned int	ph_atuoi(char *s, t_err *error, short type)
  */
 int	my_strcmp(char *s1, char *s2)
 {
-	int i;
+	int	i;
 
 	if (s1 == NULL && s2 == NULL)
 		return (0);
@@ -114,7 +114,6 @@ int	my_strcmp(char *s1, char *s2)
 		return (0 - *s2);
 	if (s2 == NULL)
 		return (*s1);
-
 	i = 0;
 	while (s1[i] || s2[i])
 	{
@@ -124,4 +123,3 @@ int	my_strcmp(char *s1, char *s2)
 	}
 	return (0);
 }
-

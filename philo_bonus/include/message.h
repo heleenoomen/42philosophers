@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 12:25:23 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 15:35:48 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,3 @@ altogether to start a simulation"
 # define DIE "died"
 
 #endif
-
