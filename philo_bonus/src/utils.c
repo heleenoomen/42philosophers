@@ -52,9 +52,9 @@ static bool	check_error(char *s, t_err *error, short type)
 		return (true);
 	if (s == NULL || s[0] == '\0' || (s[0] == '0' && s[1] != '\0'))
 	{
-		if (type == PH)
+		if (type == N_PH)
 			*error = INV_PH;
-		else if (type == ME)
+		else if (type == N_MEALS)
 			*error = INV_ME;
 		else
 			*error = INV_TIME;
@@ -83,11 +83,11 @@ unsigned int	ft_atoi(char *s, t_err *error, short type)
 		if ((*s < '0' || *s > '9'))
 			inv = true;
 		nbr = (10 * nbr) + *s - '0';
-		if (type == PH && (inv || nbr > PH_MAX))
+		if (type == N_PH && (inv || nbr > PH_MAX))
 			*error = INV_PH;
-		else if (type == ME && (inv || nbr > ME_MAX))
+		else if (type == N_MEALS && (inv || nbr > INT_MAX))
 			*error = INV_ME;
-		else if ((inv || nbr > TIME_MAX))
+		else if ((inv || nbr > INT_MAX))
 			*error = INV_TIME;
 		if (*error)
 			return (0);

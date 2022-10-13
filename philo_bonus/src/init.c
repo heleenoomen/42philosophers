@@ -19,10 +19,7 @@ sem_t	*init_semaphore(char *name, int value, t_err *error)
 	sem_unlink(name);
 	ret = sem_open(name, O_CREAT, 0664, value);
 	if (ret == SEM_FAILED)
-	{
-		perror(name);
 		*error = SEM_ERR; 
-	}
 	return (ret);
 }
 		
@@ -31,11 +28,36 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	if (*error)
 		return ;
 	ctrl->forks = init_semaphore("forks", ctrl->nu_philo, error);
-	ctrl->print = init_semaphore("print", 1, error);
+	ctrl->print_sem = init_semaphore("print", 1, error);
 	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);
 	ctrl->sated_sem = init_semaphore("sated_sem", 1, error);
+}
+
+void	fill_in_params(int argc, char **argv, t_ctrl *ctrl, t_err *error)
+{
+	ctrl->nu_philo = ft_atoi(argv[1], error, N_PH);
+	ctrl->time_die = ft_atoi(argv[2], error, TIME);
+	ctrl->time_eat = ft_atoi(argv[3], error, TIME);
+	ctrl->time_sleep = ft_atoi(argv[4], error, TIME);
+	if (argc == 6)
+		ctrl->max_meals = ft_atoi(argv[5], error, N_MEALS);
+	else
+		ctrl->max_meals = -1;
+	if (*error == NULL && ctrl->nu_philo == 0)
+		*error = NO_PH;
+	if (*error == NULL && ctrl->max_meals == 0)
+		*error = START_SATED;
+}
+
+void	set_flags_and_counters(t_ctrl *ctrl)
+{
+	ctrl->status = EATING;
+	ctrl->meals = 0;
+	ctrl->died = false;
+	ctrl->sated = false;
+	ctrl->two_forks = false;
 }
 
 t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
@@ -45,25 +67,12 @@ t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 	ctrl = (t_ctrl *) ft_malloc(sizeof(t_ctrl), error);
 	if (*error)
 		return (NULL);
-	ctrl->nu_philo = ft_atoi(argv[1], error, PH);
-	ctrl->time_die = ft_atoi(argv[2], error, TI);
-	ctrl->time_eat = ft_atoi(argv[3], error, TI);
-	ctrl->time_sleep = ft_atoi(argv[4], error, TI);
-	if (argc == 6)
-		ctrl->max_meals = ft_atoi(argv[5], error, ME);
-	else
-		ctrl->max_meals = -1;
-	if (*error == NULL && ctrl->nu_philo == 0)
-		*error = NO_PH;
-	if (*error)
-		return (ctrl);
-	init_all_semaphores(ctrl, error);
-	ctrl->status = EATING;
-	ctrl->meals = 0;
-	ctrl->died = false;
-	ctrl->sated = false;
-	ctrl->two_forks = false;
-	ctrl->cpids = ft_calloc(ctrl->nu_philo * sizeof(int), error);
+	fill_in_params(argc, argv, ctrl, error);
+	if (!*error)
+		init_all_semaphores(ctrl, error);
+	if (!*error)
+		set_flags_and_counters(ctrl);
+	if (!*error)
+		ctrl->cpids = ft_calloc(ctrl->nu_philo * sizeof(int), error);
 	return (ctrl);
 }
-	

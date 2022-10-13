@@ -24,8 +24,7 @@ void	run_philosophers(t_ctrl *ctrl)
 		print_action(ctrl, THINK);
 	}
 	pthread_join(ctrl->watcher, NULL);
-	free(ctrl->cpids);
-	free(ctrl);
+	free_ctrl(ctrl);
 	exit(DEATH);
 }
 
@@ -40,7 +39,7 @@ void	watcher(t_ctrl *ctrl)
 				> ctrl->time_die))
 		{
 			set_died(ctrl);
-			sem_wait(ctrl->print);
+			sem_wait(ctrl->print_sem);
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
 			sem_post(ctrl->forks);
 			sem_post(ctrl->forks);
@@ -79,7 +78,8 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 			ctrl->index = i + 1;
 			if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, (void *)ctrl))
 			{
-				sem_wait(ctrl->print);
+				sem_wait(ctrl->print_sem);
+				free_ctrl(ctrl);
 				exit(THREAD_ERR_CHILD);
 			}
 			run_philosophers(ctrl);

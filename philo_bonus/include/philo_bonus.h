@@ -61,7 +61,7 @@ typedef struct s_ctrl
 	bool			two_forks;
 	sem_t			*sated_sem;
 	pthread_t		watcher;
-	sem_t			*print;
+	sem_t			*print_sem;
 	sem_t			*forks;
 }					t_ctrl;
 
@@ -77,23 +77,13 @@ typedef struct s_ctrl
  * ft_aoui will set error to INV_PH if the number exceeds 200. Otherwise, the
  * number is one of the time parameters and ft_atoui will set error to INV_T if
  * the number exceeds UINT_MAX */
-# define PH 0
-# define ME 1
-# define TI	2
+# define N_PH		0
+# define N_MEALS	1
+# define TIME		2
 
 /* define the maximum number op philosopers */
 # ifndef PH_MAX
 #  define PH_MAX 200
-# endif
-
-/* define the maximum for time parameters */
-# ifndef TIME_MAX
-#  define TIME_MAX 2000 * 1000
-# endif
-
-/* define the maximum for the meals_max parameter */
-# ifndef ME_MAX
-#  define ME_MAX 2000 * 1000
 # endif
 
 /* exit statuses for philosophers */

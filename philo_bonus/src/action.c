@@ -16,10 +16,10 @@ void	print_action(t_ctrl *ctrl, char *action)
 {
 	if (check_died(ctrl))
 		return ;
-	sem_wait(ctrl->print);
+	sem_wait(ctrl->print_sem);
 	ctrl->last_action = gettime();
 	printf("%u %i %s\n", ctrl->last_action - ctrl->start, ctrl->index, action);
-	sem_post(ctrl->print);
+	sem_post(ctrl->print_sem);
 }
 
 void	take_forks(t_ctrl *ctrl)
@@ -47,10 +47,11 @@ void	ph_eat(t_ctrl *ctrl)
 	sated = ++ctrl->meals == ctrl->max_meals;
 	ph_usleep(ctrl, ctrl->time_eat);
 	leave_forks(ctrl);
-	if (sated)
+	if (sated && ctrl->max_meals > -1)
 	{
 		set_sated(ctrl);
 		pthread_join(ctrl->watcher, NULL);
+		free_ctrl(ctrl);
 		exit(SATED);
 	}
 }

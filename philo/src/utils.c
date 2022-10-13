@@ -49,14 +49,13 @@ static bool	check_error(char *s, t_err *error, short type)
 
 /* converts string to unsigned int. Sets error when there is an obvious
  * error (check_error returns true), when any non numeric characters are found
- * or when the number is too high (higher than MAX_INT for number of
- * philosopher (type = PH) and number of meals (type = ME) and higher than
- * UNIT_MAX for the time parameters (type = T)
+ * or when the number is too high (higher than INT_MAX, or higher than PH_MAX
+ * for the number of philosophers).
  */
 unsigned int	ft_atoui(char *s, t_err *error, short type)
 {
-	unsigned long int	nbr;
-	bool				inv;
+	unsigned int	nbr;
+	bool			inv;
 
 	if (check_error(s, error, type))
 		return (0);
@@ -71,7 +70,7 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 			*error = INV_PH;
 		else if (type == ME && (inv || nbr > INT_MAX))
 			*error = INV_ME;
-		else if ((inv || nbr > UINT_MAX))
+		else if ((inv || nbr > INT_MAX))
 			*error = INV_TIME;
 		if (*error)
 			return (0);
@@ -79,12 +78,12 @@ unsigned int	ft_atoui(char *s, t_err *error, short type)
 	}
 	if (nbr == 0 && type == PH)
 		*error = NO_PH;
-	return ((unsigned int) nbr);
+	return (nbr);
 }
 
 /* returns 0 if both strings are equal, returns the difference between the
  * first non equal character otherwise (s1[n] - s2[n] or s2[n] - s1[n])
- * returns 0 if both of the strings are NULL strings.
+ * returns 0 if both strings are NULL.
  */
 int	ft_strcmp(char *s1, char *s2)
 {

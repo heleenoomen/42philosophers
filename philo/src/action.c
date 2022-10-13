@@ -21,7 +21,6 @@
  */
 void	print_action(t_philo *philo, char *action)
 {
-
 	pthread_mutex_lock(&(philo->ctrl->lock_print.mutex));
 	philo->last_action = gettime();
 	if (!(check_death(philo->ctrl)) || check_sated(philo->ctrl)
