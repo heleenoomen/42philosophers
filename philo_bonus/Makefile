@@ -6,7 +6,7 @@
 #    By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/22 15:35:03 by hoomen            #+#    #+#              #
-#    Updated: 2022/09/19 17:18:04 by hoomen           ###   ########.fr        #
+#    Updated: 2022/10/13 12:29:13 by hoomen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
 
 NAME		= philo
 HEADER		= include/philo_bonus.h
-SRC			= action.c check.c exit_program.c init.c main.c set.c simulation.c\
+SRC			= actions.c get.c exit_program.c init.c main.c set.c simulation.c\
 			  time.c utils.c big_watcher.c
 OBJ			= $(addprefix obj/,$(notdir $(SRC:.c=.o)))
 

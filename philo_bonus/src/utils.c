@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:45:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:11:16 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 11:43:25 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* allocates size bytes of memory on the heap. If allocation fails, sets
  * error to MALLOC_ERR. Returns a pointer to the allocated block
  */
-void	*ft_malloc(size_t size, t_err *error)
+void	*malloc_set_err(size_t size, t_err *error)
 {
 	void	*ret;
 
@@ -25,13 +25,17 @@ void	*ft_malloc(size_t size, t_err *error)
 	return (ret);
 }
 
-void	*ft_calloc(size_t size, t_err *error)
+/* allocates size bytes of memory on the heap. If allocation fails, sets
+ * error to MALLOC_ERR. Else, fills allocated block with null bytes.
+ * returns a pointer to the allocated block
+ */
+void	*calloc_set_err(size_t size, t_err *error)
 {
 	void	*ret;
 	char	*ptr;
 	size_t	i;
 
-	ret = ft_malloc(size, error);
+	ret = malloc_set_err(size, error);
 	if (*error)
 		return (NULL);
 	ptr = (char *)ret;
@@ -41,12 +45,12 @@ void	*ft_calloc(size_t size, t_err *error)
 	return (ret);
 }
 	
-/* helper function for ft_atoui. Returns true if, for some reason, error was
+/* helper function for ph_atoi. Returns true if, for some reason, error was
  * already set. Returns also true when there is an obvious error: the string
  * is a NULL string or is empty, or starts with '0' (numbers with leading
  * zeros are not accepted). Returns false if no obvious error is found
  */
-static bool	check_error(char *s, t_err *error, short type)
+static bool	ph_atoui_check_error(char *s, t_err *error, short type)
 {
 	if (*error)
 		return (true);
@@ -69,12 +73,12 @@ static bool	check_error(char *s, t_err *error, short type)
  * philosopher (type = PH) and number of meals (type = ME) and higher than
  * UNIT_MAX for the time parameters (type = T)
  */
-unsigned int	ft_atoi(char *s, t_err *error, short type)
+unsigned int	ph_atuoi(char *s, t_err *error, short type)
 {
 	unsigned int	nbr;
 	bool			inv;
 
-	if (check_error(s, error, type))
+	if (ph_atoui_check_error(s, error, type))
 		return (0);
 	nbr = 0;
 	inv = false;
@@ -100,7 +104,7 @@ unsigned int	ft_atoi(char *s, t_err *error, short type)
  * first non equal character otherwise (s1[n] - s2[n] or s2[n] - s1[n])
  * returns 0 if one or both of the strings are NULL strings.
  */
-int	ft_strcmp(char *s1, char *s2)
+int	my_strcmp(char *s1, char *s2)
 {
 	int i;
 

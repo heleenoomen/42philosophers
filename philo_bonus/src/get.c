@@ -1,17 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   get.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hoomen <hoomen@student.42heilbronn.de      +#+  +:+       +#+        */
+/*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 17:48:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/09/17 14:59:35 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/13 11:19:54 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
+/* these functions are used to get the value of variables that are checked
+ * or set throughout the simulation by more than one thread, typically by the
+ * main thread (the philosopher) and her watcher thread. To do this in a safe
+ * way (without data races), all of these values are protected by a
+ * semaphore of their own with value one. Waiting for the semaphore is required
+ * before getting or setting the value of the variable. After getting/setting,
+ * the semaphore is being posted upon so that the other thread will be able
+ * to access the variable.
+ */
+
+/* returns true if died flag was set, returns false if died flag was not set
+ */
 bool	check_died(t_ctrl *ctrl)
 {
 	bool	ret;
@@ -22,6 +34,8 @@ bool	check_died(t_ctrl *ctrl)
 	return (ret);
 }
 
+/* returns the value of the status flag (either EATING or OTHER)
+ */
 bool	check_status(t_ctrl *ctrl)
 {
 	bool	ret;
@@ -32,6 +46,8 @@ bool	check_status(t_ctrl *ctrl)
 	return (ret);
 }
 
+/* returns the timestamp of the last_meal
+ */
 t_ms	time_last_meal(t_ctrl *ctrl)
 {
 	t_ms	time;
@@ -42,6 +58,8 @@ t_ms	time_last_meal(t_ctrl *ctrl)
 	return (time);
 }
 
+/* returns true if philosopher is sated, returns false if not
+ */
 bool	check_sated(t_ctrl *ctrl)
 {
 	bool	ret;
