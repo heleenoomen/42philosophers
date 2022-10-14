@@ -33,9 +33,9 @@ void	saturation_watcher(t_ctrl *ctrl)
 		return ;
 	i = -1;
 	while (++i < ctrl->nu_philo)
-		sem_wait(ctrl->all_sated);
+		sem_wait(ctrl->sated_sem);
 	sem_post(ctrl->end_of_simulation);
-	sem_post(ctrl->sated_sem);
+	sem_post(ctrl->all_sated);
 }
 
 //	int	status;

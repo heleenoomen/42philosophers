@@ -76,9 +76,9 @@ void	ph_eat(t_ctrl *ctrl)
 	leave_forks(ctrl);
 	if (sated && ctrl->max_meals != -1)
 	{
-		sem_post(ctrl->all_sated);
-		sem_wait(ctrl->sated_sem);
 		sem_post(ctrl->sated_sem);
+		sem_wait(ctrl->all_sated);
+		sem_post(ctrl->all_sated);
 	}
 }
 
