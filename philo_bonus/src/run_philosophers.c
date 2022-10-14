@@ -25,14 +25,14 @@ void	watcher(t_ctrl *ctrl)
 {
 	t_ms	last_meal;
 
-	while (!check_died(ctrl))
+	while (simulation(ctrl))
 	{
 		last_meal = time_last_meal(ctrl);
 		if (check_status(ctrl) == OTHER && ((gettime() - last_meal)
 				> ctrl->time_die))
 		{
 			sem_wait(ctrl->print_sem);
-			if (!check_died(ctrl))
+			if (simulation(ctrl))
 				printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
 			set_died(ctrl);
 			sem_post(ctrl->forks);
@@ -88,7 +88,7 @@ void	run_philosophers(t_ctrl *ctrl)
 	set_status(ctrl, OTHER);
 	if (ctrl->index % 2)
 		ph_usleep_sleep(ctrl);
-	while (check_died(ctrl) == false)
+	while (simulation(ctrl))
 	{
 		ph_eat(ctrl);
 		ph_sleep(ctrl);

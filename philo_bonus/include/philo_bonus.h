@@ -71,7 +71,7 @@ typedef struct s_ctrl
 	int				meals;
 	int				*cpids;
 	bool			status;
-	bool			died;
+	bool			simulation;
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
@@ -146,15 +146,11 @@ void			ph_sleep(t_ctrl *ctrl);
 void			set_died(t_ctrl *ctrl);
 void			set_status(t_ctrl *ctrl, bool status);
 void			set_last_meal(t_ctrl *ctrl, t_ms time);
-bool			incr_meals_check_sated(t_ctrl *ctrl);
-void			set_sated(t_ctrl *ctrl);
 
 /* check.c */
-bool			check_died(t_ctrl *ctrl);
+bool			simulation(t_ctrl *ctrl);
 bool			check_status(t_ctrl *ctrl);
 t_ms			time_last_meal(t_ctrl *ctrl);
-bool			check_sated(t_ctrl *ctrl);
-bool			check_sated(t_ctrl *ctrl);
 
 /* run_philosophers.c*/
 void			run_philosophers(t_ctrl *ctrl);

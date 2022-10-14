@@ -27,7 +27,7 @@
 void	set_died(t_ctrl *ctrl)
 {
 	sem_wait(ctrl->died_sem);
-	ctrl->died = true;
+	ctrl->simulation = false;
 	sem_post(ctrl->died_sem);
 }
 

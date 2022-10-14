@@ -24,11 +24,11 @@
  */
 void	print_action(t_ctrl *ctrl, char *action)
 {
-	if (check_died(ctrl))
+	if (!simulation(ctrl))
 		return ;
 	sem_wait(ctrl->print_sem);
 	ctrl->start_current_action = gettime();
-	if (!check_died(ctrl))
+	if (simulation(ctrl))
 		printf("%u %i %s\n", ctrl->start_current_action \
 		- ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print_sem);

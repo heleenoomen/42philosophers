@@ -35,19 +35,17 @@ t_ms	gettime(void)
 void	ph_usleep_sleep(t_ctrl *ctrl)
 {
 	t_ms	end_of_action;
-	bool	died;
 
 	end_of_action = ctrl->start_current_action + ctrl->time_sleep;
 	while ((gettime() < end_of_action))
 	{
-		died = check_died(ctrl);
-		if (died)
+		if (!simulation(ctrl))
 			break ;
 		usleep (200);
 	}
 }
 
-/* same as ph_usleep_sleep, but without calling costly check_died function,
+/* same as ph_usleep_sleep, but without calling costly sim_over function,
  * since philosophers cannot die while eating anyway.
  */
 void	ph_usleep_eat(t_ctrl *ctrl)

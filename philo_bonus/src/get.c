@@ -24,12 +24,12 @@
 
 /* returns true if died flag was set, returns false if died flag was not set
  */
-bool	check_died(t_ctrl *ctrl)
+bool	simulation(t_ctrl *ctrl)
 {
 	bool	ret;
 
 	sem_wait(ctrl->died_sem);
-	ret = ctrl->died;
+	ret = ctrl->simulation;
 	sem_post(ctrl->died_sem);
 	return (ret);
 }
