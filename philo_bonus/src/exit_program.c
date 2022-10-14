@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 14:00:39 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:55:01 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,18 @@ void	kill_child_processes(t_ctrl *ctrl)
 	}
 }
 
+/* once all child processes are running, semaphores can be unlinked safely
+ */
+void	unlink_all_semaphores(void)
+{
+	sem_unlink("forks");
+	sem_unlink("print_sem");
+	sem_unlink("last_meal_sem");
+	sem_unlink("status_sem");
+	sem_unlink("died_sem");
+	sem_unlink("sated_sem");
+}
+		
 /* exits the program in a clean way. First, an error message is printed.
  * Depending on the stage of the program where the error occurred,
  * resources are freed, any remaining child processes are terminated and
@@ -81,8 +93,8 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 	}
 	if (!my_strcmp(*error, FORK_ERR))
 		kill_child_processes(ctrl);
-	close_all_semaphores(ctrl);
 	free_ctrl(ctrl);
+	unlink_all_semaphores();
 	if (*error)
 		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 16:55:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:40:26 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	ph_eat(t_ctrl *ctrl)
 	if (sated && ctrl->max_meals > -1)
 	{
 		set_sated(ctrl);
-		usleep(1000);
 		free_ctrl(ctrl);
 		exit(SATED);
 	}

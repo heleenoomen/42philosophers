@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 17:19:27 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:52:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,7 @@ void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
 	exit_program(ctrl, error);
 }
 
-/* once all child processes are running, semaphores can be unlinked safely
- */
-void	unlink_all_semaphores(void)
-{
-	sem_unlink("forks");
-	sem_unlink("print_sem");
-	sem_unlink("last_meal_sem");
-	sem_unlink("status_sem");
-	sem_unlink("died_sem");
-	sem_unlink("sated_sem");
-}
+
 
 /* This is the main process after creating all child processes (i.e. after
  * spawning the philosophers). Now that all child processes are running,
@@ -63,7 +53,6 @@ void	big_watcher(t_ctrl *ctrl, t_err *error)
 	int	sated;
 
 	sated = 0;
-	unlink_all_semaphores();
 	while (1)
 	{
 		waitpid(-1, &status, 0);
