@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 23:15:27 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 20:06:04 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);
 	ctrl->sated_sem = init_semaphore("sated_sem", 1, error);
+	ctrl->end_of_simulation = init_semaphore("end_of_simulation", 0, error);
+	ctrl->all_sated = init_semaphore("all_sated", 0, error);
 }
 
 /* convert the parameters in the argument vector to integers calling
