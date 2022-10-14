@@ -32,27 +32,6 @@ void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
 	exit_program(ctrl, error);
 }
 
-/* if the number of philosophers is bigger than 1, returns to big watcher
- * without doing anything (i.e. big watcher will continue to go into its normal
- * routine). Else, the lonely philosopher is allowed to live for time_die
- * millisecond. She will take the sole fork and will fruitlessly wait for a
- * second fork until check_lonely kills her, prints the death message and
- * exits the program.
- */
-void	check_lonely(t_ctrl *ctrl, t_err *error)
-{
-	int	start;
-
-	if (ctrl->nu_philo > 1)
-		return ;
-	start = gettime();
-	while (gettime() < start + ctrl->time_die)
-		usleep(500);
-	kill(ctrl->cpids[0], SIGTERM);
-	printf("%u 1 died\n", gettime() - ctrl->start);
-	exit_program(ctrl, error);
-}
-
 /* this is the main process after creating all child processes (i.e. after
  * spawning the philosophers). Big_watcher will check constantly if a child
  * process has exited. If a child process has exited with SATED status, the
@@ -70,7 +49,6 @@ void	big_watcher(t_ctrl *ctrl, t_err *error)
 	int	sated;
 
 	sated = 0;
-	check_lonely(ctrl, error);
 	while (1)
 	{
 		waitpid(-1, &status, 0);
