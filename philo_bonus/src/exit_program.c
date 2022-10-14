@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 19:58:30 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 14:00:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,29 @@
 
 /* closes a semaphore and unlinks it
  */
-void	close_sem(sem_t *semaphore, char *name)
+void	close_sem(sem_t *semaphore)
 {
 	if (semaphore != SEM_FAILED)
-	{
 		sem_close(semaphore);
-		sem_unlink(name);
-	}
 }
 
 /* closes semaphores 
  */
 void	close_all_semaphores(t_ctrl *ctrl)
 {
-	close_sem(ctrl->print_sem, "print_sem");
-	close_sem(ctrl->forks, "forks");
-	close_sem(ctrl->last_meal_sem, "last_meal_sem");
-	close_sem(ctrl->status_sem, "status_sem");
-	close_sem(ctrl->died_sem, "died_sem");
-	close_sem(ctrl->sated_sem, "sated_sem");
+	close_sem(ctrl->print_sem);
+	close_sem(ctrl->forks);
+	close_sem(ctrl->last_meal_sem);
+	close_sem(ctrl->status_sem);
+	close_sem(ctrl->died_sem);
+	close_sem(ctrl->sated_sem);
 }
 
 /* frees all allocated memory in ctrl struct
  */
 void	free_ctrl(t_ctrl *ctrl)
 {
+	close_all_semaphores(ctrl);
 	free(ctrl->cpids);
 	free(ctrl);
 }
