@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 14:01:21 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:16:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
  */
 void	run_philosophers(t_ctrl *ctrl)
 {
+	pthread_detach(ctrl->watcher);
 	set_status(ctrl, OTHER);
 	if (ctrl->index % 2)
 		ph_usleep_sleep(ctrl);
@@ -28,7 +29,6 @@ void	run_philosophers(t_ctrl *ctrl)
 		ph_sleep(ctrl);
 		print_action(ctrl, THINK);
 	}
-	//pthread_join(ctrl->watcher, NULL);
 	free_ctrl(ctrl);
 	exit(DEATH);
 }
@@ -57,10 +57,10 @@ void	watcher(t_ctrl *ctrl)
 			printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
 			sem_post(ctrl->forks);
 			sem_post(ctrl->forks);
-			break ;
+			return ;
 		}
 		if (check_sated(ctrl))
-			break ;
+			return ;
 	}
 }
 
@@ -81,11 +81,6 @@ int	fork_handle_error(t_ctrl *ctrl, t_err *error)
 		exit_program(ctrl, error);
 	}
 	return (ret);
-}
-
-void	unlink_all_sempahores(void)
-{
-	sem_unlink()
 }
 
 /* sets the start time of the simulation, and sets last_meal and last_action to
@@ -120,10 +115,8 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 				free_ctrl(ctrl);
 				exit(THREAD_ERR_CHILD);
 			}
-			pthread_detach(ctrl->watcher);
 			run_philosophers(ctrl);
 		}
 	}
-	detach_all_semaphores();
 	big_watcher(ctrl, error);
 }
