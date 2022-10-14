@@ -75,7 +75,11 @@ void	ph_eat(t_ctrl *ctrl)
 	ph_usleep_eat(ctrl);
 	leave_forks(ctrl);
 	if (sated && ctrl->max_meals != -1)
+	{
 		sem_post(ctrl->all_sated);
+		sem_wait(ctrl->sated_sem);
+		sem_post(ctrl->sated_sem);
+	}
 }
 
 /* prints log message, sets status to OTHER (philosopher is no longer eating,

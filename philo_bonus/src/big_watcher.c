@@ -12,26 +12,6 @@
 
 #include "philo_bonus.h"
 
-void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
-{
-	int	i;
-
-	i = -1;
-	while (++i < ctrl->nu_philo)
-	{
-		kill(ctrl->cpids[i], SIGKILL);
-		ctrl->cpids[i] = 0;
-	}	
-	if (status != DEATH)
-	{
-		if (status == THREAD_ERR_CHILD)
-			*error = THREAD_ERR;
-		else
-			*error = UNDEF_CHILD_PROC;
-	}
-	exit_program(ctrl, error);
-}
-
 /* This is the main process after creating all child processes (i.e. after
  * spawning the philosophers). Now that all child processes are running,
  * semaphores can be unlinked safely. After unlinking, big_watcher
@@ -55,6 +35,7 @@ void	saturation_watcher(t_ctrl *ctrl)
 	while (++i < ctrl->nu_philo)
 		sem_wait(ctrl->all_sated);
 	sem_post(ctrl->end_of_simulation);
+	sem_post(ctrl->sated_sem);
 }
 
 //	int	status;

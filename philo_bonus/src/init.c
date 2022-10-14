@@ -41,7 +41,7 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
 	ctrl->status_sem = init_semaphore("status_sem", 1, error);
 	ctrl->died_sem = init_semaphore("died_sem", 1, error);
-	ctrl->sated_sem = init_semaphore("sated_sem", 1, error);
+	ctrl->sated_sem = init_semaphore("sated_sem", 0, error);
 	ctrl->end_of_simulation = init_semaphore("end_of_simulation", 0, error);
 	ctrl->all_sated = init_semaphore("all_sated", 0, error);
 }

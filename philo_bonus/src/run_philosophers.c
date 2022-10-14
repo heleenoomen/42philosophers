@@ -24,7 +24,6 @@
 void	watcher(t_ctrl *ctrl)
 {
 	t_ms	last_meal;
-	int		i;
 
 	while (!check_died(ctrl))
 	{
@@ -39,7 +38,6 @@ void	watcher(t_ctrl *ctrl)
 			sem_post(ctrl->forks);
 			sem_post(ctrl->forks);
 			sem_post(ctrl->end_of_simulation);
-			i = -1;
 			return ;
 		}
 	}
@@ -99,6 +97,7 @@ void	run_philosophers(t_ctrl *ctrl)
 	pthread_join(ctrl->watcher2, NULL);
 	pthread_join(ctrl->watcher, NULL);
 	sem_post(ctrl->all_sated);
+	sem_post(ctrl->print_sem);
 	free_ctrl(ctrl);
 	exit(EXIT_SUCCESS);
 }

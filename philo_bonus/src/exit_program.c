@@ -30,6 +30,8 @@ void	close_all_semaphores(t_ctrl *ctrl)
 	close_sem(ctrl->status_sem);
 	close_sem(ctrl->died_sem);
 	close_sem(ctrl->sated_sem);
+	close_sem(ctrl->end_of_simulation);
+	close_sem(ctrl->all_sated);
 }
 
 /* frees all allocated memory in ctrl struct

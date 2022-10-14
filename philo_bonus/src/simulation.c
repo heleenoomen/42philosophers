@@ -46,7 +46,6 @@ void	wait_for_child_processes(t_ctrl *ctrl, t_err *error)
 			status = WEXITSTATUS(status);
 			if (status)
 				*error = THREAD_ERR;
-			sem_post(ctrl->print_sem);
 		}
 	}
 }
