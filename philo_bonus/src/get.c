@@ -57,15 +57,3 @@ t_ms	time_last_meal(t_ctrl *ctrl)
 	sem_post(ctrl->last_meal_sem);
 	return (time);
 }
-
-/* returns true if philosopher is sated, returns false if not
- */
-bool	check_sated(t_ctrl *ctrl)
-{
-	bool	ret;
-
-	sem_wait(ctrl->sated_sem);
-	ret = ctrl->sated;
-	sem_post(ctrl->sated_sem);
-	return (ret);
-}

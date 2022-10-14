@@ -72,7 +72,6 @@ typedef struct s_ctrl
 	int				*cpids;
 	bool			status;
 	bool			died;
-	bool			sated;
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;

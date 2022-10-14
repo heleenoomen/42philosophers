@@ -76,7 +76,6 @@ void	set_flags_and_counters(t_ctrl *ctrl)
 	ctrl->status = EATING;
 	ctrl->meals = 0;
 	ctrl->died = false;
-	ctrl->sated = false;
 }
 
 /* initialize control struct. Allocate memory (malloc_set_err) for ctrl struct,

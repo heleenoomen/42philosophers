@@ -49,12 +49,3 @@ void	set_last_meal(t_ctrl *ctrl, t_ms time)
 	ctrl->last_meal = time;
 	sem_post(ctrl->last_meal_sem);
 }
-
-/* set the sated flag in the control struct to true
- */
-void	set_sated(t_ctrl *ctrl)
-{
-	sem_wait(ctrl->sated_sem);
-	ctrl->sated = true;
-	sem_post(ctrl->sated_sem);
-}
