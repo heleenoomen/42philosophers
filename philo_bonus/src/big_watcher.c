@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 17:19:27 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 20:24:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,6 @@ void	death_or_error(t_ctrl *ctrl, int status, t_err *error)
 	exit_program(ctrl, error);
 }
 
-/* once all child processes are running, semaphores can be unlinked safely
- */
-void	unlink_all_semaphores(void)
-{
-	sem_unlink("forks");
-	sem_unlink("print_sem");
-	sem_unlink("last_meal_sem");
-	sem_unlink("status_sem");
-	sem_unlink("died_sem");
-	sem_unlink("sated_sem");
-}
-
 /* This is the main process after creating all child processes (i.e. after
  * spawning the philosophers). Now that all child processes are running,
  * semaphores can be unlinked safely. After unlinking, big_watcher
@@ -57,27 +45,37 @@ void	unlink_all_semaphores(void)
  * Before doing anything, the big watcher checks if there is only one philo-
  * pher, in which case a special routine is carried out before exiting.
  */
-void	big_watcher(t_ctrl *ctrl, t_err *error)
+void	saturation_watcher(t_ctrl *ctrl)
 {
-	int	status;
-	int	sated;
+	int	i;
 
-	sated = 0;
-	unlink_all_semaphores();
-	while (1)
-	{
-		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
-		{
-			status = WEXITSTATUS(status);
-			if (status != SATED)
-				death_or_error(ctrl, status, error);
-			else
-			{
-				sated++;
-				if (sated == ctrl->nu_philo)
-					exit_program(ctrl, error);
-			}
-		}
-	}
+	if (ctrl->max_meals == -1)
+		return ;
+	i = -1;
+	while (++i < ctrl->nu_philo)
+		sem_wait(ctrl->all_sated);
+	sem_post(ctrl->end_of_simulation);
 }
+
+//	int	status;
+//	int	sated;
+//
+//	sated = 0;
+//	unlink_all_semaphores();
+//	while (1)
+//	{
+//		waitpid(-1, &status, 0);
+//		if (WIFEXITED(status))
+//		{
+//			status = WEXITSTATUS(status);
+//			if (status != SATED)
+//				death_or_error(ctrl, status, error);
+//			else
+//			{
+//				sated++;
+//				if (sated == ctrl->nu_philo)
+//					exit_program(ctrl, error);
+//			}
+//		}
+//	}
+//}

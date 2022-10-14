@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 16:55:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 20:25:43 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	print_action(t_ctrl *ctrl, char *action)
 		return ;
 	sem_wait(ctrl->print_sem);
 	ctrl->start_current_action = gettime();
-	printf("%u %i %s\n", ctrl->start_current_action \
-	- ctrl->start, ctrl->index, action);
+	if (!check_died(ctrl))
+		printf("%u %i %s\n", ctrl->start_current_action \
+		- ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print_sem);
 }
 
@@ -73,13 +74,8 @@ void	ph_eat(t_ctrl *ctrl)
 	sated = ++ctrl->meals == ctrl->max_meals;
 	ph_usleep_eat(ctrl);
 	leave_forks(ctrl);
-	if (sated && ctrl->max_meals > -1)
-	{
-		set_sated(ctrl);
-		usleep(1000);
-		free_ctrl(ctrl);
-		exit(SATED);
-	}
+	if (sated && ctrl->max_meals != -1)
+		sem_post(ctrl->all_sated);
 }
 
 /* prints log message, sets status to OTHER (philosopher is no longer eating,

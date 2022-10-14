@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:40:24 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 20:43:28 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,11 @@ typedef struct s_ctrl
 	sem_t			*sated_sem;
 	sem_t			*print_sem;
 	sem_t			*forks;
+	sem_t			*end_of_simulation;
+	sem_t			*all_sated;
+	sem_t			*end_sem;
 	pthread_t		watcher;
+	pthread_t		watcher2;
 }					t_ctrl;
 
 /* status of individual philosopher: either she is EATING and thus cannot die,
@@ -132,7 +136,7 @@ t_ctrl			*init_ctrl(int argc, char **argv, t_err *error);
 void			start_simulation(t_ctrl *ctrl, t_err *error);
 
 /* big_watcher.c */
-void			big_watcher(t_ctrl *ctrl, t_err *error);
+void			saturation_watcher(t_ctrl *ctrl);
 
 /* actions.c */
 void			print_action(t_ctrl *ctrl, char *action);
@@ -152,6 +156,9 @@ bool			check_status(t_ctrl *ctrl);
 t_ms			time_last_meal(t_ctrl *ctrl);
 bool			check_sated(t_ctrl *ctrl);
 bool			check_sated(t_ctrl *ctrl);
+
+/* run_philosophers.c*/
+void			run_philosophers(t_ctrl *ctrl);
 
 /* time.c */
 t_ms			gettime(void);
