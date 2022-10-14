@@ -70,6 +70,8 @@ void	unlink_all_semaphores(void)
 	sem_unlink("status_sem");
 	sem_unlink("died_sem");
 	sem_unlink("sated_sem");
+	sem_unlink("end_of_simulation");
+	sem_unlink("all_sated");
 }
 
 /* exits the program in a clean way. First, an error message is printed.
