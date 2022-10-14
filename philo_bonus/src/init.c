@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:27:58 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 23:15:27 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ sem_t	*init_semaphore(char *name, int value, t_err *error)
 	sem_t	*ret;
 
 	sem_unlink(name);
-	ret = sem_open(name, O_CREAT, 0664, value);
+	ret = sem_open(name, O_CREAT | O_EXCL, 0664, value);
 	if (ret == SEM_FAILED)
 		*error = SEM_ERR;
 	return (ret);

@@ -160,6 +160,7 @@ void			ph_usleep_sleep(t_ctrl *ctrl);
 
 /* exit_program.c */
 void			free_ctrl(t_ctrl *ctrl);
+void			close_all_semaphores(t_ctrl *ctrl);
 void			exit_program(t_ctrl *ctrl, t_err *error);
 
 #endif

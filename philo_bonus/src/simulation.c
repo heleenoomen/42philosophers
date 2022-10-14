@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:41:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/14 09:04:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	run_philosophers(t_ctrl *ctrl)
 		print_action(ctrl, THINK);
 	}
 	pthread_join(ctrl->watcher, NULL);
+	close_all_semaphores(ctrl);
 	free_ctrl(ctrl);
 	exit(DEATH);
 }

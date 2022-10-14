@@ -77,6 +77,7 @@ void	ph_eat(t_ctrl *ctrl)
 	{
 		set_sated(ctrl);
 		pthread_join(ctrl->watcher, NULL);
+		close_all_semaphores(ctrl);
 		free_ctrl(ctrl);
 		exit(SATED);
 	}
