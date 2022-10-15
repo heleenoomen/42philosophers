@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 18:41:25 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 21:49:03 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,6 @@ t_ctrl	*init_controller(int argc, char **argv, t_err *error)
 	init_mutexes_ctrl_struct(ctrl, error);
 	init_philos(ctrl, error);
 	ctrl->death = false;
+	ctrl->nu_sated = 0;
 	return (ctrl);
 }
