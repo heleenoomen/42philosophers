@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 16:01:00 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 16:05:06 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,20 +52,8 @@ void	unlink_all_semaphores(void)
 	sem_unlink("status_sem");
 	sem_unlink("simulation_sem");
 	sem_unlink("sated");
-	sem_unlink("stop_all");
 	sem_unlink("all_sated");
-}
-
-/* once all child processes are running, semaphores can be unlinked safely
- */
-void	unlink_all_semaphores(void)
-{
-	sem_unlink("forks");
-	sem_unlink("print_sem");
-	sem_unlink("last_meal_sem");
-	sem_unlink("status_sem");
-	sem_unlink("died_sem");
-	sem_unlink("sated_sem");
+	sem_unlink("stop_all");
 }
 		
 /* exits the program in a clean way. First, an error message is printed.

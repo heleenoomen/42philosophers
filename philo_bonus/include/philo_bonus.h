@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 15:34:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 16:10:10 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,29 +38,41 @@ typedef char			*t_err;
  * index			the number of the individual philosopher (for printing logs)
  * max_meals		the max_meals parameter (entered by user)
  * meals			counter: number of times the philosopher has eaten
- * cpids			array of process id's (every philosopher is a child process)
  * status			boolean: philosopher is either EATING (meaning she cannot
  * 					die), or busy withsome OTHER activity (sleeping, thinking;
  * 					meaning she may die)
- * died				boolean: set to true when philosopher dies
- * sated			boolean: set to true when number of times philosopher has
- * 					eaten equals max_meals
+ * simulation		boolean: set to true at start, set to false when death occurs
+ * 					or when all are sated
  * time_eat			time it takes the philosopher to eat a meal (entered by user)
  * time_sleep		time philosopher spends sleeping (entered by user)
  * time_die			max time a philosopher can go without eating before she dies
  * start_current_action	time when the philosopher started her last
  * 						activity
  * last_meal			time when the philosopher started her last meal
- * sem_t parameters:	semaphores used to protect variables checked and set by
- * 						philosopher (main thread) and watcher (helper thread) to
+ * ...sem:				semaphores used to protect variables checked and set by
+ * 						philosopher (main thread) and watchers (helper threads) to
  * 						avoid data races
+ * stop_all				posted upon when a philo dies or all are sated. Causes
+ * 						watcher2 thread to wake up, which will produce a domino
+ * 						effect, waking all other watcher2 threads up, who make all
+ * 						watcher threads return, so that all main threads can join
+ * 						their watchers and return.
+ * sated				posted upon when a philo is sated. When all are sated,
+ * 						saturation_watcher will post on stop_all so that all child
+ * 						processes will return cleanly.
+ * all_sated			posted upon when saturation_watcher has posted upon stop_all
+ * 						wakes up hanging sated philosopher, who will then join her
+ * 						watchers and exit
  * print_sem			semaphore to protect stdout, so that only one philosopher
  * 						can print to stdout at time and log messages don't get
  * 						mixed up
  * forks				semaphore representing the forks. Value is equal to number of
  * 						philosophers
  * watcher				each philosopher generates a watcher thread that checks if 
- * 						the philosopher has died or is sated (and should thus exit)
+ * 						the philosopher has died (and should thus exit)
+ * watcher2				waits until stop_all is being posted upon, then sets simulation
+ * 						to false, causing watcher1 to return, and posts again on
+ * 						stop_all so that next watcher2 in next process does the same
  */
 
 typedef struct s_ctrl

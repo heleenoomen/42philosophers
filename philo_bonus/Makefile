@@ -6,7 +6,7 @@
 #    By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/22 15:35:03 by hoomen            #+#    #+#              #
-#    Updated: 2022/10/15 16:01:35 by hoomen           ###   ########.fr        #
+#    Updated: 2022/10/15 16:03:19 by hoomen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ VPATH		= src
 INCFLAGS	= -I include
 
 CC			= cc
-FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
+FLAGS		= -Wall -Werror -Wextra #-fsanitize=thread
 
 NAME		= philo_bonus
 HEADER		= include/philo_bonus.h
