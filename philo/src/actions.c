@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 18:40:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 22:51:56 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ void	print_action(t_philo *philo, char *action)
 {
 	pthread_mutex_lock(&(philo->ctrl->lock_print.mutex));
 	philo->start_current_action = gettime();
-	if (!(check_death(philo->ctrl)) || check_sated(philo->ctrl)
-		|| !my_strcmp(action, DIE))
+	if (!(check_death(philo->ctrl)) || !my_strcmp(action, DIE))
 		printf("%u %i %s\n", philo->start_current_action - philo->ctrl->start, \
 		philo->nbr, action);
 	pthread_mutex_unlock(&(philo->ctrl->lock_print.mutex));
@@ -54,13 +53,17 @@ void	leave_forks(t_philo *philo)
  */
 void	ph_eat(t_philo *philo)
 {
+	bool	sated;
+
 	take_forks(philo);
 	print_action(philo, EAT);
 	set_status(philo, EATING);
 	set_last_meal(philo, philo->start_current_action);
+	sated = ++philo->meals == philo->ctrl->max_meals && \
+	philo->ctrl->max_meals != -1;
 	ph_usleep_eat(philo);
 	leave_forks(philo);
-	if (++philo->meals == philo->ctrl->max_meals)
+	if (sated)
 		increment_sated(philo->ctrl);
 }
 
