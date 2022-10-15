@@ -6,24 +6,20 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 12:27:19 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 13:14:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-/* This is the main process after creating all child processes (i.e. after
- * spawning the philosophers). Now that all child processes are running,
- * semaphores can be unlinked safely. After unlinking, big_watcher
- * will check constantly if a child
- * process has exited. If a child process has exited with SATED status, the
- * other philosophers (child processes) are allowed to continue running until
- * they become sated as well.
- * If, on the contrary, a child process has exited with any other status,
- * error_or_death is called to terminate all other processes and exit the
- * program.
- * Before doing anything, the big watcher checks if there is only one philo-
- * pher, in which case a special routine is carried out before exiting.
+/* If max_meals parameter was not entered by user (and set to -1 during intia-
+ * lization), saturation_watcher has nothing to do and returns immediately.
+ * Otherwise, he waits until all philosophers have posted on the sated
+ * semaphore, upon which he posts on the stop_all semaphore to wake up all
+ * watcher2 threads throughout processes, which whill make all threads return
+ * and all child processes exit. Finally, all_sated is posted upon to make
+ * threads that where hanging after saturation resume (i.e. join 
+ * watchers and exit).
  */
 void	saturation_watcher(t_ctrl *ctrl)
 {
@@ -37,26 +33,3 @@ void	saturation_watcher(t_ctrl *ctrl)
 	sem_post(ctrl->stop_all);
 	sem_post(ctrl->all_sated);
 }
-
-//	int	status;
-//	int	sated;
-//
-//	sated = 0;
-//	unlink_all_semaphores();
-//	while (1)
-//	{
-//		waitpid(-1, &status, 0);
-//		if (WIFEXITED(status))
-//		{
-//			status = WEXITSTATUS(status);
-//			if (status != SATED)
-//				death_or_error(ctrl, status, error);
-//			else
-//			{
-//				sated++;
-//				if (sated == ctrl->nu_philo)
-//					exit_program(ctrl, error);
-//			}
-//		}
-//	}
-//}

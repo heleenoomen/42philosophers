@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 12:22:15 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 13:15:56 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	leave_forks(t_ctrl *ctrl)
  * start_current_action. Meals is increased by one and checked against max_meals
  * to define if the philosopher will be sated after this meal or not. Main
  * thread is send to sleep for time_eat milliseconds. Afterwards, if sated is
- * true and max_meals parameter was entered, the philosopher will set the sated
- * flag to true, wait for the watcher thread to return, free her resources and
- * exit with SATED status.
+ * true and max_meals parameter was entered, the philosopher will post on the
+ * sated semaphore (to eventually wake up saturation_watcher in main process)
+ * and waits until all threads are sated before resuming.
  */
 void	ph_eat(t_ctrl *ctrl)
 {
@@ -90,5 +90,5 @@ void	ph_sleep(t_ctrl *ctrl)
 {
 	print_action(ctrl, SLEEP);
 	set_status(ctrl, OTHER);
-	ph_usleep_sleep(ctrl);
+	ph_usleep_check(ctrl, ctrl->time_sleep);
 }
