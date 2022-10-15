@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:34:37 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:39:04 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,9 +75,7 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 	}
 	if (!my_strcmp(*error, FORK_ERR))
 		kill_all(ctrl, error);
-	close_all_semaphores(ctrl);
-	free(ctrl->cpids);
-	free(ctrl);
+	free_ctrl(ctrl);
 	unlink_all_semaphores();
 	if (*error)
 		exit(EXIT_FAILURE);

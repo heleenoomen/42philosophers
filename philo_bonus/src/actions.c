@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:22:39 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:42:43 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	ph_eat(t_ctrl *ctrl)
 	set_last_meal(ctrl, ctrl->start_current_action);
 	sated = ++ctrl->meals == ctrl->max_meals\
 	&& ctrl->max_meals != -1;
-	ph_usleep_eat(ctrl);
+	ph_usleep(ctrl, ctrl->time_eat);
 	leave_forks(ctrl);
 	if (sated)
 		sem_post(ctrl->sated);
@@ -83,5 +83,5 @@ void	ph_sleep(t_ctrl *ctrl)
 {
 	print_action(ctrl, SLEEP);
 	set_last_meal(ctrl, OTHER);
-	ph_usleep_check(ctrl, ctrl->time_sleep);
+	ph_usleep(ctrl, ctrl->time_sleep);
 }

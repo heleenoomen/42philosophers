@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 23:50:05 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:42:55 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	run_philosophers(t_ctrl *ctrl)
 	pthread_detach(ctrl->watcher);
 	set_last_meal(ctrl, 0);
 	if (ctrl->index % 2)
-		ph_usleep_check(ctrl, ctrl->time_eat - 10);
+		ph_usleep(ctrl, ctrl->time_eat - 10);
 	while (1)
 	{
 		ph_eat(ctrl);

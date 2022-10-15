@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:19:10 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:41:13 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,8 +165,7 @@ void			run_philosophers(t_ctrl *ctrl);
 
 /* time.c */
 t_ms			gettime(void);
-void			ph_usleep_eat(t_ctrl *ctrl);
-void			ph_usleep_check(t_ctrl *ctrl, t_ms time);
+void			ph_usleep(t_ctrl *ctrl, t_ms time);
 
 /* exit_program.c */
 void			free_ctrl(t_ctrl *ctrl);

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 23:44:19 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:43:14 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,23 +32,11 @@ t_ms	gettime(void)
  * ph_usleep_sleep checks at every iteration if the philosopher has died, since
  * philosophers may die while sleeping.
  */
-void	ph_usleep_check(t_ctrl *ctrl, t_ms time)
+void	ph_usleep(t_ctrl *ctrl, t_ms time)
 {
 	t_ms	end_of_action;
 
 	end_of_action = ctrl->start_current_action + time;
-	while ((gettime() < end_of_action))
-		usleep (200);
-}
-
-/* same as ph_usleep_sleep, but without calling costly sim_over function,
- * since philosophers cannot die while eating anyway.
- */
-void	ph_usleep_eat(t_ctrl *ctrl)
-{
-	t_ms	end_of_action;
-
-	end_of_action = ctrl->start_current_action + ctrl->time_eat;
 	while ((gettime() < end_of_action))
 		usleep(200);
 }
