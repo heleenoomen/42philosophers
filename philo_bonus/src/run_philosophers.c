@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 15:58:27 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 20:32:53 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,9 @@ void	watcher(t_ctrl *ctrl)
 			end_simulation(ctrl);
 			sem_post(ctrl->forks);
 			sem_post(ctrl->forks);
+			sem_post(ctrl->forks);
+			sem_post(ctrl->forks);
+			sem_post(ctrl->stop_all);
 			sem_post(ctrl->stop_all);
 			return ;
 		}
