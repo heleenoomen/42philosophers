@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 13:05:09 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 15:34:11 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ typedef struct s_ctrl
 	int				index;
 	int				max_meals;
 	int				meals;
-	int				*cpids;
 	bool			status;
 	bool			simulation;
 	t_ms			time_eat;
@@ -81,8 +80,8 @@ typedef struct s_ctrl
 	sem_t			*last_meal_sem;
 	sem_t			*status_sem;
 	sem_t			*simulation_sem;
-	sem_t			*sated;
 	sem_t			*print_sem;
+	sem_t			*sated;
 	sem_t			*forks;
 	sem_t			*stop_all;
 	sem_t			*all_sated;

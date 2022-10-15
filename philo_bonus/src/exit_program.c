@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 12:23:56 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 15:37:02 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,7 @@ void	close_all_semaphores(t_ctrl *ctrl)
 void	free_ctrl(t_ctrl *ctrl)
 {
 	close_all_semaphores(ctrl);
-	free(ctrl->cpids);
 	free(ctrl);
-}
-
-/* sends SIGTERM to any existing child processes
- */
-void	kill_child_processes(t_ctrl *ctrl)
-{
-	int	i;
-
-	i = -1;
-	while (++i < ctrl->nu_philo)
-	{
-		if (ctrl->cpids[i] != 0)
-		{
-			kill(ctrl->cpids[i], SIGTERM);
-			ctrl->cpids[i] = 0;
-		}
-	}
 }
 
 /* once all child processes are running, semaphores can be unlinked safely
@@ -92,12 +74,13 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 		|| !my_strcmp(*error, INV_ME) || !my_strcmp(*error, START_SATED)
 		|| !my_strcmp(*error, NO_PH))
 	{
-		free_ctrl(ctrl);
+		free(ctrl);
 		exit(EXIT_USER_ERROR);
 	}
 	if (!my_strcmp(*error, FORK_ERR))
-		kill_child_processes(ctrl);
-	free_ctrl(ctrl);
+		kill(0, SIGTERM);
+	close_all_semaphores(ctrl);
+	free(ctrl);
 	unlink_all_semaphores();
 	if (*error)
 		exit(EXIT_FAILURE);

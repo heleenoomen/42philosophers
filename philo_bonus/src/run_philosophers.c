@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 13:11:41 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 15:58:27 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,12 @@ void	watcher(t_ctrl *ctrl)
 	}
 }
 
-/* merely wait until the stop_all semaphore is posted upon, in which case watcher2
- * set the simulation parameter to 'false' and posts itself twice on the stop_all
- * semaphore. This will cause all other watcher2 threads in all other processes
- * to do the same (in a domino effect), which will make all threads throughout
- * all processes return so that all child processes can exit safely after joining
- * them
+/* merely wait until the stop_all semaphore is posted upon, in which case 
+ * watcher2 set the simulation parameter to 'false' and posts itself twice
+ * on the stop_all semaphore. This will cause all other watcher2 threads in
+ * all other processes to do the same (in a domino effect), which will make
+ * all threads throughout all processes return so that all child processes
+ * can exit safely after joining them
  */
 void	watcher2(void *parm)
 {

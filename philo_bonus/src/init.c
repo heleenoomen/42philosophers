@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 12:23:42 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 15:54:57 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,5 @@ t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 		init_all_semaphores(ctrl, error);
 	if (!*error)
 		set_flags_and_counters(ctrl);
-	if (!*error)
-		ctrl->cpids = calloc_set_err(ctrl->nu_philo * sizeof(int), error);
 	return (ctrl);
 }

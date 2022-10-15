@@ -6,12 +6,11 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 21:03:50 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 15:58:38 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
-
 
 /* calls fork to create child process. When fork fails, sets error and calls
  * exit_program to directly exit the program in a clean way.
@@ -26,7 +25,7 @@ int	fork_handle_error(t_ctrl *ctrl, t_err *error)
 	ret = fork();
 	if (ret == -1)
 	{
-		*error = FORK;
+		*error = FORK_ERR;
 		exit_program(ctrl, error);
 	}
 	return (ret);
@@ -62,6 +61,7 @@ void	wait_for_child_processes(t_ctrl *ctrl, t_err *error)
 void	start_simulation(t_ctrl *ctrl, t_err *error)
 {
 	int	i;
+	int	cpid;
 
 	i = -1;
 	ctrl->start = gettime();
@@ -69,10 +69,10 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 	ctrl->start_current_action = ctrl->start;
 	while (++i < ctrl->nu_philo)
 	{
-		ctrl->cpids[i] = fork_handle_error(ctrl, error);
+		cpid = fork_handle_error(ctrl, error);
 		if (*error)
 			exit_program(ctrl, error);
-		if (ctrl->cpids[i] == 0)
+		if (cpid == 0)
 		{
 			ctrl->index = i + 1;
 			run_philosophers(ctrl);
