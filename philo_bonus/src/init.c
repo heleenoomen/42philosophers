@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 16:01:17 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:12:12 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,11 @@ void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 {
 	if (*error)
 		return ;
-	ctrl->forks = init_semaphore("forks", ctrl->nu_philo, error);
-	ctrl->print_sem = init_semaphore("print_sem", 1, error);
-	ctrl->last_meal_sem = init_semaphore("last_meal_sem", 1, error);
-	ctrl->status_sem = init_semaphore("status_sem", 1, error);
-	ctrl->simulation_sem = init_semaphore("simulation_sem", 1, error);
-	ctrl->sated = init_semaphore("sated", 0, error);
-	ctrl->stop_all = init_semaphore("stop_all", 0, error);
-	ctrl->all_sated = init_semaphore("all_sated", 0, error);
+	ctrl->forks = init_semaphore("/forks", ctrl->nu_philo, error);
+	ctrl->print_sem = init_semaphore("/print_sem", 1, error);
+	ctrl->last_meal_sem = init_semaphore("/last_meal_sem", 1, error);
+	ctrl->sated = init_semaphore("/sated", 0, error);
+	ctrl->stop_all = init_semaphore("/stop_all", 0, error);
 }
 
 /* convert the parameters in the argument vector to integers calling
@@ -78,7 +75,6 @@ void	set_flags_and_counters(t_ctrl *ctrl)
 {
 	ctrl->status = EATING;
 	ctrl->meals = 0;
-	ctrl->simulation = true;
 }
 
 /* initialize control struct. Allocate memory (malloc_set_err) for ctrl struct,
@@ -93,6 +89,7 @@ t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 	if (*error)
 		return (NULL);
 	fill_in_params(argc, argv, ctrl, error);
+	ctrl->cpids = malloc_set_err(sizeof(int) * ctrl->nu_philo, error);
 	if (!*error)
 		init_all_semaphores(ctrl, error);
 	if (!*error)

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 20:32:53 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 23:50:05 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,43 +26,18 @@ void	watcher(t_ctrl *ctrl)
 {
 	t_ms	last_meal;
 
-	while (simulation(ctrl))
+	while (1)
 	{
 		last_meal = time_last_meal(ctrl);
-		if (check_status(ctrl) == OTHER && ((gettime() - last_meal)
-				> ctrl->time_die))
+		if (((gettime() - last_meal) > ctrl->time_die))
 		{
 			sem_wait(ctrl->print_sem);
-			if (simulation(ctrl))
 				printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
-			end_simulation(ctrl);
-			sem_post(ctrl->forks);
-			sem_post(ctrl->forks);
-			sem_post(ctrl->forks);
-			sem_post(ctrl->forks);
 			sem_post(ctrl->stop_all);
 			sem_post(ctrl->stop_all);
 			return ;
 		}
 	}
-}
-
-/* merely wait until the stop_all semaphore is posted upon, in which case 
- * watcher2 set the simulation parameter to 'false' and posts itself twice
- * on the stop_all semaphore. This will cause all other watcher2 threads in
- * all other processes to do the same (in a domino effect), which will make
- * all threads throughout all processes return so that all child processes
- * can exit safely after joining them
- */
-void	watcher2(void *parm)
-{
-	t_ctrl	*ctrl;
-
-	ctrl = (t_ctrl *)parm;
-	sem_wait(ctrl->stop_all);
-	end_simulation(ctrl);
-	sem_post(ctrl->stop_all);
-	sem_post(ctrl->stop_all);
 }
 
 /* create two watcher threads. In case of failure, post on semaphores
@@ -73,23 +48,7 @@ void	create_watcher_threads(t_ctrl *ctrl)
 {
 	if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, \
 	(void *)ctrl))
-	{
 		sem_post(ctrl->stop_all);
-		sem_post(ctrl->stop_all);
-		free_ctrl(ctrl);
-		exit(THREAD_ERR_CHILD);
-	}
-	if (pthread_create(&(ctrl->watcher2), NULL, (void *) &watcher2, \
-	(void *)ctrl))
-	{
-		sem_post(ctrl->all_sated);
-		sem_post(ctrl->stop_all);
-		sem_post(ctrl->stop_all);
-		end_simulation(ctrl);
-		pthread_join(ctrl->watcher, NULL);
-		free_ctrl(ctrl);
-		exit(THREAD_ERR_CHILD);
-	}
 }
 
 /* philosophers create their watcher threads, set their status to OTHER
@@ -103,19 +62,14 @@ void	create_watcher_threads(t_ctrl *ctrl)
 void	run_philosophers(t_ctrl *ctrl)
 {
 	create_watcher_threads(ctrl);
-	set_status(ctrl, OTHER);
+	pthread_detach(ctrl->watcher);
+	set_last_meal(ctrl, 0);
 	if (ctrl->index % 2)
 		ph_usleep_check(ctrl, ctrl->time_eat - 10);
-	while (simulation(ctrl))
+	while (1)
 	{
 		ph_eat(ctrl);
 		ph_sleep(ctrl);
 		print_action(ctrl, THINK);
 	}
-	pthread_join(ctrl->watcher2, NULL);
-	pthread_join(ctrl->watcher, NULL);
-	sem_post(ctrl->all_sated);
-	sem_post(ctrl->print_sem);
-	free_ctrl(ctrl);
-	exit(EXIT_SUCCESS);
 }

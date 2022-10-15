@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 16:00:28 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:22:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,10 @@
  */
 void	print_action(t_ctrl *ctrl, char *action)
 {
-	if (!simulation(ctrl))
-		return ;
 	sem_wait(ctrl->print_sem);
 	ctrl->start_current_action = gettime();
-	if (simulation(ctrl))
-		printf("%u %i %s\n", ctrl->start_current_action \
-		- ctrl->start, ctrl->index, action);
+	printf("%u %i %s\n", ctrl->start_current_action \
+	- ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print_sem);
 }
 
@@ -69,17 +66,13 @@ void	ph_eat(t_ctrl *ctrl)
 
 	take_forks(ctrl);
 	print_action(ctrl, EAT);
-	set_status(ctrl, EATING);
 	set_last_meal(ctrl, ctrl->start_current_action);
-	sated = ++ctrl->meals == ctrl->max_meals;
+	sated = ++ctrl->meals == ctrl->max_meals\
+	&& ctrl->max_meals != -1;
 	ph_usleep_eat(ctrl);
 	leave_forks(ctrl);
-	if (sated && ctrl->max_meals != -1)
-	{
+	if (sated)
 		sem_post(ctrl->sated);
-		sem_wait(ctrl->all_sated);
-		sem_post(ctrl->all_sated);
-	}
 }
 
 /* prints log message, sets status to OTHER (philosopher is no longer eating,
@@ -89,6 +82,6 @@ void	ph_eat(t_ctrl *ctrl)
 void	ph_sleep(t_ctrl *ctrl)
 {
 	print_action(ctrl, SLEEP);
-	set_status(ctrl, OTHER);
+	set_last_meal(ctrl, OTHER);
 	ph_usleep_check(ctrl, ctrl->time_sleep);
 }

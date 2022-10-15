@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 16:10:10 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:19:10 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,8 +81,8 @@ typedef struct s_ctrl
 	int				index;
 	int				max_meals;
 	int				meals;
+	int				*cpids;
 	bool			status;
-	bool			simulation;
 	t_ms			time_eat;
 	t_ms			time_sleep;
 	t_ms			time_die;
@@ -90,14 +90,10 @@ typedef struct s_ctrl
 	t_ms			last_meal;
 	t_ms			start;
 	sem_t			*last_meal_sem;
-	sem_t			*status_sem;
-	sem_t			*simulation_sem;
 	sem_t			*print_sem;
 	sem_t			*sated;
 	sem_t			*forks;
 	sem_t			*stop_all;
-	sem_t			*all_sated;
-	sem_t			*end_sem;
 	pthread_t		watcher;
 	pthread_t		watcher2;
 }					t_ctrl;
@@ -146,7 +142,8 @@ t_ctrl			*init_ctrl(int argc, char **argv, t_err *error);
 void			start_simulation(t_ctrl *ctrl, t_err *error);
 
 /* big_watcher.c */
-void			saturation_watcher(t_ctrl *ctrl);
+void			big_watcher(t_ctrl *ctrl, t_err *error);
+void			kill_all(t_ctrl *ctrl, t_err *error);
 
 /* actions.c */
 void			print_action(t_ctrl *ctrl, char *action);

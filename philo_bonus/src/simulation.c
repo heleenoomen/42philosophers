@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 16:00:22 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:00:18 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,6 @@ int	fork_handle_error(t_ctrl *ctrl, t_err *error)
 	return (ret);
 }
 
-void	wait_for_child_processes(t_ctrl *ctrl, t_err *error)
-{
-	int	i;
-	int	status;
-
-	i = -1;
-	while (++i < ctrl->nu_philo)
-	{
-		waitpid(-1, &status, 0);
-		if (WIFEXITED(status))
-		{
-			status = WEXITSTATUS(status);
-			if (status)
-				*error = THREAD_ERR;
-		}
-	}
-}
-
 /* sets the start time of the simulation, and sets last_meal and last_action to
  * start_time. generates a process for each philosopher, calling
  * fork_handle_error. Saves the process id's of the child processes in the cpids
@@ -61,7 +43,6 @@ void	wait_for_child_processes(t_ctrl *ctrl, t_err *error)
 void	start_simulation(t_ctrl *ctrl, t_err *error)
 {
 	int	i;
-	int	cpid;
 
 	i = -1;
 	ctrl->start = gettime();
@@ -69,15 +50,15 @@ void	start_simulation(t_ctrl *ctrl, t_err *error)
 	ctrl->start_current_action = ctrl->start;
 	while (++i < ctrl->nu_philo)
 	{
-		cpid = fork_handle_error(ctrl, error);
+		ctrl->cpids[i] = fork_handle_error(ctrl, error);
 		if (*error)
 			exit_program(ctrl, error);
-		if (cpid == 0)
+		if (ctrl->cpids[i] == 0)
 		{
 			ctrl->index = i + 1;
+			free(ctrl->cpids);
 			run_philosophers(ctrl);
 		}
 	}
-	saturation_watcher(ctrl);
-	wait_for_child_processes(ctrl, error);
+	big_watcher(ctrl, error);
 }

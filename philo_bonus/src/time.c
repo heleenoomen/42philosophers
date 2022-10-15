@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 13:04:28 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 23:44:19 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,11 +38,7 @@ void	ph_usleep_check(t_ctrl *ctrl, t_ms time)
 
 	end_of_action = ctrl->start_current_action + time;
 	while ((gettime() < end_of_action))
-	{
-		if (!simulation(ctrl))
-			break ;
 		usleep (200);
-	}
 }
 
 /* same as ph_usleep_sleep, but without calling costly sim_over function,

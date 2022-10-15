@@ -6,22 +6,13 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 13:14:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 00:24:20 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
-/* If max_meals parameter was not entered by user (and set to -1 during intia-
- * lization), saturation_watcher has nothing to do and returns immediately.
- * Otherwise, he waits until all philosophers have posted on the sated
- * semaphore, upon which he posts on the stop_all semaphore to wake up all
- * watcher2 threads throughout processes, which whill make all threads return
- * and all child processes exit. Finally, all_sated is posted upon to make
- * threads that where hanging after saturation resume (i.e. join 
- * watchers and exit).
- */
-void	saturation_watcher(t_ctrl *ctrl)
+void	saturation(t_ctrl *ctrl)
 {
 	int	i;
 
@@ -31,5 +22,52 @@ void	saturation_watcher(t_ctrl *ctrl)
 	while (++i < ctrl->nu_philo)
 		sem_wait(ctrl->sated);
 	sem_post(ctrl->stop_all);
-	sem_post(ctrl->all_sated);
+	sem_post(ctrl->stop_all);
+}
+
+void	wait_for_child_processes(t_ctrl *ctrl, t_err *error)
+{
+	int	i;
+	int	status;
+
+	i = -1;
+	while (++i < ctrl->nu_philo)
+	{
+		waitpid(0, &status, 0);
+		if (WIFSIGNALED(status))
+			status = 0;
+		else if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		if (status && *error == NULL)
+			*error = THREAD_ERR;
+	}
+}
+
+void	kill_all(t_ctrl *ctrl, t_err *error)
+{
+	int	i;
+
+	i = -1;
+	while(++i < ctrl->nu_philo)
+		kill(ctrl->cpids[i], SIGTERM);
+	wait_for_child_processes(ctrl, error);
+}
+
+void	big_watcher(t_ctrl *ctrl, t_err *error)
+{
+	int	i;
+
+	if (pthread_create(&ctrl->watcher2, NULL, (void *)&saturation,\
+	(void *)ctrl))
+	{
+		*error = THREAD_ERR;
+		kill_all(ctrl, error);
+		return ;
+	}
+	sem_wait(ctrl->stop_all);
+	kill_all(ctrl, error);
+	i = -1;
+	while (++i < ctrl->nu_philo)
+		sem_post(ctrl->sated);
+	pthread_join(ctrl->watcher2, NULL);
 }
