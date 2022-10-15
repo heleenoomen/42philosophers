@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/17 14:01:17 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 20:24:32 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:20:52 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ void	saturation_watcher(t_ctrl *ctrl)
 		return ;
 	i = -1;
 	while (++i < ctrl->nu_philo)
-		sem_wait(ctrl->sated_sem);
-	sem_post(ctrl->end_of_simulation);
+		sem_wait(ctrl->sated);
+	sem_post(ctrl->stop_all);
 	sem_post(ctrl->all_sated);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 20:16:05 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:23:56 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ void	close_all_semaphores(t_ctrl *ctrl)
 	close_sem(ctrl->forks);
 	close_sem(ctrl->last_meal_sem);
 	close_sem(ctrl->status_sem);
-	close_sem(ctrl->died_sem);
-	close_sem(ctrl->sated_sem);
-	close_sem(ctrl->end_of_simulation);
+	close_sem(ctrl->simulation_sem);
+	close_sem(ctrl->sated);
+	close_sem(ctrl->stop_all);
 	close_sem(ctrl->all_sated);
 }
 
@@ -68,9 +68,9 @@ void	unlink_all_semaphores(void)
 	sem_unlink("print_sem");
 	sem_unlink("last_meal_sem");
 	sem_unlink("status_sem");
-	sem_unlink("died_sem");
-	sem_unlink("sated_sem");
-	sem_unlink("end_of_simulation");
+	sem_unlink("simulation_sem");
+	sem_unlink("sated");
+	sem_unlink("stop_all");
 	sem_unlink("all_sated");
 }
 

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 21:01:23 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:18:53 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,10 @@ void	watcher(t_ctrl *ctrl)
 			sem_wait(ctrl->print_sem);
 			if (simulation(ctrl))
 				printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
-			set_died(ctrl);
+			end_simulation(ctrl);
 			sem_post(ctrl->forks);
 			sem_post(ctrl->forks);
-			sem_post(ctrl->end_of_simulation);
+			sem_post(ctrl->stop_all);
 			return ;
 		}
 	}
@@ -48,10 +48,10 @@ void	watcher2(void *parm)
 	t_ctrl	*ctrl;
 
 	ctrl = (t_ctrl *)parm;
-	sem_wait(ctrl->end_of_simulation);
-	set_died(ctrl);
-	sem_post(ctrl->end_of_simulation);
-	sem_post(ctrl->end_of_simulation);
+	sem_wait(ctrl->stop_all);
+	end_simulation(ctrl);
+	sem_post(ctrl->stop_all);
+	sem_post(ctrl->stop_all);
 }
 
 void	create_watcher_threads(t_ctrl *ctrl)
@@ -59,8 +59,8 @@ void	create_watcher_threads(t_ctrl *ctrl)
 	if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, \
 	(void *)ctrl))
 	{
-		sem_post(ctrl->end_of_simulation);
-		sem_post(ctrl->end_of_simulation);
+		sem_post(ctrl->stop_all);
+		sem_post(ctrl->stop_all);
 		free_ctrl(ctrl);
 		exit(THREAD_ERR_CHILD);
 	}
@@ -68,9 +68,9 @@ void	create_watcher_threads(t_ctrl *ctrl)
 	(void *)ctrl))
 	{
 		sem_post(ctrl->all_sated);
-		sem_post(ctrl->end_of_simulation);
-		sem_post(ctrl->end_of_simulation);
-		set_died(ctrl);
+		sem_post(ctrl->stop_all);
+		sem_post(ctrl->stop_all);
+		end_simulation(ctrl);
 		pthread_join(ctrl->watcher, NULL);
 		free_ctrl(ctrl);
 		exit(THREAD_ERR_CHILD);

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 20:25:43 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:22:15 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	ph_eat(t_ctrl *ctrl)
 	leave_forks(ctrl);
 	if (sated && ctrl->max_meals != -1)
 	{
-		sem_post(ctrl->sated_sem);
+		sem_post(ctrl->sated);
 		sem_wait(ctrl->all_sated);
 		sem_post(ctrl->all_sated);
 	}

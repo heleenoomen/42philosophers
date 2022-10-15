@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 17:48:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 01:28:48 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:23:21 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ bool	simulation(t_ctrl *ctrl)
 {
 	bool	ret;
 
-	sem_wait(ctrl->died_sem);
+	sem_wait(ctrl->simulation_sem);
 	ret = ctrl->simulation;
-	sem_post(ctrl->died_sem);
+	sem_post(ctrl->simulation_sem);
 	return (ret);
 }
 

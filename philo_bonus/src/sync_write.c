@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 09:15:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 01:28:52 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:23:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 
 /* set the died variable to true
  */
-void	set_died(t_ctrl *ctrl)
+void	end_simulation(t_ctrl *ctrl)
 {
-	sem_wait(ctrl->died_sem);
+	sem_wait(ctrl->simulation_sem);
 	ctrl->simulation = false;
-	sem_post(ctrl->died_sem);
+	sem_post(ctrl->simulation_sem);
 }
 
 /* set the status variable in the control struct to status (either EATING or

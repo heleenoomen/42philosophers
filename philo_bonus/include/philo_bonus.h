@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 20:43:28 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:22:51 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ typedef struct s_ctrl
 	t_ms			start;
 	sem_t			*last_meal_sem;
 	sem_t			*status_sem;
-	sem_t			*died_sem;
-	sem_t			*sated_sem;
+	sem_t			*simulation_sem;
+	sem_t			*sated;
 	sem_t			*print_sem;
 	sem_t			*forks;
-	sem_t			*end_of_simulation;
+	sem_t			*stop_all;
 	sem_t			*all_sated;
 	sem_t			*end_sem;
 	pthread_t		watcher;
@@ -143,7 +143,7 @@ void			ph_eat(t_ctrl *ctrl);
 void			ph_sleep(t_ctrl *ctrl);
 
 /* set.c */
-void			set_died(t_ctrl *ctrl);
+void			end_simulation(t_ctrl *ctrl);
 void			set_status(t_ctrl *ctrl, bool status);
 void			set_last_meal(t_ctrl *ctrl, t_ms time);
 
