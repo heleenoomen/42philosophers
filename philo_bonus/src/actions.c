@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 17:40:26 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 16:00:28 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@
  */
 void	print_action(t_ctrl *ctrl, char *action)
 {
-	if (check_died(ctrl))
+	if (!simulation(ctrl))
 		return ;
 	sem_wait(ctrl->print_sem);
 	ctrl->start_current_action = gettime();
-	printf("%u %i %s\n", ctrl->start_current_action \
-	- ctrl->start, ctrl->index, action);
+	if (simulation(ctrl))
+		printf("%u %i %s\n", ctrl->start_current_action \
+		- ctrl->start, ctrl->index, action);
 	sem_post(ctrl->print_sem);
 }
 
@@ -58,9 +59,9 @@ void	leave_forks(t_ctrl *ctrl)
  * start_current_action. Meals is increased by one and checked against max_meals
  * to define if the philosopher will be sated after this meal or not. Main
  * thread is send to sleep for time_eat milliseconds. Afterwards, if sated is
- * true and max_meals parameter was entered, the philosopher will set the sated
- * flag to true, wait for the watcher thread to return, free her resources and
- * exit with SATED status.
+ * true and max_meals parameter was entered, the philosopher will post on the
+ * sated semaphore (to eventually wake up saturation_watcher in main process)
+ * and waits until all threads are sated before resuming.
  */
 void	ph_eat(t_ctrl *ctrl)
 {
@@ -73,11 +74,11 @@ void	ph_eat(t_ctrl *ctrl)
 	sated = ++ctrl->meals == ctrl->max_meals;
 	ph_usleep_eat(ctrl);
 	leave_forks(ctrl);
-	if (sated && ctrl->max_meals > -1)
+	if (sated && ctrl->max_meals != -1)
 	{
-		set_sated(ctrl);
-		free_ctrl(ctrl);
-		exit(SATED);
+		sem_post(ctrl->sated);
+		sem_wait(ctrl->all_sated);
+		sem_post(ctrl->all_sated);
 	}
 }
 
@@ -89,5 +90,5 @@ void	ph_sleep(t_ctrl *ctrl)
 {
 	print_action(ctrl, SLEEP);
 	set_status(ctrl, OTHER);
-	ph_usleep_sleep(ctrl);
+	ph_usleep_check(ctrl, ctrl->time_sleep);
 }

@@ -6,7 +6,7 @@
 #    By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/22 15:35:03 by hoomen            #+#    #+#              #
-#    Updated: 2022/10/14 18:12:21 by hoomen           ###   ########.fr        #
+#    Updated: 2022/10/15 16:01:35 by hoomen           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,12 +14,13 @@ VPATH		= src
 INCFLAGS	= -I include
 
 CC			= cc
-FLAGS		= -g -Wall -Werror -Wextra -fsanitize=thread
+FLAGS		= -Wall -Werror -Wextra -fsanitize=thread
 
 NAME		= philo_bonus
 HEADER		= include/philo_bonus.h
-SRC			= actions.c get.c exit_program.c init.c main.c set.c simulation.c\
-			  time.c utils.c big_watcher.c
+SRC			= actions.c exit_program.c init.c main.c simulation.c\
+			  time.c utils.c saturation.c run_philosophers.c\
+			  sync_read.c sync_write.c
 OBJ			= $(addprefix obj/,$(notdir $(SRC:.c=.o)))
 
 

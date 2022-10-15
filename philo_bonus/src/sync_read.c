@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get.c                                              :+:      :+:    :+:   */
+/*   sync_read.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/10 17:48:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 18:06:47 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 16:01:28 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@
 
 /* returns true if died flag was set, returns false if died flag was not set
  */
-bool	check_died(t_ctrl *ctrl)
+bool	simulation(t_ctrl *ctrl)
 {
 	bool	ret;
 
-	sem_wait(ctrl->died_sem);
-	ret = ctrl->died;
-	sem_post(ctrl->died_sem);
+	sem_wait(ctrl->simulation_sem);
+	ret = ctrl->simulation;
+	sem_post(ctrl->simulation_sem);
 	return (ret);
 }
 
@@ -56,16 +56,4 @@ t_ms	time_last_meal(t_ctrl *ctrl)
 	time = ctrl->last_meal;
 	sem_post(ctrl->last_meal_sem);
 	return (time);
-}
-
-/* returns true if philosopher is sated, returns false if not
- */
-bool	check_sated(t_ctrl *ctrl)
-{
-	bool	ret;
-
-	sem_wait(ctrl->sated_sem);
-	ret = ctrl->sated;
-	sem_post(ctrl->sated_sem);
-	return (ret);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.c                                              :+:      :+:    :+:   */
+/*   sync_write.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/11 09:15:57 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 15:28:38 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 12:23:32 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@
 
 /* set the died variable to true
  */
-void	set_died(t_ctrl *ctrl)
+void	end_simulation(t_ctrl *ctrl)
 {
-	sem_wait(ctrl->died_sem);
-	ctrl->died = true;
-	sem_post(ctrl->died_sem);
+	sem_wait(ctrl->simulation_sem);
+	ctrl->simulation = false;
+	sem_post(ctrl->simulation_sem);
 }
 
 /* set the status variable in the control struct to status (either EATING or
@@ -48,13 +48,4 @@ void	set_last_meal(t_ctrl *ctrl, t_ms time)
 	sem_wait(ctrl->last_meal_sem);
 	ctrl->last_meal = time;
 	sem_post(ctrl->last_meal_sem);
-}
-
-/* set the sated flag in the control struct to true
- */
-void	set_sated(t_ctrl *ctrl)
-{
-	sem_wait(ctrl->sated_sem);
-	ctrl->sated = true;
-	sem_post(ctrl->sated_sem);
 }

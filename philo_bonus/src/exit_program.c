@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/14 17:55:01 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/15 16:01:00 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,10 @@ void	close_all_semaphores(t_ctrl *ctrl)
 	close_sem(ctrl->forks);
 	close_sem(ctrl->last_meal_sem);
 	close_sem(ctrl->status_sem);
-	close_sem(ctrl->died_sem);
-	close_sem(ctrl->sated_sem);
+	close_sem(ctrl->simulation_sem);
+	close_sem(ctrl->sated);
+	close_sem(ctrl->stop_all);
+	close_sem(ctrl->all_sated);
 }
 
 /* frees all allocated memory in ctrl struct
@@ -37,25 +39,21 @@ void	close_all_semaphores(t_ctrl *ctrl)
 void	free_ctrl(t_ctrl *ctrl)
 {
 	close_all_semaphores(ctrl);
-	free(ctrl->cpids);
 	free(ctrl);
 }
 
-/* sends SIGTERM to any existing child processes
+/* once all child processes are running, semaphores can be unlinked safely
  */
-void	kill_child_processes(t_ctrl *ctrl)
+void	unlink_all_semaphores(void)
 {
-	int	i;
-
-	i = -1;
-	while (++i < ctrl->nu_philo)
-	{
-		if (ctrl->cpids[i] != 0)
-		{
-			kill(ctrl->cpids[i], SIGTERM);
-			ctrl->cpids[i] = 0;
-		}
-	}
+	sem_unlink("forks");
+	sem_unlink("print_sem");
+	sem_unlink("last_meal_sem");
+	sem_unlink("status_sem");
+	sem_unlink("simulation_sem");
+	sem_unlink("sated");
+	sem_unlink("stop_all");
+	sem_unlink("all_sated");
 }
 
 /* once all child processes are running, semaphores can be unlinked safely
@@ -88,12 +86,13 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 		|| !my_strcmp(*error, INV_ME) || !my_strcmp(*error, START_SATED)
 		|| !my_strcmp(*error, NO_PH))
 	{
-		free_ctrl(ctrl);
+		free(ctrl);
 		exit(EXIT_USER_ERROR);
 	}
 	if (!my_strcmp(*error, FORK_ERR))
-		kill_child_processes(ctrl);
-	free_ctrl(ctrl);
+		kill(0, SIGTERM);
+	close_all_semaphores(ctrl);
+	free(ctrl);
 	unlink_all_semaphores();
 	if (*error)
 		exit(EXIT_FAILURE);
