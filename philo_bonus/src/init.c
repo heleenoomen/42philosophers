@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:12:12 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 11:07:37 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,17 @@ sem_t	*init_semaphore(char *name, int value, t_err *error)
 	return (ret);
 }
 
-/* initialize all semaphores in the control struct. Semaphores are
- * initialized with a value of one (only one thread can get or set the protected
- * info at a time, only one thread can print at a time). The forks semaphore
- * is initialized with the number of philosophers (representing the amount of
- * forks on the table)
+/* initialize all semaphores in the control struct.
+ * Forks semaphores is initialized with value of nu_philo (there are as many
+ * forks as philosophers).
+ * Last_meal semaphore is initizalized to 1 to guarantee safe access to the
+ * status and last_meal variables, shared between philosopher and her watcher
+ * thread.
+ * Print_sem is initialized to 1 to protect stdout from multiple processes
+ * and printing at the same time and messages getting mixed up.
+ * Sated and stop_all semaphores are initialized to 0 so that ripper and
+ * sat_watcher thread in main process will remain dormant until they are posted
+ * upon by the child processes.
  */
 void	init_all_semaphores(t_ctrl *ctrl, t_err *error)
 {
@@ -78,8 +84,9 @@ void	set_flags_and_counters(t_ctrl *ctrl)
 }
 
 /* initialize control struct. Allocate memory (malloc_set_err) for ctrl struct,
- * fill in the user parameters, initialize all semaphores and set flags and
- * counters. Return a pointer to the dynamically allocated ctrl struct
+ * fill in the user parameters, allocate space for the child pid array (cpids),
+ * initialize all semaphores and set flags and counters. Return a pointer to
+ * the dynamically allocated ctrl struct.
  */
 t_ctrl	*init_ctrl(int argc, char **argv, t_err *error)
 {

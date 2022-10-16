@@ -6,14 +6,14 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 13:20:06 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:43:14 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 11:13:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo_bonus.h"
 
 /* Returns the current time in milliseconds */
-t_ms	gettime(void)
+t_ms	current_time(void)
 {
 	struct timeval	time;
 
@@ -22,21 +22,19 @@ t_ms	gettime(void)
 }
 
 /* usleep is imprecise (since it stops a thread for AT LEAST n microseconds, but
- * possibly longer). Therefore, we use two custom ph_usleep functions, which 
+ * possibly longer). Therefore, we use a custom ph_usleep function, which 
  * usleeps the process for only 0.2 milliseconds and then checks if the current
- * time (obtained by gettime()) is already smaller than end_of_action time.
+ * time, obtained by gettime(), is already smaller than end_of_action time.
  * end_of_action is obtained by adding the time the action takes to the
  * start time of the last action. (In between start_current_action and calling
  * the usleep function, some delays may have happened, for example, by setting
  * status or setting last meal, which require waiting for a semaphore).
- * ph_usleep_sleep checks at every iteration if the philosopher has died, since
- * philosophers may die while sleeping.
  */
 void	ph_usleep(t_ctrl *ctrl, t_ms time)
 {
 	t_ms	end_of_action;
 
 	end_of_action = ctrl->start_current_action + time;
-	while ((gettime() < end_of_action))
+	while ((current_time() < end_of_action))
 		usleep(200);
 }

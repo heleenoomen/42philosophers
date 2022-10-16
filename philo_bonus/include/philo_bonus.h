@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:41:13 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 11:14:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,28 +41,19 @@ typedef char			*t_err;
  * status			boolean: philosopher is either EATING (meaning she cannot
  * 					die), or busy withsome OTHER activity (sleeping, thinking;
  * 					meaning she may die)
- * simulation		boolean: set to true at start, set to false when death occurs
- * 					or when all are sated
  * time_eat			time it takes the philosopher to eat a meal (entered by user)
  * time_sleep		time philosopher spends sleeping (entered by user)
  * time_die			max time a philosopher can go without eating before she dies
  * start_current_action	time when the philosopher started her last
  * 						activity
  * last_meal			time when the philosopher started her last meal
- * ...sem:				semaphores used to protect variables checked and set by
- * 						philosopher (main thread) and watchers (helper threads) to
- * 						avoid data races
- * stop_all				posted upon when a philo dies or all are sated. Causes
- * 						watcher2 thread to wake up, which will produce a domino
- * 						effect, waking all other watcher2 threads up, who make all
- * 						watcher threads return, so that all main threads can join
- * 						their watchers and return.
+ * last_meal_sem		semaphore to protect last_meal and status variables
+ * 						(shared between child process and its watcher thread)
+ * stop_all				posted upon when a philo dies or all are sated to wake
+ * 						up main process, who will proceed to terminate all philos
  * sated				posted upon when a philo is sated. When all are sated,
- * 						saturation_watcher will post on stop_all so that all child
- * 						processes will return cleanly.
- * all_sated			posted upon when saturation_watcher has posted upon stop_all
- * 						wakes up hanging sated philosopher, who will then join her
- * 						watchers and exit
+ * 						sat_watcher will post on stop_all and main process will
+ * 						proceed to terminate all child processes.
  * print_sem			semaphore to protect stdout, so that only one philosopher
  * 						can print to stdout at time and log messages don't get
  * 						mixed up
@@ -70,11 +61,7 @@ typedef char			*t_err;
  * 						philosophers
  * watcher				each philosopher generates a watcher thread that checks if 
  * 						the philosopher has died (and should thus exit)
- * watcher2				waits until stop_all is being posted upon, then sets simulation
- * 						to false, causing watcher1 to return, and posts again on
- * 						stop_all so that next watcher2 in next process does the same
  */
-
 typedef struct s_ctrl
 {
 	int				nu_philo;
@@ -95,7 +82,6 @@ typedef struct s_ctrl
 	sem_t			*forks;
 	sem_t			*stop_all;
 	pthread_t		watcher;
-	pthread_t		watcher2;
 }					t_ctrl;
 
 /* status of individual philosopher: either she is EATING and thus cannot die,
@@ -121,11 +107,6 @@ typedef struct s_ctrl
 #  define PH_MAX		200
 # endif
 
-/* exit statuses for philosophers */
-# define THREAD_ERR_CHILD	7
-# define DEATH				8
-# define SATED				9
-
 /* exit status for program if user enters invalid parameters */
 # define EXIT_USER_ERROR	2
 
@@ -142,34 +123,26 @@ t_ctrl			*init_ctrl(int argc, char **argv, t_err *error);
 void			start_simulation(t_ctrl *ctrl, t_err *error);
 
 /* big_watcher.c */
-void			big_watcher(t_ctrl *ctrl, t_err *error);
-void			kill_all(t_ctrl *ctrl, t_err *error);
+void			jack_the_ripper(t_ctrl *ctrl, t_err *error);
+void			kill_all(t_ctrl *ctrl);
 
 /* actions.c */
 void			print_action(t_ctrl *ctrl, char *action);
 void			ph_eat(t_ctrl *ctrl);
 void			ph_sleep(t_ctrl *ctrl);
 
-/* set.c */
-void			end_simulation(t_ctrl *ctrl);
-void			set_status(t_ctrl *ctrl, bool status);
-void			set_last_meal(t_ctrl *ctrl, t_ms time);
-
-/* check.c */
-bool			simulation(t_ctrl *ctrl);
-bool			check_status(t_ctrl *ctrl);
-t_ms			time_last_meal(t_ctrl *ctrl);
+/* last_meal.c */
+void			set_status(t_ctrl *ctrl, t_ms time);
+t_ms			get_time_last_meal(t_ctrl *ctrl);
 
 /* run_philosophers.c*/
 void			run_philosophers(t_ctrl *ctrl);
 
 /* time.c */
-t_ms			gettime(void);
+t_ms			current_time(void);
 void			ph_usleep(t_ctrl *ctrl, t_ms time);
 
 /* exit_program.c */
-void			free_ctrl(t_ctrl *ctrl);
-void			close_all_semaphores(t_ctrl *ctrl);
 void			exit_program(t_ctrl *ctrl, t_err *error);
 
 #endif

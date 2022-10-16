@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:39:04 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 10:41:09 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	exit_program(t_ctrl *ctrl, t_err *error)
 		exit(EXIT_USER_ERROR);
 	}
 	if (!my_strcmp(*error, FORK_ERR))
-		kill_all(ctrl, error);
+		kill_all(ctrl);
 	free_ctrl(ctrl);
 	unlink_all_semaphores();
 	if (*error)

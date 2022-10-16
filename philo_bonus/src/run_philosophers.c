@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/14 20:29:11 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/16 00:42:55 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 11:14:22 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,9 @@
 
 /* check continuously if the main thread (the philosopher) has spend too much
  * time without eating. If she is not in a protected state (i.e. her status is
- * not EATING, but some OTHER activity), watcher prints a death message, sets
- * simulation to false, posts twice on the forks semaphore to avoid any risk of
- * deadlock and posts on the stop_all semaphore to wake up all watcher2 threads
- * that will end all threads throughout all processes and make all child
- * processes return. Watcher holds the print_sem semaphore, to avoid
- * any other messages to be printed after death has occured.
+ * not EATING, but some OTHER activity), watcher prints a death message, blocks
+ * further access to stdout and posts on stop_all semaphore to wake up ripper,
+ * which will then terminate all child processes.
  *)
  */
 void	watcher(t_ctrl *ctrl)
@@ -28,11 +25,12 @@ void	watcher(t_ctrl *ctrl)
 
 	while (1)
 	{
-		last_meal = time_last_meal(ctrl);
-		if (((gettime() - last_meal) > ctrl->time_die))
+		last_meal = get_time_last_meal(ctrl);
+		if (((current_time() - last_meal) > ctrl->time_die))
 		{
 			sem_wait(ctrl->print_sem);
-				printf("%u %i died\n", gettime() - ctrl->start, ctrl->index);
+				printf("%u %i died\n", current_time() - ctrl->start, \
+				ctrl->index);
 			sem_post(ctrl->stop_all);
 			sem_post(ctrl->stop_all);
 			return ;
@@ -44,26 +42,31 @@ void	watcher(t_ctrl *ctrl)
  * and join any existing threads, free up resoursec and exit with a
  * status that indicates thread error to parent process
  */
-void	create_watcher_threads(t_ctrl *ctrl)
+void	create_watcher_thread(t_ctrl *ctrl)
 {
 	if (pthread_create(&(ctrl->watcher), NULL, (void *) &watcher, \
 	(void *)ctrl))
+	{
+		sem_wait(ctrl->print_sem);
+		printf("%s %s\n", PHILO, THREAD_ERR_CHILD);
 		sem_post(ctrl->stop_all);
+	}
 }
 
-/* philosophers create their watcher threads, set their status to OTHER
- * (i.e. not eating, they may die). Uneven philos sleep for almost 
- * time_eat to avoid deadlock and give them all a fair chance at
- * grabbing forks. Philos enter in a while loop until the simulation
- * parameter is set to 'false'. Philos join their watcher thread,
- * post on all_sated and print_sem semaphores to allow all other
- * threads and processes to return, free their resources and exit.
+/* philosophers create their watcher threads and detach it, so that
+ * the thread will clean up its own resources once the process receives the
+ * SIGTERM signal from ripper.
+ * set their status to OTHER, meaning that form now on, they may die when
+ * not eating. Uneven philos sleep for almost time_eat to avoid deadlock and
+ * give them all a fair chance at grabbing forks. Philos enter in a while loop
+ * and will carry out their routine (eat, sleep, think) until the ripper in the
+ * main process sends it SIGTERM signal.
  */
 void	run_philosophers(t_ctrl *ctrl)
 {
-	create_watcher_threads(ctrl);
+	create_watcher_thread(ctrl);
 	pthread_detach(ctrl->watcher);
-	set_last_meal(ctrl, 0);
+	set_status(ctrl, 0);
 	if (ctrl->index % 2)
 		ph_usleep(ctrl, ctrl->time_eat - 10);
 	while (1)

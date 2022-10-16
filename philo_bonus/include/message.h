@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:56:52 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 19:57:37 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 10:26:24 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # define PHILO "philo:"
 # define MALLOC_ERR "System error: Failed to allocate memory."
 # define THREAD_ERR "System error: Failed to create thread."
+# define THREAD_ERR_CHILD "System error Failed to create thread in child \
+process. Aborting."
 # define SEM_ERR "System error: Failed to open semaphores."
 # define FORK_ERR "System error: Failed to create child process."
 # define UNDEF_CHILD_PROC "Abort: Undefined error in child process"
