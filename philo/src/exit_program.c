@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 17:55:05 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 18:57:30 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 13:40:39 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	destroy_all_mutexes(t_ctrl *ctrl)
 	destroy_mutex(&(ctrl->lock_death));
 	destroy_mutex(&(ctrl->lock_sated));
 	destroy_mutex(&(ctrl->lock_print));
-	destroy_mutex(&(ctrl->lock_start));
 }
 
 /* prints error message in case error was set. Frees all resources that were

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:05:45 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 22:35:35 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 13:40:16 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,8 @@
  */
 void	run_philosophers(t_philo *philo)
 {
-	pthread_mutex_lock(&(philo->ctrl->lock_start.mutex));
-	pthread_mutex_unlock(&(philo->ctrl->lock_start.mutex));
-	philo->start_current_action = philo->ctrl->start;
-	philo->last_meal = philo->start_current_action;
-	set_status(philo, OTHER);
 	if (philo->nbr % 2)
-		ph_usleep_check(philo, philo->ctrl->time_eat - 10);
+		ph_usleep_check(philo, philo->ctrl->time_eat);
 	while ((check_death(philo->ctrl) == false))
 	{
 		ph_eat(philo);
@@ -69,10 +64,11 @@ void	init_threads(t_ctrl *ctrl, t_err *error)
 	int		nu_created;
 
 	nu_created = -1;
-	pthread_mutex_lock(&(ctrl->lock_start.mutex));
 	ctrl->start = gettime();
 	while (++nu_created < ctrl->nu_philo)
 	{
+		ctrl->philos[nu_created].last_meal = ctrl->start;
+		ctrl->philos[nu_created].start_current_action = ctrl->start;
 		if (pthread_create(ctrl->threads + nu_created, NULL, \
 		(void *) &run_philosophers, ctrl->philos + nu_created))
 		{
@@ -81,7 +77,6 @@ void	init_threads(t_ctrl *ctrl, t_err *error)
 			break ;
 		}
 	}
-	pthread_mutex_unlock(&(ctrl->lock_start.mutex));
 	watcher(ctrl, nu_created);
 	join_threads(ctrl, nu_created);
 }

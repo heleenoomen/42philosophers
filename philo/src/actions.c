@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 11:38:50 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 22:51:56 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 13:46:42 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,16 @@ void	ph_eat(t_philo *philo)
 {
 	bool	sated;
 
+	if (philo->ctrl->time_eat == 0)
+		return ;
 	take_forks(philo);
 	print_action(philo, EAT);
 	set_status(philo, EATING);
 	set_last_meal(philo, philo->start_current_action);
-	sated = ++philo->meals == philo->ctrl->max_meals && \
-	philo->ctrl->max_meals != -1;
+	sated = ++philo->meals == philo->ctrl->max_meals;
 	ph_usleep_eat(philo);
 	leave_forks(philo);
-	if (sated)
+	if (sated && philo->ctrl->max_meals != -1)
 		increment_sated(philo->ctrl);
 }
 

@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/03 18:15:30 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/13 18:44:11 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 13:40:07 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ typedef struct s_ctrl
 	t_mutex			lock_death;
 	t_mutex			lock_sated;
 	t_mutex			lock_print;
-	t_mutex			lock_start;
 	pthread_t		*threads;
 	struct s_philo	*philos;
 }					t_ctrl;

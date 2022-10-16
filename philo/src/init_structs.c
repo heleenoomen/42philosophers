@@ -6,7 +6,7 @@
 /*   By: hoomen <hoomen@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/04 09:31:39 by hoomen            #+#    #+#             */
-/*   Updated: 2022/10/15 22:55:37 by hoomen           ###   ########.fr       */
+/*   Updated: 2022/10/16 13:40:30 by hoomen           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	init_mutexes_ctrl_struct(t_ctrl *ctrl, t_err *error)
 	init_mutex(&(ctrl->lock_print), error);
 	init_mutex(&(ctrl->lock_death), error);
 	init_mutex(&(ctrl->lock_sated), error);
-	init_mutex(&(ctrl->lock_start), error);
 }
 
 /* give each entry in the ctrl->philos array their parameters and initialize
